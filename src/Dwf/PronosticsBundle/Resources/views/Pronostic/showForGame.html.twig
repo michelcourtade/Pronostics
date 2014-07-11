@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
+    <li><a href="{{ path('game_by_type', { 'type': game.type.id, 'event': event.id }) }}">{{ game.type }}</a></li>
+    <li><a href="{{ path('game_show', { 'id': game.id }) }}">{{ game }}</a></li>
+    <li>Pronostics sur {{ game }}</li>
+    </ul>
+    <div class="page-header">
+    <h1>Les pronostics sur le match {{ game }}</h1>
+    </div>
+    
+<img src='/{{ game.team1.getWebPath }}' /> {{ game.team1.name }} - {{ game.team2.name }}<img src='/{{ game.team2.getWebPath }}' />
+<h2>Score : {{ game.score }}</h2>
+    <table class="records_list table table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+{#                 <th>Resultat</th>#}
+                <th>Score</th>
+{#                 <th>Scoreteam2</th>#}
+{#                 <th>Createdat</th>#}
+{#                 <th>Updatedat</th>#}
+{#                 <th>Expiresat</th>#}
+                <th>Pts gagnés</th>
+{#                 <th>Actions</th>#}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                {{ entity.user }}
+{#                 <br /><a href="{{ path('game_show', { 'id': entity.game.id }) }}">{{ entity.game }}</a>#}
+                </td>
+                <td>
+                {{ entity.score }}
+                {% if entity.game.type.canHaveOvertime %}
+                    <br />{{ entity.scoreAfterOvertime }}
+                    {% if entity.winner %}
+                        {{ entity.winner }}
+                    {% endif %}
+                {% endif %}
+                </td>
+{#                 <td></td>#}
+{#                 <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+{#                 <td>{% if entity.updatedAt %}{{ entity.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+{#                 <td>{% if entity.expiresAt %}{{ entity.expiresAt|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+                <td>{{ entity.result }}</td>
+{#                 <td>#}
+{#                 </td>#}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

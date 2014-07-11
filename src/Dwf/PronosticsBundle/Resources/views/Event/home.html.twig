@@ -1,0 +1,126 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>Accueil</li>
+    </ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
+</div>
+{% if games %}
+<div class="page-header">
+    <h2>Matchs du jour</h2>
+</div>
+<div class="row">
+    
+    <div class="list-match col-sm-12">
+    {% set lastDate = '' %}
+        {% for entity in games %}
+            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% set lastDate = entity.date|date('Ymd') %}
+        {% else %}
+            <p>Pas de match aujourd'hui. </p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% if nextGames %}
+<div class="page-header">
+    <h2>Prochains Matchs</h2>
+</div>
+<div class="row">
+    
+    <div class="list-match col-sm-12">
+        {% set lastDate = '' %}
+        {% for entity in nextGames %}
+            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% set lastDate = entity.date|date('Ymd') %}
+        {% else %}
+            <p>Plus de match à jouer</p>
+            
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% if bestOffenses %}
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleures attaques</h1>
+</div>
+<div class="row">
+<div class="col-sm-9">
+    <div class="panel panel-default row">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Classement meilleures attaques (sans les buts csc)</div>
+  <!-- Table -->
+    <table class="table">
+    <thead>
+    <tr>
+    <th>#</th>
+    <th>Equipe</th>
+    <th>Nb buts</th>
+{#     <th>Nb matchs</th>#}
+    </tr>
+    </thead>
+    <tbody>
+    {% for result in bestOffenses %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+        {% if teams[result.team_id].getWebPath %}
+            <img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
+        {% endif %}
+        {{ result.name }}
+        </td>
+        <td>{{ result.total }}</td>
+{#         <td>{{ result.nbGames }}</td>#}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+{% endif %}
+
+{% if scorers %}
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleurs buteurs</h1>
+</div>
+<p><a href="{{ path('event_scorers', {'event': event.id }) }}">Voir tous les buteurs</a></p>
+<div class="col-sm-9">
+    <div class="panel panel-default row">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Classement meilleurs buteurs</div>
+  <!-- Table -->
+    <table class="table">
+    <thead>
+    <tr>
+    <th>#</th>
+    <th>Joueur</th>
+    <th>Equipe</th>
+    <th>Nb buts</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for scorer in scorers %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ players[scorer.player_id].firstname }} {{ players[scorer.player_id].name }}</td>
+        <td>
+{#         {% if teams[result.team_id].getWebPath %}#}
+             <img src='/{{ players[scorer.player_id].team.getWebPath }}' width="20" />
+{#         {% endif %}#}
+        {{ players[scorer.player_id].team }}
+        </td>
+        <td>{{ scorer.total }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}

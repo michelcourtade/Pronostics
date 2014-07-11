@@ -1,0 +1,14 @@
+{# src/Dwf/ChBundle/Resources/views/House/index.html.twig #}
+
+{% extends '::base.html.twig' %} 
+
+{% block title %}{{ page.title }}{% endblock %}
+{% block metaDescription %}{{ page.metaDescription }}{% endblock %}
+
+{% block body %}
+<div>
+    {% autoescape 'html' %}
+    {{ page.content|raw }}
+    {% endautoescape %}
+</div>
+{% endblock %}

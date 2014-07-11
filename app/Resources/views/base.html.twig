@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{#         <meta name="viewport" content="width=device-width, initial-scale=1">#}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+        <title>{% block title %}Pronostics{% endblock %}</title>
+        <!-- Bootstrap -->
+        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}" rel="stylesheet">
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body{% block bodyclass %}{% endblock %}>
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{{ path('home') }}">Pronostics</a>
+            </div>
+            <div class="navbar-collapse collapse">
+            {% if event is defined %}
+                {% if event %}
+              <ul class="nav navbar-nav">
+                <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>
+                <li><a href='{{ path('games_event', {'event': event.id}) }}'>Matchs</a></li>
+                <li><a href='{{ path('pronostics_event', {'event': event.id}) }}'>Mes pronostics</a></li>
+                <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>Règlement</a></li>
+              </ul>
+              {% endif %}
+              {% endif %}
+              <p class="navbar-text navbar-right">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {% if gravatar_exists(app.user.email) %}
+  				<img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
+				{% endif %}
+{#                     {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}#}
+						{{ app.user.username }}
+{#                     <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>#}
+                    <a href="{{ path('fos_user_security_logout') }}"  class="glyphicon glyphicon-remove"></a>
+                {% else %}
+                    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                {% endif %}
+              </p>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+        	{% else %}
+        	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{{ path('home') }}">Participer</a>
+            </div>
+            <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+            	<li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>Voir le règlement</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+              {% endif %}
+        
+        <div class="container">
+{#         	<div>#}
+{#                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}#}
+{#                     {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |#}
+{#                     <a href="{{ path('fos_user_security_logout') }}">#}
+{#                         {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}#}
+{#                     </a>#}
+{#                 {% else %}#}
+{#                     <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
+{#                 {% endif %}#}
+{#             </div>#}
+            {% block body %}{% endblock %}
+            
+            <div class="col-xs-12 footer">
+                <p>&copy; <a href="http://www.dwf.fr" target="_blank">DWF</a></p>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="{{ asset('bundles/dwfpronostics/js/bootstrap.min.js') }}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

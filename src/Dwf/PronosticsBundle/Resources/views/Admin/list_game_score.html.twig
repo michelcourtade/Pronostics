@@ -1,0 +1,15 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+ 
+{% block field%}
+{% if admin.datagrid.results|length > 1 %}
+ <div>
+ 		{{ object.scoreTeam1 }} - {{ object.scoreTeam2 }}
+ 		{% if object.hasOvertime() %}
+ 			{{ object.scoreTeam1Overtime }} - {{ object.scoreTeam2Overtime }}
+ 			{% if object.scoreTeam1Overtime == object.scoreTeam2Overtime %}
+ 				<img src='/{{ object.winner.getWebPath }}' class="admin-preview" /> {{ object.winner }}
+ 			{% endif %}
+ 		{% endif %}
+    </div>
+{% endif %}
+{% endblock %}

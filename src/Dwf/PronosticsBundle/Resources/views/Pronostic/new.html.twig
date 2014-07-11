@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+	{% if entity.game %}
+		<h1>Pronostic sur {{ entity.game }}</h1>
+		<input id="dwf_pronosticsbundle_pronostic_game" name="dwf_pronosticsbundle_pronostic[game]" type="hidden" value="{{ entity.game.id }}"/>
+	{% else %}
+	    <h1>Pronostic creation</h1>
+		{{ form(form.game) }}
+	{% endif %}
+    {{ form(form) }}
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('pronostics') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

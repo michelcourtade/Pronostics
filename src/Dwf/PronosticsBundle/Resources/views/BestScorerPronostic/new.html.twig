@@ -1,0 +1,72 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('pronostics_event', {'event': event.id}) }}">Mes pronostics</a></li>
+    <li>Mon meilleur marqueur</li>
+</ul>
+
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event }} - Mon meilleur marqueur</h1>
+</div>
+{{ form_start(form, {'attr': { 'class': 'prono' }}) }}
+<div class="well center-block col-xs-12 col-sm-6 col-md-4">
+	<div class="photos">
+		{% for player in players %}
+			{% if player.getWebPath %}
+			<div class="player-{{ player.id }}" style="display:none;">
+				<img src='/{{ player.getWebPath }}' />
+			</div>
+			{% endif %}
+		{% endfor %}	
+	</div>
+        <p>
+        {{ form_label(form.player, 'Joueur') }}
+        {{ form_widget(form.player) }}
+        </p>
+        <p>
+        {{ form_label(form.goals, 'Buts') }}
+        {{ form_widget(form.goals) }}
+        </p>
+    </div>
+</div>
+<div class="center col-xs-12">{{ form_widget(form.submit, {'attr': { 'class': 'btn btn-lg btn-primary' }}) }}</div>
+{{ form_rest(form) }}
+{{ form_end(form) }}
+
+{# {{ form_start(form) }}#}
+{# {{ form_errors(form) }}#}
+{# {{ form_row(form.player) }}#}
+{# {{ form_row(form.goals) }}#}
+{# {{ form_row(form.submit) }}#}
+{# {{ form_end(form) }}#}
+{# <ul class="record_actions">#}
+{#     <li>#}
+{#         <a href="{{ path('event_pronostics', {'event': event.id}) }}">#}
+{#             Revenir à mes pronostics sur l'evenement#}
+{#         </a>#}
+{#     </li>#}
+{# </ul>#}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    function displayBestScorerImg(id) {
+        $('.photos > div').hide();
+        if($('.photos > div.player-'+id).size()) {
+            $('.photos > div.player-'+id).show();
+        }
+    }
+
+    $(document).ready(function() {
+        displayBestScorerImg( $('#dwf_pronosticsbundle_bestscorer_pronostic_player').val());
+        $('#dwf_pronosticsbundle_bestscorer_pronostic_player').change(function(){
+            displayBestScorerImg($(this).val());
+        });
+    });
+    </script> 
+{% endblock %}

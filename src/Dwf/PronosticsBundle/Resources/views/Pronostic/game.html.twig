@@ -1,0 +1,45 @@
+{% if (entity.game.date|date('Ymd') != lastDate) %}
+<div class="head-date row">
+    <h2 class="col-sm-12">{{ entity.game.date|date('d/m/Y') }}</h2>
+</div>
+{% endif %}
+<div class="match row">
+    <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>
+    <div class="team{% if(entity.game.getWhoLose() == 1) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
+        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+            <span class="hidden-xs hidden-sm">{{ entity.game.team1.name }}</span>
+            <span class="hidden-md hidden-lg">{{ entity.game.team1.iso }}</span>
+            <img src='/{{ entity.game.team1.getWebPath }}' />
+        </a>
+    </div>
+    <div class="score col-xs-3 col-sm-2 col-md-2">
+        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+        
+            <strong>{{ entity.score }}</strong>
+            {% if entity.game.type.canHaveOvertime and entity.overtime %}
+                {{ entity.scoreAfterOvertime }}
+                {% if entity.winner %}({{ entity.winner }}){% endif %}
+            {% endif %}
+            {% if entity.game.played %}
+            	<br />Résultat : <strong>{{ entity.game.score }}</strong> (90 min)
+            {% endif %}
+        
+        </a>
+    </div>
+    <div class="team ext{% if(entity.game.getWhoLose() == 2) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
+        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+            <span class="hidden-xs hidden-sm ">{{ entity.game.team2.name }}</span>
+            <span class="hidden-md hidden-lg">{{ entity.game.team2.iso }}</span> 
+            <img src='/{{ entity.game.team2.getWebPath }}' />
+        </a>
+    </div>
+    <div class="points pts-{{ entity.result }} col-xs-3 col-sm-2 col-md-1">
+        {% if entity.result %}{{ entity.result }} pts{% endif %}
+    </div>
+    <div class="actions col-xs-2 col-sm-2 col-md-1">
+    <a class="btn btn-default" href="{{ path('game_show', { 'id': entity.game.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+    {% if not entity.game.played and not entity.game.hasBegan() %}
+    <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id }) }}" title="Modifier"><span class="glyphicon glyphicon-screenshot"></span></a>
+    {% endif %}
+    </div>
+</div>

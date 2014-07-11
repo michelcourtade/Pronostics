@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>Mes pronostics</li>
+    </ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Mes pronostics</h1>
+</div>
+
+    <div class="page-header">
+    <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
+    {% if nbPronostics %}
+    <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
+    {% endif %}
+    {% if nbPerfectScore %}
+    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+    {% endif %}
+    {% if nbGoodScore %}
+    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+    {% endif %}
+    {% if nbBadScore %}
+    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
+    {% endif %}
+    
+    </div>
+    
+<div class="list-match col-sm-12">
+    {% set lastDate = '' %}
+    {% for entity in entities %}
+        {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+        {% set lastDate = entity.game.date|date('Ymd') %}
+    {% else %}
+        <p>Pas encore de pronostic enregistré. Allez voir la <a href="{{ path('games_event', {'event': event.id }) }}">liste des matchs</a> pour pronostiquer.</p>
+    {% endfor %}
+</div>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Mon meilleur marqueur</h1>
+</div>
+{% if bestscorer_pronostic %}
+    <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - Nb buts : {{ bestscorer_pronostic.goals }}</h2>
+    <div class="center"><a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-lg btn-primary">Modifier</a></div>
+{% else %}
+    <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">Pronostiquer</a></div>
+{% endif %}
+{% endblock %}

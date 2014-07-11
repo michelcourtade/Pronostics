@@ -1,0 +1,16 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block javascripts %}
+    {{ tinymce_init() }} 
+    {{ parent() }}
+{% endblock %}
+
+{% block logo %}
+	<a class="logo" href="{{ url('sonata_admin_dashboard') }}">
+{#         <img src="{{ asset('bundles/dwfch/images/logo.png') }}" alt="Admin Dashboard" />#}
+		Admin Dashboard
+	</a>
+{% endblock %}
+
+{% block side_bar_after_nav %}
+{% endblock %}

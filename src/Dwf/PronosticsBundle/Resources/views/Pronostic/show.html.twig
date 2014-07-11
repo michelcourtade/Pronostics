@@ -1,0 +1,38 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<ul id="ariane">
+    <li><a href="{{ path('pronostics') }}">Mes pronostics</a></li>
+    <li>Pronostic sur {{ entity.game }}</li>
+    </ul>
+    <h1>
+    <img src='/{{ entity.game.team1.getWebPath }}' /> {{ entity.game.team1.name }} - {{ entity.game.team2.name }} <img src='/{{ entity.game.team2.getWebPath }}' />
+    </h1>
+    <h2><a href="{{ path('game_by_type', { 'type': entity.game.type.id }) }}">{{ entity.game.type }}</a></h2>
+	<p>Se joue le : {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}</p>
+	{% if entity.game.played %}
+	<p>Score : {{ entity.game.score }}</p>
+	{% if entity.overtime %}
+		   <p>Score après prolongations : {{ entity.game.scoreAfterOvertime }}</p>
+		   {% if entity.game.winner %}
+		      <p>Vainqueur : {{ entity.game.winner }}</p>
+		   {% endif %}
+		{% endif %}
+	<a href="{{ path('pronostics_show_game', { 'gameId': entity.game.id }) }}">Voir tous les pronostics sur ce match</a>
+	{% endif %}
+	<p>Mon pronostic : {{ entity.score }}</p>
+	{% if entity.overtime %}
+		   <p>Avec prolongations, score final : {{ entity.scoreAfterOvertime }} </p>
+		   {% if entity.winner %}
+		       <p>Vainqueur si nul : {{ entity.winner }}</p>
+		   {% endif %}
+        {% endif %}
+	   {% if not entity.game.played and not entity.game.hasBegan() %}
+		   <a href="{{ path('pronostics_edit', { 'id': entity.id }) }}">
+	            Modifier mon pronostic
+	        </a>
+	   {% endif %}
+
+
+    {{ form(delete_form) }}
+{% endblock %}

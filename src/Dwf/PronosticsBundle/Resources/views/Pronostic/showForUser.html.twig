@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>
+    <li>Pronostics de {{ user }}</li>
+    </ul>
+
+    <div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Les pronostics de {{ user }}</h1>
+    </div>
+    
+    <div class="page-header">
+    <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
+    {% if nbPronostics %}
+    <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
+    {% endif %}
+    {% if nbPerfectScore %}
+    <h2>Nb scores exacts trouvés (<span class="points pts-5">5 points</span>): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+    {% endif %}
+    {% if nbGoodScore %}
+    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+    {% endif %}
+    {% if nbBadScore %}
+    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
+    {% endif %}
+    </div>
+    
+    <div class="list-match col-sm-12">
+    
+    {% set lastDate = '' %}
+        {% for entity in entities %}
+            {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% set lastDate = entity.game.date|date('Ymd') %}
+        {% else %}
+            <p>{{ user }} n'a pas encore de pronostic enregistré pour {{ event.name }}</p>
+        {% endfor %}
+    </div>
+    {% if bestscorer_pronostic %}
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Son meilleur marqueur</h1>
+</div>
+    <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - Nb buts : <span class="label label-default">{{ bestscorer_pronostic.goals }}</span></h2>
+{% endif %}
+{% endblock %}

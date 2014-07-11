@@ -1,0 +1,28 @@
+services:
+ dwf_pronosticsbundle.type.entity_hidden:
+  class: Dwf\PronosticsBundle\Form\Type\EntityHiddenType
+  arguments: ["@doctrine.orm.entity_manager"]
+  tags:
+   - { name: form.type, alias: entity_hidden }
+ dwf_pronosticbundle.result:
+        class: Dwf\PronosticsBundle\Result\Result
+        arguments: [ @doctrine.orm.entity_manager ]
+ dwf_pronosticbundle.mailer:
+        class: Dwf\PronosticsBundle\Mailer\Mailer
+        arguments: ['@mailer']
+ 
+ dwf_pronosticbundle.type.registration_form:
+        class: Dwf\PronosticsBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+         - { name: "form.type", alias: "dwf_pronosticsbundle_user_registration" }
+
+ dwf_pronosticbundle.invitation.form.type:
+        class: Dwf\PronosticsBundle\Form\Type\InvitationFormType
+        arguments: [@dwf_pronosticbundle.invitation.form.data_transformer]
+        tags:
+         - { name: "form.type", alias: "dwf_pronosticsbundle_invitation_type" }
+
+ dwf_pronosticbundle.invitation.form.data_transformer:
+        class: Dwf\PronosticsBundle\Form\DataTransformer\InvitationToCodeTransformer
+        arguments: [@doctrine.orm.entity_manager]

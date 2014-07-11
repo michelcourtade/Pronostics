@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div class="page-header">
+    <h1>Meilleur scoreur pour {{ event }}- Mon pronostic</h1>
+    </div>
+    
+    {% if entity %}
+    	<h2>{{ entity.player }} - Nb buts : {{ entity.goals }}</h2>
+    	<a href='{{ path('bestscorer_pronostics_edit', {'id': entity.id}) }}'>Modifier</a>
+    {% else %}
+    	<a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}'>Pronostiquer</a>	
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+Bienvenue {{ user }} !
+
+<ul>
+    <li><a href='{{ path('standings') }}'>Classement</a></li>
+    <li><a href='{{ path('game') }}'>Matchs</a></li>
+    <li><a href='{{ path('pronostics') }}'>Mes pronostics</a></li>
+</ul>
+{% if nextGame %}
+<h2>Prochain match</h2>
+<a href="{{ path('game_show', { 'id': nextGame.id }) }}">
+<h2>
+<img src='/{{ nextGame.team1.getWebPath }}' /> {{ nextGame.team1.name }} - {{ nextGame.team2.name }} <img src='/{{ nextGame.team2.getWebPath }}' />
+</h2>
+</a>
+<h3><a href="{{ path('game_by_type', { 'type': nextGame.type.id }) }}">{{ nextGame.type }}</a></h3>
+<p>Se joue le : {{ nextGame.date|date('d/m/Y') }} à {{ nextGame.date|date('H:i:s') }}</p>
+{% endif %}
+{% endblock %}

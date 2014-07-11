@@ -1,0 +1,63 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_pronostics', {'event': event.id }) }}">{{ event.name }}</a></li>
+    </ul>
+<div class="page-header">
+<h1>Mon meilleur marqueur</h1>
+</div>
+    {% if bestscorer_pronostic %}
+    	<h2>{{ bestscorer_pronostic.player }} - Nb buts : {{ bestscorer_pronostic.goals }}</h2>
+    	<a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-sm btn-default">Modifier</a>
+    {% else %}
+    	<a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-sm btn-default">Pronostiquer</a>	
+    {% endif %}
+    
+    <div class="page-header">
+    <h1>Mes pronostics</h1>
+    </div>
+    
+    <table class="records_list table table-striped">
+        <thead>
+            <tr>
+                <th colspan="3">Match</th>
+                <th>Pts gagnés</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in pronostics %}
+            <tr>
+                <td>
+	                <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+	                <img src='/{{ entity.game.team1.getWebPath }}' /> {{ entity.game.team1.name|upper }}
+	                </a>
+                </td>
+                <td>
+                {{ entity.score }}
+                {% if entity.game.type.canHaveOvertime and entity.overtime %}
+                    <br />{{ entity.scoreAfterOvertime }}
+                    {% if entity.winner %}
+                        <img src='/{{ entity.winner.getWebPath }}' />
+{#                         {{ entity.winner }}#}
+                    {% endif %}
+                {% endif %}
+                </td>
+                <td>
+	                <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+	                {{ entity.game.team2.name|upper }} <img src='/{{ entity.game.team2.getWebPath }}' />
+	                </a>
+                </td>
+                <td>{{ entity.result }}</td>
+                <td>
+                {% if not entity.game.hasBegan() and not entity.game.played %}
+                        <a href="{{ path('pronostics_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-default">Modifier</a>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

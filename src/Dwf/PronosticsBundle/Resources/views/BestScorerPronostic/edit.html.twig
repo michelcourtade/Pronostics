@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<div class="page-header">
+<h1>{{ entity.event }}</h1>
+</div>
+
+<h2>Mon meilleur marqueur</h2>
+{{ form_start(edit_form) }}
+{{ form_errors(edit_form) }}
+{{ form_row(edit_form.player) }}
+{{ form_row(edit_form.goals) }}
+{{ form_row(edit_form.submit) }}
+{{ form_end(edit_form) }}
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('event_pronostics', {'event': entity.event.id}) }}">
+            Revenir à mes pronostics sur l'evenement
+        </a>
+    </li>
+</ul>
+{% endblock %}

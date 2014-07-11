@@ -1,0 +1,119 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
+    <li><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></li>
+    <li><a href="{{ path('game_show', { 'id': entity.game.id }) }}">{{ entity.game }}</a></li>
+    <li>Pronostiquer sur {{ entity.game }}</li>
+</ul>
+{# <div class="page-header">#}
+{#     <h1>{{ entity.game }} - Mon pronostic<br /><small>{{ event.name }} - {{ entity.game.type }}</small></h1>#}
+{# </div>#}
+{# <img src='/{{ entity.game.team1.getWebPath }}' /> - <img src='/{{ entity.game.team2.getWebPath }}' />#}
+{# <p>Se joue le : {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i') }}</p>#}
+{# {{ form(form) }}#}
+
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Mon pronostic</h1>
+</div>
+{{ form_start(form, {'attr': { 'class': 'prono' }}) }}
+<div class="page-header">
+    <div class="head-date row">
+        <p class="date col-xs-12">
+            <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> - 
+            {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i') }}
+        </p>
+	</div>
+    <div class="show-match row">
+        <div class="team col-xs-4 col-sm-4 col-md-4">
+            <span class="hidden-xs">{{ entity.game.team1.name }}</span>
+            <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team1.iso }}</span>
+            <img src='/{{ entity.game.team1.getWebPath }}' />
+        </div>
+        <div class="score col-xs-4 col-sm-4 col-md-4">
+    		<strong>{{ form_widget(form.scoreTeam1) }} - {{ form_widget(form.scoreTeam2) }}</strong>
+    		<div class="overtime"{% if not entity.game.type.canHaveOvertime %} style="display:none;"{% endif %}>
+                <p>
+                    {{ form_label(form.overtime, 'Ira aux prolongations') }}
+                    {{ form_widget(form.overtime) }}
+                </p>
+                <div class="overtime_content" style="display: none;">
+                    <span>{{ form_widget(form.scoreTeam1Overtime) }} - {{ form_widget(form.scoreTeam2Overtime) }}</span>
+                    <p class="final_winner">
+                        {{ form_label(form.overtime, 'Vainqueur si nul') }}
+                        {{ form_widget(form.winner) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="team ext col-xs-4 col-sm-4 col-md-4">
+            <span class="hidden-xs">{{ entity.game.team2.name }}</span>
+            <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team2.iso }}</span> 
+            <img src='/{{ entity.game.team2.getWebPath }}' />
+        </div>
+    </div>
+</div>
+<div class="center col-xs-12">{{ form_widget(form.submit, {'attr': { 'class': 'btn btn-lg btn-primary' }}) }}</div>
+{{ form_rest(form) }}
+{{ form_end(form) }}
+
+{% if entity.game.comment %}
+	<div class="expert">
+    	<h2>L'avis de l'expert</h2>
+    	<div>
+    	{{ entity.game.comment|raw }}
+    	</div>
+    </div>
+{% endif %}
+
+{# 		{{ form_start(form) }}#}
+{# 		{{ form_errors(form) }}#}
+{# 		{{ form_row(form.game) }}#}
+{# 		{{ form_row(form.scoreTeam1) }} - {{ form_row(form.scoreTeam2) }}#}
+{# 		{% if entity.game.type.canHaveOvertime %}#}
+{# 		  {{ form_row(form.overtime) }}#}
+{# 		  {{ form_row(form.scoreTeam1Overtime) }} - {{ form_row(form.scoreTeam2Overtime) }}#}
+{# 		  {{ form_row(form.winner) }}#}
+{# 		{% endif %}#}
+{# 		{{ form_row(form.submit) }}#}
+{# 		<input id="dwf_pronosticsbundle_pronostic_game" name="dwf_pronosticsbundle_pronostic[game]" type="hidden" value="{{ entity.game.id }}"/>#}
+{#     {{ form(form) }}#}
+{#     {{ form_end(form) }}#}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    function toggleOvertime(obj) {
+        if(obj.is(':checked')){
+            $('.overtime_content').show();
+        } else {
+            $('.overtime_content').hide();
+        }
+    }
+
+    function toggleFinalWinner() {
+        if($('#dwf_pronosticsbundle_pronostic_scoreTeam1Overtime').val() == $('#dwf_pronosticsbundle_pronostic_scoreTeam2Overtime').val()) {
+            $('p.final_winner').show();
+        }
+        else {
+            $('p.final_winner').hide();
+            $('#dwf_pronosticsbundle_pronostic_winner').val('');
+        }
+    }
+    
+    $(document).ready(function() {
+        toggleOvertime( $('#dwf_pronosticsbundle_pronostic_overtime'));
+        $('#dwf_pronosticsbundle_pronostic_overtime').change(function(){
+            toggleOvertime($(this));
+        });
+        $('#dwf_pronosticsbundle_pronostic_scoreTeam1Overtime, #dwf_pronosticsbundle_pronostic_scoreTeam2Overtime').change(function(){
+            toggleFinalWinner();
+        });
+    });
+    </script> 
+{% endblock %}

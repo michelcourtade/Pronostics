@@ -1,0 +1,119 @@
+# Dwf/PronosticsBundle/Resources/config/admin.yml
+services:
+    sonata.admin.event:
+        class: Dwf\PronosticsBundle\Admin\EventAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Evenements" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Event
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.sport:
+        class: Dwf\PronosticsBundle\Admin\SportAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Sports" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Sport
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.game_type:
+        class: Dwf\PronosticsBundle\Admin\GameTypeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Types de matchs" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\GameType
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.game_type_result:
+        class: Dwf\PronosticsBundle\Admin\GameTypeResultAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Resultats par groupes" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\GameTypeResult
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.game:
+        class: Dwf\PronosticsBundle\Admin\GameAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Matchs" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Game
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+            - [ setResult, [@dwf_pronosticbundle.result]]
+    sonata.admin.team:
+        class: Dwf\PronosticsBundle\Admin\TeamAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Equipes" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Team
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.player:
+        class: Dwf\PronosticsBundle\Admin\PlayerAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Joueurs" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Player
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.scorer:
+        class: Dwf\PronosticsBundle\Admin\ScorerAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Scorers" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Scorer
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.pronostic:
+        class: Dwf\PronosticsBundle\Admin\PronosticAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Jeu", label: "Pronostics" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Pronostic
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.best_scorer_pronostic:
+        class: Dwf\PronosticsBundle\Admin\BestScorerPronosticAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Jeu", label: "Meilleurs marqueurs" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\BestScorerPronostic
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.invitation:
+        class: Dwf\PronosticsBundle\Admin\InvitationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Jeu", label: "Invitations" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Invitation
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+            - [ setMailer, [@dwf_pronosticbundle.mailer]]

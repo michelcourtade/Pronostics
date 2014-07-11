@@ -1,0 +1,5 @@
+DwfPageBundle_page:
+    pattern:  /{id}_{linkRewrite}
+    defaults: { _controller: DwfPageBundle:Page:index }
+    requirements:
+        id: \d+
