@@ -84,10 +84,11 @@ class GameAdmin extends Admin
     
     public function postUpdate($game)
     {
-        if($game->getPlayed())
+        if($game->getPlayed()) {
             $this->result->setResultsForGame($game);
             if(!$game->getType()->getCanHaveOvertime())
                 $this->result->setResultsForGroup($game);
+        }
     		//Pronostic::setResultsForGame($game);
     }
     
