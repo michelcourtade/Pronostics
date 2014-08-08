@@ -32,6 +32,7 @@ class EventAdmin extends Admin
         ->add('finishDate')
         ->add('active', 'checkbox', array('required' => false))
         ->add('sport')
+        ->add('nationalTeams', 'checkbox', array('required' => false))
         ->add('nbPointsForLoss')
         ->add('nbPointsForDraw')
         ->add('nbPointsForWin')
@@ -44,6 +45,7 @@ class EventAdmin extends Admin
         $datagridMapper
         ->add('name')
         ->add('sport')
+        ->add('nationalTeams')
         ->add('active')
         ;
     }

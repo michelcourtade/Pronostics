@@ -160,7 +160,7 @@ class PronosticRepository extends EntityRepository
 		    ;
 		
 		    $query = $qb->getQuery();
-		    return $query->getSingleResult();
+		    return $query->getOneOrNullResult();
 		}
 
 	public function findAllForUser(Dwf\PronosticsBundle\Entity\User $user)

@@ -24,6 +24,8 @@
         {% for entity in entities %}
             {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
             {% set lastDate = entity.date|date('Ymd') %}
+            {% else %}
+            <p>Aucun match pour le moment</p>
         {% endfor %}
     </div>
 </div>

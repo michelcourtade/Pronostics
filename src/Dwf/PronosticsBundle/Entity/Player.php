@@ -42,10 +42,18 @@ class Player
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="Team")
+     * @ORM\JoinColumn(name="nationalTeam", referencedColumnName="id", nullable=true)
+     */
+    private $nationalTeam;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Team")
      * @ORM\JoinColumn(name="team", referencedColumnName="id")
      */
     private $team;
-
+    
     /**
      * @var boolean
      *
@@ -181,6 +189,29 @@ class Player
     public function getTeam()
     {
         return $this->team;
+    }
+    
+    /**
+     * Set national team
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Team $team
+     * @return Player
+     */
+    public function setNationalTeam(\Dwf\PronosticsBundle\Entity\Team $team = null)
+    {
+    	$this->nationalTeam = $team;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get national team
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Team
+     */
+    public function getNationalTeam()
+    {
+    	return $this->nationalTeam;
     }
     
     public function __toString()

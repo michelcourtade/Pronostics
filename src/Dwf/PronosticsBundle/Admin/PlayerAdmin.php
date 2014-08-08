@@ -29,6 +29,7 @@ class PlayerAdmin extends Admin
         ->add('firstname', 'text', array('label' => 'Prénom', 'required' => false))        
         ->add('name', 'text', array('label' => 'Nom'))
         ->add('file', 'file', $fileFieldOptions)
+        ->add('nationalTeam')
         ->add('team')
         ->add('active')
         ;
@@ -51,6 +52,7 @@ class PlayerAdmin extends Admin
         ->addIdentifier('firstname')
         ->addIdentifier('name')
         ->add('team')
+        ->add('nationalTeam')
         ->add('active')
         ;
     }

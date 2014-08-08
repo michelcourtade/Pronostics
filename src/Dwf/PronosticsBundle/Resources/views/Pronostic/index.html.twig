@@ -9,7 +9,7 @@
 <div class="page-header">
     <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Mes pronostics</h1>
 </div>
-
+{% if total %}
     <div class="page-header">
     <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
     {% if nbPronostics %}
@@ -24,8 +24,8 @@
     {% if nbBadScore %}
     <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
     {% endif %}
-    
     </div>
+{% endif %}
     
 <div class="list-match col-sm-12">
     {% set lastDate = '' %}

@@ -31,6 +31,13 @@ class Event
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="nationalTeams", type="boolean")
+     */
+    private $nationalTeams;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="startDate", type="datetime")
@@ -441,5 +448,28 @@ class Event
     public function getSport()
     {
         return $this->sport;
+    }
+
+    /**
+     * Set nationalTeams
+     *
+     * @param boolean $nationalTeams
+     * @return Event
+     */
+    public function setNationalTeams($nationalTeams)
+    {
+        $this->nationalTeams = $nationalTeams;
+
+        return $this;
+    }
+
+    /**
+     * Get nationalTeams
+     *
+     * @return boolean 
+     */
+    public function getNationalTeams()
+    {
+        return $this->nationalTeams;
     }
 }

@@ -27,7 +27,8 @@ class TeamAdmin extends Admin
     	
         $formMapper
         ->add('name', 'text', array('label' => 'Nom'))
-        ->add('iso')
+        ->add('national', 'checkbox', array('required' => false))
+        ->add('iso', 'text', array('required' => false))
         ->add('file', 'file', $fileFieldOptions)
         ;
     }
@@ -37,6 +38,7 @@ class TeamAdmin extends Admin
     {
         $datagridMapper
         ->add('name')
+        ->add('national')
         ->add('iso')
         ;
     }
@@ -47,6 +49,7 @@ class TeamAdmin extends Admin
         $listMapper
         ->addIdentifier('flag', 'string', array('label' => 'Drapeau', 'template' => 'DwfPronosticsBundle:Admin:list_flag.html.twig'))
         ->addIdentifier('name')
+        ->add('national')
         ->add('iso')
         //->add('file', 'file',$fileFieldOptions)
         ;

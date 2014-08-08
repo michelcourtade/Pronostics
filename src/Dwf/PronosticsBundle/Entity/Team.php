@@ -31,6 +31,13 @@ class Team
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="national", type="boolean")
+     */
+    private $national;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="iso", type="string", length=3)
@@ -179,4 +186,50 @@ class Team
     }
 
 
+
+    /**
+     * Set national
+     *
+     * @param boolean $national
+     * @return Team
+     */
+    public function setNational($national)
+    {
+        $this->national = $national;
+
+        return $this;
+    }
+
+    /**
+     * Get national
+     *
+     * @return boolean 
+     */
+    public function getNational()
+    {
+        return $this->national;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Team
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
 }

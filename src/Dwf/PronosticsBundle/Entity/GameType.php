@@ -39,7 +39,7 @@ class GameType
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="gameTypes")
      * @ORM\JoinTable(name="event_gametypes")
      */
-    private $events;
+    public $events;
 
 
     /**

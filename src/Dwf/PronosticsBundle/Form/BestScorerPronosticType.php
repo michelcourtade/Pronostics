@@ -14,7 +14,7 @@ class BestScorerPronosticType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        for($i = 0; $i < 16; $i++)
+        for($i = 0; $i < 40; $i++)
             $arrayChoices[$i] = $i;
         $builder
             ->add('goals', 'choice', array('label' => null, 
