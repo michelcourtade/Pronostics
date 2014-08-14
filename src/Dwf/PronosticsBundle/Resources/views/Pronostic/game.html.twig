@@ -15,13 +15,25 @@
     <div class="score col-xs-3 col-sm-2 col-md-2">
         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
         
-            <strong>{{ entity.score }}</strong>
-            {% if entity.game.type.canHaveOvertime and entity.overtime %}
-                {{ entity.scoreAfterOvertime }}
-                {% if entity.winner %}({{ entity.winner }}){% endif %}
+        	{% if event.simpleBet %}
+	        	{% if entity.game.played %}
+	        	<div class="simple_bet">
+	        		<span{% if entity.simpleBet == "1" %} class='active'{% endif %}>1</span>
+	        		<span{% if entity.simpleBet == "N" %} class='active'{% endif %}>N</span>
+	        		<span{% if entity.simpleBet == "2" %} class='active'{% endif %}>2</span>
+	        	</div>
+	        	{% else %}
+	        		{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.game.id, 'form': forms[loop.index - 1]} %}
+	        	{% endif %}
+        	{% else %}
+	            <strong>{{ entity.score }}</strong>
+	            {% if entity.game.type.canHaveOvertime and entity.overtime %}
+	                {{ entity.scoreAfterOvertime }}
+	                {% if entity.winner %}({{ entity.winner }}){% endif %}
+            	{% endif %}
             {% endif %}
             {% if entity.game.played %}
-            	<br />Résultat : <strong>{{ entity.game.score }}</strong> (90 min)
+            	<br />Résultat : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
             {% endif %}
         
         </a>
@@ -38,7 +50,7 @@
     </div>
     <div class="actions col-xs-2 col-sm-2 col-md-1">
     <a class="btn btn-default" href="{{ path('game_show', { 'id': entity.game.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-    {% if not entity.game.played and not entity.game.hasBegan() %}
+    {% if not entity.game.played and not entity.game.hasBegan() and not event.simpleBet %}
     <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id }) }}" title="Modifier"><span class="glyphicon glyphicon-screenshot"></span></a>
     {% endif %}
     </div>

@@ -18,7 +18,11 @@
     <div class="list-match col-sm-12">
     {% set lastDate = '' %}
         {% for entity in games %}
-            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+        	{% if event.simpleBet %}
+            	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'forms': forms_games} %}
+            {% else %}
+            	{% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
         {% else %}
             <p>Pas de match aujourd'hui. </p>
@@ -35,7 +39,11 @@
     <div class="list-match col-sm-12">
         {% set lastDate = '' %}
         {% for entity in nextGames %}
-            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+        	{% if event.simpleBet %}
+            	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'forms': forms_nextgames} %}
+            {% else %}
+            	{% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
         {% else %}
             <p>Plus de match à jouer</p>
@@ -122,5 +130,8 @@
 </div>
 </div>
 {% endif %}
-
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
 {% endblock %}

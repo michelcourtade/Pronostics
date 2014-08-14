@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Dwf\PronosticsBundle\Entity\Game;
 use Dwf\PronosticsBundle\Form\GameType;
+use Dwf\PronosticsBundle\Form\SimplePronosticType;
 
 /**
  * Game controller.
@@ -96,18 +97,100 @@ class EventController extends Controller
      * Lists all Events entities.
      *
      * @Route("/{event}/home", name="event_home")
-     * @Method("GET")
+     * @Method({"GET","POST", "PUT"})
      * @Template()
      */
     public function homeAction($event)
     {
         $em = $this->getDoctrine()->getManager();
-    
+        $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     
         $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventAndDate($event, date("Y/m/d"));
-        $nextGames = $em->getRepository('DwfPronosticsBundle:Game')->findNextGames($event);
+        if($event->getSimpleBet()) {
+        	$forms_games = array();
+        	$i = 0;
+        	foreach($games as $entity)
+        	{
+        		$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+        		if($pronostic) {
+        			$simpleType = new SimplePronosticType();
+        			$simpleType->setName($entity->getId());
+        			$form = $this->createForm($simpleType, $pronostic, array(
+        					'action' => '',
+        					'method' => 'PUT',
+        			));
+        			$form->handleRequest($request);
+        			if ($form->isValid()) {
+        				$em->persist($pronostic);
+        				$em->flush();
+        			}
+        		}
+        		else {
+        			$simplePronostic = new Pronostic();
+        			$simplePronostic->setGame($entity);
+        			$simplePronostic->setUser($this->getUser());
+        			$simplePronostic->setEvent($entity->getEvent());
+        			$simpleType = new SimplePronosticType();
+        			$simpleType->setName($entity->getId());
+        			$form = $this->createForm($simpleType, $simplePronostic, array(
+        					'action' => '',
+        					'method' => 'POST',
+        			));
+        			$form->handleRequest($request);
+        			if ($form->isValid()) {
+        				$em->persist($simplePronostic);
+        				$em->flush();
+        			}
+        		}
+        		array_push($forms_games, $form->createView());
+        		$i++;
+        	}
+        }
+        else $forms_games = "";
         
+        $nextGames = $em->getRepository('DwfPronosticsBundle:Game')->findNextGames($event);
+        if($event->getSimpleBet()) {
+        	$forms_nextgames = array();
+        	$i = 0;
+        	foreach($nextGames as $entity)
+        	{
+        		$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+        		if($pronostic) {
+        			$simpleType = new SimplePronosticType();
+        			$simpleType->setName($entity->getId());
+        			$form = $this->createForm($simpleType, $pronostic, array(
+        					'action' => '',
+        					'method' => 'PUT',
+        			));
+        			$form->handleRequest($request);
+        			if ($form->isValid()) {
+        				$em->persist($pronostic);
+        				$em->flush();
+        			}
+        		}
+        		else {
+        			$simplePronostic = new Pronostic();
+        			$simplePronostic->setGame($entity);
+        			$simplePronostic->setUser($this->getUser());
+        			$simplePronostic->setEvent($entity->getEvent());
+        			$simpleType = new SimplePronosticType();
+        			$simpleType->setName($entity->getId());
+        			$form = $this->createForm($simpleType, $simplePronostic, array(
+        					'action' => '',//$this->generateUrl('pronostics_create_simple'),
+        					'method' => 'POST',
+        			));
+        			$form->handleRequest($request);
+        			if ($form->isValid()) {
+        				$em->persist($simplePronostic);
+        				$em->flush();
+        			}
+        		}
+        		array_push($forms_nextgames, $form->createView());
+        		$i++;
+        	}
+        }
+        else $forms_nextgames = "";
         $scorers = $em->getRepository('DwfPronosticsBundle:Scorer')->findBestScorersByEvent($event, 25);
         $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         foreach ($players as $player)
@@ -135,6 +218,8 @@ class EventController extends Controller
                 'players'   => $arrayPlayers,
                 'bestOffenses' => $bestOffenses,
                 'bestDefenses' => $bestDefenses,
+        		'forms_games' => $forms_games,
+        		'forms_nextgames' => $forms_nextgames,
         );
     }
     

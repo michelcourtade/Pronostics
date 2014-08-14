@@ -1,0 +1,70 @@
+<div class="row">
+    {% if types %}
+    <div class="col-sm-3">
+        <ul class="list-group">
+        	<li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
+        {% for type in types %}
+            <li class="list-group-item"><a href="{{ path('game_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <div class="list-match col-sm-9">
+    <div class="tabs-container">
+		<ul class="nav nav-tabs">
+	        <li class="active"><a href="#">Matchs</a></li>
+	        <li><a href="#">Classement {{ title }}</a></li>
+		</ul>
+    <div class="tabs">
+    {% set lastDate = '' %}
+        {% for entity in entities %}
+        	{% if event.simpleBet %}
+            	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" %}
+            {% else %}
+            	{% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% endif %}
+            {% set lastDate = entity.date|date('Ymd') %}
+            {% else %}
+            <p>Aucun match pour le moment</p>
+        {% endfor %}
+    </div>
+    <div style="display:none;" class="tabs">
+        {% if results %}
+        <div class="panel panel-default row">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">Classement {{ title }}</div>
+		  <!-- Table -->
+		    <table class="table">
+		    <thead>
+		    <tr>
+		    <th>#</th>
+		    <th>Equipe</th>
+		    <th>Points</th>
+		    <th>Diff. buts</th>
+		    </tr>
+		    </thead>
+		    <tbody>
+		    {% for result in results %}
+		    <tr>
+		        <td>{{ loop.index }}</td>
+		        <td>
+		{#         <img src='/{{ result.team.getWebPath }}' /> #}
+				{% if teams[result.team_id].getWebPath %}
+					<img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
+				{% endif %}
+		        {{ result.team }}
+		        </td>
+		        <td>{{ result.total }}</td>
+		        <td>{% if(result.goals >= 0) %}+{% endif %}{{ result.goals }}</td>
+		    </tr>
+		    {% endfor %}
+		    </tbody>
+  			</table>
+        </div>
+	</div>
+	{% else %}
+	<p>Pas encore de classement</p>
+    {% endif %}
+	</div>
+	</div>
+</div>

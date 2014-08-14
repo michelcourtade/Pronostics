@@ -87,6 +87,16 @@ class Pronostic
     private $winner;
     
     /**
+     * @var string
+     *
+     * possible values : 1 / N / 2
+     * 
+     * @ORM\Column(name="simpleBet", type="string", length=1)
+     */
+    private $simpleBet;
+    
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
@@ -508,5 +518,28 @@ class Pronostic
     public function getEvent()
     {
     	return $this->event;
+    }
+
+    /**
+     * Set simpleBet
+     *
+     * @param string $simpleBet
+     * @return Pronostic
+     */
+    public function setSimpleBet($simpleBet)
+    {
+        $this->simpleBet = $simpleBet;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleBet
+     *
+     * @return string 
+     */
+    public function getSimpleBet()
+    {
+        return $this->simpleBet;
     }
 }

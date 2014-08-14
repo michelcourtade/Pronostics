@@ -9,24 +9,10 @@
 <div class="page-header">
     <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Tous les matchs</h1>
 </div>
-<div class="row">
-    {% if types %}
-    <div class="col-sm-3">
-        <ul class="list-group">
-        {% for type in types %}
-            <li class="list-group-item"><a href="{{ path('game_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    <div class="list-match col-sm-9">
-    {% set lastDate = '' %}
-        {% for entity in entities %}
-            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
-            {% set lastDate = entity.date|date('Ymd') %}
-            {% else %}
-            <p>Aucun match pour le moment</p>
-        {% endfor %}
-    </div>
-</div>
+{% include "DwfPronosticsBundle:Game:game-list.html.twig" with {'title': event.name } %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
 {% endblock %}

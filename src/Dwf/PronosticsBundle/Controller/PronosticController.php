@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Dwf\PronosticsBundle\Entity\Pronostic;
 use Dwf\PronosticsBundle\Form\PronosticType;
 use Dwf\PronosticsBundle\Form\PronosticGameType;
+use Dwf\PronosticsBundle\Form\SimplePronosticType;
 
 /**
  * Pronostic controller.
@@ -90,7 +91,7 @@ class PronosticController extends Controller
 
         return $form;
     }
-
+    
     /**
      * Displays a form to create a new Pronostic entity.
      *
@@ -227,13 +228,13 @@ class PronosticController extends Controller
      * Displays Pronostics for a specific event.
      *
      * @Route("/event/{event}", name="pronostics_event")
-     * @Method("GET")
+     * @Method({"GET","POST", "PUT"})
      * @Template("DwfPronosticsBundle:Pronostic:index.html.twig")
      */
     public function showForEventAction($event)
     {
     	$em = $this->getDoctrine()->getManager();
-    
+    	$request = $this->getRequest();
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
     	    $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
@@ -246,6 +247,28 @@ class PronosticController extends Controller
 	    	$nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
 	    	$nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
 	    	$total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
+	    	if($event->getSimpleBet()) {
+	    		$forms = array();
+	    		$i = 0;
+	    		foreach($entities as $entity)
+	    		{
+    				$simpleType = new SimplePronosticType();
+    				$simpleType->setName($entity->getGame()->getId());
+    				$form = $this->createForm($simpleType, $entity, array(
+    						'action' => '',
+    						'method' => 'PUT',
+    				));
+    				$form->handleRequest($request);
+    				if ($form->isValid()) {
+    					$em->persist($entity);
+    					$em->flush();
+    				}
+	    			
+	    			array_push($forms, $form->createView());
+    				$i++;
+	    		}
+	    	}
+	    	else $forms = "";
 	    	return array(
 	    			'event'     => $event,
 	    			'user'		=> $this->getUser(),
@@ -256,6 +279,7 @@ class PronosticController extends Controller
 	    			'nbGoodScore' => $nbGoodScore,
 	    			'nbBadScore' => $nbBadScore,
 	    			'total'         => $total,
+	    			'forms'	=> $forms,
 	    	);
     	}
     	else throw $this->createNotFoundException('Unable to find Event entity.');
@@ -348,30 +372,25 @@ class PronosticController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Pronostic entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
+    	$em = $this->getDoctrine()->getManager();
+    	$entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
+    	if (!$entity) {
+    		throw $this->createNotFoundException('Unable to find Pronostic entity.');
+    	}
+    	$deleteForm = $this->createDeleteForm($id);
+    	$editForm = $this->createEditForm($entity);
+    	$editForm->handleRequest($request);
+    	if ($editForm->isValid()) {
+    		$em->flush();
+    		return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id)));
+    	}
+    	return array(
+    			'entity' => $entity,
+    			'edit_form' => $editForm->createView(),
+    			'delete_form' => $deleteForm->createView(),
+    	);
     }
+    
     /**
      * Deletes a Pronostic entity.
      *

@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Dwf\PronosticsBundle\Entity\Game;
 use Dwf\PronosticsBundle\Form\GameType;
+use Dwf\PronosticsBundle\Form\SimplePronosticType;
+use Dwf\PronosticsBundle\Entity\Pronostic;
 
 /**
  * Game controller.
@@ -48,7 +50,7 @@ class GameController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+		$request = $this->getRequest();
         $entity = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
         if($entity->getScoreTeam1() > 0 || $entity->getScoreTeam1Overtime() > 0)
             $scorersTeam1 = $em->getRepository('DwfPronosticsBundle:Scorer')->findScorersByGameAndTeam($entity, $entity->getTeam1());
@@ -60,10 +62,40 @@ class GameController extends Controller
         if($pronostic) {
             $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
             $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
+            
+            if($entity->getEvent()->getSimpleBet()) {
+            	$simpleType = new SimplePronosticType();
+            	$simpleType->setName($entity->getId());
+	            $form = $this->createForm($simpleType, $pronostic, array(
+	            		'action' => '',
+	            		'method' => 'PUT',
+	            ));
+	            $form->handleRequest($request);
+	            if ($form->isValid()) {
+	            	$em->persist($pronostic);
+	            	$em->flush();
+	            }
+        	}
         }
         else {
             $nextGame = "";
             $pronosticNextGame = "";
+            if($entity->getEvent()->getSimpleBet()) {
+	            $simplePronostic = new Pronostic();
+	            $simplePronostic->setGame($entity);
+			    $simplePronostic->setUser($this->getUser());
+			    $simplePronostic->setEvent($entity->getEvent());
+			    $simpleType = new SimplePronosticType();
+	             $form = $this->createForm($simpleType, $simplePronostic, array(
+	            		'action' => '',
+	            		'method' => 'POST',
+	            ));
+	             $form->handleRequest($request);
+	             if ($form->isValid()) {
+	             	$em->persist($simplePronostic);
+	             	$em->flush();
+	             }
+            }
         }
 
         if($entity->hasBegan() || $entity->getPlayed()) {
@@ -76,8 +108,6 @@ class GameController extends Controller
             throw $this->createNotFoundException('Unable to find Game entity.');
         }
 
-        //$deleteForm = $this->createDeleteForm($id);
-
         return array(
             'event'                 => $entity->getEvent(),
             'entity'                => $entity,
@@ -87,6 +117,7 @@ class GameController extends Controller
         	'pronostics'            => $pronostics,
             'scorersTeam1'          => $scorersTeam1,
             'scorersTeam2'          => $scorersTeam2,
+        	'form'					=> $entity->getEvent()->getSimpleBet() ? $form->createView():'',
             //'delete_form' => $deleteForm->createView(),
         );
     }
@@ -95,22 +126,72 @@ class GameController extends Controller
      * Lists all Game entities.
      *
      * @Route("/event/{event}", name="games_event")
-     * @Method("GET")
+     * @Method({"GET","POST", "PUT"})
      * @Template("DwfPronosticsBundle:Game:index.html.twig")
      */
     public function showByEventAction($event)
     {
     	$em = $this->getDoctrine()->getManager();
-    
+    	$request = $this->getRequest();
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
 	    	$entities = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventOrderedByDate($event);
 	    	$types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
+	    	$results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByEvent($event);
+	    	$teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
+	    	foreach ($teams as $team)
+	    	{
+	    		$arrayTeams[$team->getId()] = $team;
+	    	}
+	    	if($event->getSimpleBet()) {
+	    		$forms = array();
+	    		$i = 0;
+	    		foreach($entities as $entity)
+	    		{
+	    			$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+	    			if($pronostic) {
+	    				$simpleType = new SimplePronosticType();
+	    				$simpleType->setName($entity->getId());
+	    				$form = $this->createForm($simpleType, $pronostic, array(
+	    						'action' => '',
+	    						'method' => 'PUT',
+	    				));
+	    				$form->handleRequest($request);
+	    				if ($form->isValid()) {
+	    					$em->persist($pronostic);
+	    					$em->flush();
+	    				}
+	    			}
+	    			else {
+	    				$simplePronostic = new Pronostic();
+	    				$simplePronostic->setGame($entity);
+	    				$simplePronostic->setUser($this->getUser());
+	    				$simplePronostic->setEvent($entity->getEvent());
+	    				$simpleType = new SimplePronosticType();
+	    				$simpleType->setName($entity->getId());
+	    				$form = $this->createForm($simpleType, $simplePronostic, array(
+	    						'action' => '',
+	    						'method' => 'POST',
+	    				));
+	    				$form->handleRequest($request);
+	    				if ($form->isValid()) {
+	    					$em->persist($simplePronostic);
+	    					$em->flush();
+	    				}
+	    			}
+	    			array_push($forms, $form->createView());
+	    			$i++;
+	    		}
+	    	}
+	    	else $forms = "";
 	    	return array(
 	    			'event'		=> $event,
 	    			'user' 		=> $this->getUser(),
 	    			'entities' 	=> $entities,
 	    			'types'     => $types,
+	    			'forms'	=> $forms,
+	    			'teams'	=> $arrayTeams,
+	    			'results' => $results,
 	    	);
     	}
     	else return $this->redirect($this->generateUrl('events'));
@@ -120,13 +201,13 @@ class GameController extends Controller
      * Lists all Game entities by GameType
      *
      * @Route("/event/{event}/type/{type}", name="game_by_type")
-     * @Method("GET")
+     * @Method({"GET","POST", "PUT"})
      * @Template("DwfPronosticsBundle:Game:showByGameType.html.twig")
      */
     public function showByGameTypeAndEventAction($type, $event)
     {
         $em = $this->getDoctrine()->getManager();
-    
+        $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         if($event) {
             $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEvent($type, $event);
@@ -135,18 +216,60 @@ class GameController extends Controller
             {
             	$arrayTeams[$team->getId()] = $team;
             }
-            $entity = $em->getRepository('DwfPronosticsBundle:GameType')->find($type);
+            $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($type);
             $entities = $em->getRepository('DwfPronosticsBundle:Game')->findAllByTypeAndEvent($type, $event);
             $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
         
+            if($event->getSimpleBet()) {
+            	$forms = array();
+            	$i = 0;
+	            foreach($entities as $entity)
+	            {
+	            	$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+	            	if($pronostic) {
+	            			$simpleType = new SimplePronosticType();
+	            			$simpleType->setName($entity->getId());
+	            			$form = $this->createForm($simpleType, $pronostic, array(
+	            					'action' => '',
+	            					'method' => 'PUT',
+	            			));
+	            			$form->handleRequest($request);
+	            			if ($form->isValid()) {
+	            				$em->persist($pronostic);
+	            				$em->flush();
+	            			}
+	            	}
+	            	else {
+            			$simplePronostic = new Pronostic();
+            			$simplePronostic->setGame($entity);
+            			$simplePronostic->setUser($this->getUser());
+            			$simplePronostic->setEvent($entity->getEvent());
+            			$simpleType = new SimplePronosticType();
+            			$simpleType->setName($entity->getId());
+            			$form = $this->createForm($simpleType, $simplePronostic, array(
+            					'action' => '',
+            					'method' => 'POST',
+            			));
+		            	$form->handleRequest($request);
+		            	if ($form->isValid()) {
+		            		$em->persist($simplePronostic);
+		            		$em->flush();
+		            	}
+	            	}
+	            	array_push($forms, $form->createView());
+	            	$i++;
+	            }
+            }
+            else $forms = "";
             return array(
             		'teams'	=> $arrayTeams,
                     'results' => $results,
                     'event' => $event,
                     'user' => $this->getUser(),
-                    'entity'    => $entity,
+                    'entity'    => $gameType,
                     'entities' => $entities,
 	    			'types'     => $types,
+            		'forms'	=> $forms,
             );
         }
         else return $this->redirect($this->generateUrl('events'));

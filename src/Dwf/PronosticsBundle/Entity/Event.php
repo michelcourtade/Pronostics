@@ -59,6 +59,13 @@ class Event
     private $active;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="simpleBet", type="boolean")
+     */
+    private $simpleBet;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="nbPointsForLoss", type="integer", nullable=true)
@@ -471,5 +478,28 @@ class Event
     public function getNationalTeams()
     {
         return $this->nationalTeams;
+    }
+
+    /**
+     * Set simpleBet
+     *
+     * @param boolean $simpleBet
+     * @return Event
+     */
+    public function setSimpleBet($simpleBet)
+    {
+        $this->simpleBet = $simpleBet;
+
+        return $this;
+    }
+
+    /**
+     * Get simpleBet
+     *
+     * @return boolean 
+     */
+    public function getSimpleBet()
+    {
+        return $this->simpleBet;
     }
 }

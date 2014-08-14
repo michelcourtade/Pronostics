@@ -17,10 +17,22 @@ class GameTypeRepository extends EntityRepository
 	{
 		$qb = $this->createQueryBuilder('g')
 			->join('g.events', 'eg')
-			//->where($qb->expr()->in('eg.event', array($event)))
-			
 			->where('eg.id IN (:event)')
 			->setParameter('event', $event)
+		;
+	
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
+	
+	public function getByEventAndPosition(Dwf\PronosticsBundle\Entity\Event $event, $position)
+	{
+		$qb = $this->createQueryBuilder('g')
+		->join('g.events', 'eg')
+		->where('eg.id IN (:event)')
+		->setParameter('event', $event)
+		->andWhere('g.position = :position')
+		->setParameter('position', $position)
 		;
 	
 		$query = $qb->getQuery();

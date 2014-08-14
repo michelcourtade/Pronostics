@@ -34,6 +34,48 @@ class GameTypeResultRepository extends EntityRepository
         
     }
     
+    public function getResultsByGameTypeAndEventAndTeam($type, Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\Team $team)
+    {
+    	$qb = $this->createQueryBuilder('g')
+    	->leftJoin('g.team', 't')
+    	//->addSelect('p.user')
+    	->select('t.name as team', 't.id as team_id','SUM(g.result) AS total', 'SUM(g.goalaverage) AS goals')
+    	->where('g.gameType = :type')
+    	->setParameter('type', $type)
+    	->andWhere('g.event = :event')
+    	->setParameter('event', $event)
+    	->andWhere('t.id = :team')
+    	->setParameter('team', $team->getId())
+    	->groupBy('g.team')
+    	->addOrderBy('total', 'DESC')
+    	->addOrderBy('g.goalaverage', 'DESC')
+    	;
+    
+    	$query = $qb->getQuery();
+    	//         var_dump($query->getSql());
+    	return $query->getResult();
+    
+    }
+    
+    public function getResultsByEvent(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+    	$qb = $this->createQueryBuilder('g')
+    	->leftJoin('g.team', 't')
+    	//->addSelect('p.user')
+    	->select('t.name as team', 't.id as team_id','SUM(g.result) AS total', 'SUM(g.goalaverage) AS goals')
+    	->where('g.event = :event')
+    	->setParameter('event', $event)
+    	->groupBy('g.team')
+    	->addOrderBy('total', 'DESC')
+    	->addOrderBy('g.goalaverage', 'DESC')
+    	;
+    
+    	$query = $qb->getQuery();
+    	//         var_dump($query->getSql());
+    	return $query->getResult();
+    
+    }
+    
     public function findBestOffensesByEvent(Dwf\PronosticsBundle\Entity\Event $event)
     {
         $qb = $this->createQueryBuilder('g')

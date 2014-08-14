@@ -41,6 +41,12 @@ class GameType
      */
     public $events;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="position", type="integer", nullable=true)
+     */
+    private $position;
 
     /**
      * Get id
@@ -141,5 +147,28 @@ class GameType
     public function getEvents()
     {
         return $this->events;
+    }
+    
+    /**
+     * Set position
+     *
+     * @param integer $position
+     * @return HouseImage
+     */
+    public function setPosition($position)
+    {
+    	$this->position = $position;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get position
+     *
+     * @return integer
+     */
+    public function getPosition()
+    {
+    	return $this->position;
     }
 }

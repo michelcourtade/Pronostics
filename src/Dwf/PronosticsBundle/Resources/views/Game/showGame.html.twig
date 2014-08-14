@@ -49,6 +49,29 @@
     <div class="row">
     <div class="well center-block col-xs-12 col-sm-6 col-md-4">
     	{% if pronostic %}
+    		{% if event.simpleBet %}
+    			{% if not entity.played and not entity.hasBegan() %}
+    				{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id} %}
+				{% else %}
+					Mon pronostic :
+					<div class="simple_bet">
+	        		<span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
+	        		<span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
+	        		<span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
+	        		</div>
+{# 					{% if pronostic.simpleBet == "N" %}#}
+{# 					<span class="prono">Nul</span>#}
+{# 					{% elseif pronostic.simpleBet == "1" %}#}
+{# 					<span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.name }}</a></span>#}
+{#             		<span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.iso }}</a></span>#}
+{#             		<img src='/{{ entity.team1.getWebPath }}' />#}
+{#             		{% elseif pronostic.simpleBet == "2" %}#}
+{# 					<span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.name }}</a></span>#}
+{#             		<span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.iso }}</a></span>#}
+{#             		<img src='/{{ entity.team2.getWebPath }}' />#}
+{# 					{% endif %}#}
+				{% endif %}
+    		{% else %}
     	   Mon pronostic : <span class="prono">{{ pronostic.score }}</span>
     	   {% if pronostic.overtime %}
     		   <p>
@@ -66,11 +89,16 @@
     	   {% if pronostic.result %}
     	       <span class="points pts-{{ pronostic.result }}"{{ pronostic.result }} pts</span>
     	   {% endif %}
+    	   {% endif %}
     	{% else %}
     	   {% if not entity.played and not entity.hasBegan() %}
-    	   <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id }) }}">
-                Pronostiquer
-           </a>
+	    	   {% if event.simpleBet %}
+	    	   		{% include "DwfPronosticsBundle:Pronostic:createSimple.html.twig" with {'id': entity.id} %}
+	    		{% else %}
+		    	   <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id }) }}">
+		                Pronostiquer
+		           </a>
+	           {% endif %}
     	   {% endif %}
     	{% endif %}
     </div>
@@ -88,7 +116,7 @@
             <tr>
                 <th>User</th>
                 <th>Groupe</th>
-                <th>Score</th>
+                <th>Pronostic</th>
                 <th>Pts gagnés</th>
             </tr>
         </thead>
@@ -105,12 +133,26 @@
                 </td>
                 <td>{{ groupName }}</td>
                 <td>
-                {{ pronostic.score }}
-                {% if pronostic.game.type.canHaveOvertime and pronostic.overtime %}    
-                    - 90 min<br />{{ pronostic.scoreAfterOvertime }} - 120 min
-                    {% if pronostic.winner and pronostic.whoWinAfterOvertime == 0 %}
-                        <br />{{ pronostic.winner }} - TAB
-                    {% endif %}
+                {% if event.simpleBet %}
+                	{% if pronostic.simpleBet == "N" %}
+					Match Nul
+					{% elseif pronostic.simpleBet == "1" %}
+            		<img src='/{{ entity.team1.getWebPath }}' width="20" />
+					<span class="hidden-xs">{{ entity.team1.name }}</span>
+            		<span class="hidden-sm hidden-md hidden-lg">{{ entity.team1.iso }}</span>
+            		{% elseif pronostic.simpleBet == "2" %}
+            		<img src='/{{ entity.team2.getWebPath }}' width="20" />
+					<span class="hidden-xs">{{ entity.team2.name }}</span>
+            		<span class="hidden-sm hidden-md hidden-lg">{{ entity.team2.iso }}</span>
+					{% endif %}
+                {% else %}
+	                {{ pronostic.score }}
+	                {% if pronostic.game.type.canHaveOvertime and pronostic.overtime %}    
+	                    - 90 min<br />{{ pronostic.scoreAfterOvertime }} - 120 min
+	                    {% if pronostic.winner and pronostic.whoWinAfterOvertime == 0 %}
+	                        <br />{{ pronostic.winner }} - TAB
+	                    {% endif %}
+	                {% endif %}
                 {% endif %}
                 </td>
                 <td class="points pts-{{ pronostic.result }}">{{ pronostic.result }}</td>

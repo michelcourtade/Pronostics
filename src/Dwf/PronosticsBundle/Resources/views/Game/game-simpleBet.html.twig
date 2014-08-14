@@ -1,0 +1,35 @@
+{% if (entity.date|date('Ymd') != lastDate) %}
+    <div class="head-date row">
+        <h2 class="col-sm-12">{{ entity.date|date('d/m/Y') }}</h2>
+    </div>
+{% endif %}
+<div class="match row">
+    <div class="date col-xs-12 col-sm-12 col-md-3">{% if entity.date %}{{ entity.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.type }}</span></div>
+    <div class="team{% if(entity.getWhoLose() == 1) %} looser{% endif %} col-xs-3 col-sm-3 col-md-3">
+        <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <span class="hidden-xs hidden-sm">{{ entity.team1.name }}</span>
+            <span class="hidden-md hidden-lg">{{ entity.team1.iso }}</span>
+            <img src='/{{ entity.team1.getWebPath }}' />
+        </a>
+    </div>
+    <div class="score col-xs-6 col-sm-6 col-md-3">
+        {% if entity.played %}
+        <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <strong>{{ entity.score }}</strong>
+            {% if entity.overtime %}
+                {{ entity.scoreAfterOvertime }}
+                {% if entity.winner %}({{ entity.winner }}){% endif %}
+            {% endif %}
+        </a>
+        {% else %}
+        	{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id, 'form': forms[loop.index - 1]} %}
+        {% endif %}
+    </div>
+    <div class="team ext{% if(entity.getWhoLose() == 2) %} looser{% endif %} col-xs-3 col-sm-3 col-md-3">
+        <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <span class="hidden-xs hidden-sm ">{{ entity.team2.name }}</span>
+            <span class="hidden-md hidden-lg">{{ entity.team2.iso }}</span> 
+            <img src='/{{ entity.team2.getWebPath }}' />
+        </a>
+    </div>
+</div>

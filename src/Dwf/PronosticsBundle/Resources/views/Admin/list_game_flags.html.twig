@@ -3,7 +3,7 @@
 {% block field%}
 {% if admin.datagrid.results|length > 1 %}
  <div>
-        <img src='/{{ object.team1.getWebPath }}' class="admin-preview" /> - <img src='/{{ object.team2.getWebPath }}' class="admin-preview" /> 
+        <img src='/{{ object.team1.getWebPath }}' class="admin-preview" width='20' /> - <img src='/{{ object.team2.getWebPath }}' class="admin-preview"  width='20' /> 
     </div>
 {% endif %}
 {% endblock %}

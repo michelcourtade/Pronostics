@@ -10,58 +10,10 @@
     <div class="page-header">
     <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name}} - {{ entity }}</h1>
     </div>
-<div class="row">
-    {% if types %}
-    <div class="col-sm-3">
-        <ul class="list-group">
-        <li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
-        {% for type in types %}
-            <li class="list-group-item"><a href="{{ path('game_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if results %}
-    <div class="col-sm-9">
-    <div class="panel panel-default row">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Classement {{ entity.name }}</div>
-  <!-- Table -->
-    <table class="table">
-    <thead>
-    <tr>
-    <th>#</th>
-    <th>Equipe</th>
-    <th>Points</th>
-    <th>Diff. buts</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for result in results %}
-    <tr>
-        <td>{{ loop.index }}</td>
-        <td>
-{#         <img src='/{{ result.team.getWebPath }}' /> #}
-		{% if teams[result.team_id].getWebPath %}
-			<img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
-		{% endif %}
-        {{ result.team }}
-        </td>
-        <td>{{ result.total }}</td>
-        <td>{% if(result.goals >= 0) %}+{% endif %}{{ result.goals }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-</div>
-    {% endif %}
-    <div class="list-match col-sm-9">
-        {% set lastDate = '' %}
-        {% for entity in entities %}
-            {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
-            {% set lastDate = entity.date|date('Ymd') %}
-        {% endfor %}
-    </div>
-</div>
+{% include "DwfPronosticsBundle:Game:game-list.html.twig" with {'title': entity.name } %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
 {% endblock %}
