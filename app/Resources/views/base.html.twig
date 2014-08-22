@@ -34,8 +34,13 @@
                 {% if event %}
               <ul class="nav navbar-nav">
                 <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>
+                {% if currentChampionshipDay is defined and currentChampionshipDay %}
+                <li><a href='{{ path('game_by_type', { 'type': currentChampionshipDay.id, 'event': event.id }) }}'>Matchs {{ currentChampionshipDay.name }}</a></li>
+                {% else %}
                 <li><a href='{{ path('games_event', {'event': event.id}) }}'>Matchs</a></li>
+                {% endif %}
                 <li><a href='{{ path('pronostics_event', {'event': event.id}) }}'>Mes pronostics</a></li>
+                <li><a href='{{ path('events_old') }}'>Historique</a></li>
                 <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>Règlement</a></li>
               </ul>
               {% endif %}

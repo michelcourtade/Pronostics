@@ -16,9 +16,23 @@ class EventRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e')
         ->where('e.active = 1')
+        ->andWhere('e.finishDate > :date')
+        ->setParameter('date', date("YmdHis"))
         ->orderBy('e.startDate', 'ASC');
     
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+    
+    public function getOldEventsOrderedByDate()
+    {
+    	$qb = $this->createQueryBuilder('e')
+    	->where('e.active = 1')
+    	->andWhere('e.finishDate < :date')
+    	->setParameter('date', date("YmdHis"))
+    	->orderBy('e.startDate', 'ASC');
+    
+    	$query = $qb->getQuery();
+    	return $query->getResult();
     }
 }

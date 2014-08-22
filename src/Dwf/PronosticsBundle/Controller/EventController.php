@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Dwf\PronosticsBundle\Entity\Game;
+use Dwf\PronosticsBundle\Entity\Pronostic;
 use Dwf\PronosticsBundle\Form\GameType;
 use Dwf\PronosticsBundle\Form\SimplePronosticType;
 
@@ -41,6 +42,30 @@ class EventController extends Controller
             'user' => $this->getUser(),
             'events' => $entities,
         );
+    }
+    
+    /**
+     * Lists all passed Events entities.
+     *
+     * @Route("/old", name="events_old")
+     * @Method("GET")
+     * @Template("")
+     */
+    public function oldAction()
+    {
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$entities = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
+    	if(count($entities) == 1) {
+    		$event = $entities[0];
+    		return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
+    	}
+    
+    	return array(
+    			'event' => "",
+    			'user' => $this->getUser(),
+    			'events' => $entities,
+    	);
     }
     
     /**
@@ -106,6 +131,23 @@ class EventController extends Controller
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     
+        if($event->getChampionship()) {
+        	$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
+        	if(count($lastGamePlayed) > 0) {
+        		$lastGamePlayed = $lastGamePlayed[0];
+        		$gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
+        		if($gamesLeftInChampionshipDay)
+        			$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
+        		else {
+        			$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+        		}
+        		if($currentChampionshipDay)
+        			$currentChampionshipDay = $currentChampionshipDay[0];
+        		else $currentChampionshipDay = '';
+        	}
+        }
+        else $currentChampionshipDay = '';
+        
         $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventAndDate($event, date("Y/m/d"));
         if($event->getSimpleBet()) {
         	$forms_games = array();
@@ -210,6 +252,7 @@ class EventController extends Controller
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
+        		'currentChampionshipDay' => $currentChampionshipDay,
                 //'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
                 'games' => $games,
                 'nextGames' => $nextGames,

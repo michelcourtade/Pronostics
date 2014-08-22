@@ -67,7 +67,7 @@ class GameRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('g')
         ->where('g.date > :date')
-        ->setParameter('date', date("YmdHis"))
+        ->setParameter('date', date("YmdHis", mktime(23,59,59,date("m"),date("d"), date("Y"))))
         ->andWhere('g.event = :event')
         ->setParameter('event', $event)
         ->andWhere('g.played = 0')
@@ -128,5 +128,35 @@ class GameRepository extends EntityRepository
     
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+    
+    public function findLastGamePlayedByEvent(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+    	$qb = $this->createQueryBuilder('g')
+    	->where('g.event = :event')
+    	->setParameter('event', $event)
+    	->andWhere('g.played = 1')
+    	->orderBy('g.date', 'DESC')
+    	->setMaxResults(1);
+    	;
+    	
+    	$query = $qb->getQuery();
+    	
+    	return $query->getResult();
+    }
+    
+    public function findGamesLeftByEventAndGameType(Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\GameType $gameType)
+    {
+    	$qb = $this->createQueryBuilder('g')
+    	->where('g.event = :event')
+    	->setParameter('event', $event)
+    	->andWhere('g.type = :type')
+    	->setParameter('type', $gameType)
+    	->andWhere('g.played = 0')
+    	->orderBy('g.date', 'ASC')
+    	;
+    
+    	$query = $qb->getQuery();
+    	return $query->getResult();
     }
 }

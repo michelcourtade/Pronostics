@@ -197,6 +197,22 @@ class PronosticController extends Controller
     
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
+    		if($event->getChampionship()) {
+    			$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
+    			if(count($lastGamePlayed) > 0) {
+    				$lastGamePlayed = $lastGamePlayed[0];
+    				$gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
+    				if($gamesLeftInChampionshipDay)
+    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
+    				else {
+    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+    				}
+    				if($currentChampionshipDay)
+    					$currentChampionshipDay = $currentChampionshipDay[0];
+    				else $currentChampionshipDay = '';
+    			}
+    		}
+    		else $currentChampionshipDay = '';
     	    $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($user, $event);
     	    if($pronostic)
     	        $bestscorer_pronostic = $pronostic[0];
@@ -213,6 +229,7 @@ class PronosticController extends Controller
                     'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
                     'entities'	=> $entities,
                     'event'        => $event,
+                	'currentChampionshipDay' => $currentChampionshipDay,
                     'nbPronostics' => $nb,
                     'nbPerfectScore' => $nbPerfectScore,
                     'nbGoodScore' => $nbGoodScore,
@@ -237,6 +254,22 @@ class PronosticController extends Controller
     	$request = $this->getRequest();
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
+    		if($event->getChampionship()) {
+    			$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
+    			if(count($lastGamePlayed) > 0) {
+    				$lastGamePlayed = $lastGamePlayed[0];
+    				$gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
+    				if($gamesLeftInChampionshipDay)
+    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
+    				else {
+    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+    				}
+    				if($currentChampionshipDay)
+    					$currentChampionshipDay = $currentChampionshipDay[0];
+    				else $currentChampionshipDay = '';
+    			}
+    		}
+    		else $currentChampionshipDay = '';
     	    $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
     	    if($pronostic)
     	        $bestscorer_pronostic = $pronostic[0];
@@ -271,6 +304,7 @@ class PronosticController extends Controller
 	    	else $forms = "";
 	    	return array(
 	    			'event'     => $event,
+	    			'currentChampionshipDay' => $currentChampionshipDay,
 	    			'user'		=> $this->getUser(),
 	    			'entities'	=> $entities,
                     'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',

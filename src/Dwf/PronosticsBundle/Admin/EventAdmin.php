@@ -33,6 +33,7 @@ class EventAdmin extends Admin
         ->add('active', 'checkbox', array('required' => false))
         ->add('sport')
         ->add('simpleBet', 'checkbox', array('label' => 'Pari simple ? (1 N 2)', 'required' => false))
+        ->add('championship', 'checkbox', array('label' => 'Championnat ?', 'required' => false))
         ->add('nationalTeams', 'checkbox', array('required' => false))
         ->add('nbPointsForLoss')
         ->add('nbPointsForDraw')
@@ -47,6 +48,7 @@ class EventAdmin extends Admin
         ->add('name')
         ->add('sport')
         ->add('nationalTeams')
+        ->add('championship')
         ->add('active')
         ;
     }

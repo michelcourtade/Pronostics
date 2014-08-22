@@ -134,7 +134,7 @@ class Result
     	$results = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGame($game);
     	//var_dump($results); exit();
     	if(!$results) {
-    		if($game->getEvent()->getSimpleBet()) {
+    		if($game->getEvent()->getChampionship()) {
     			$nbPointsTeam1 = 0;
     			$nbPointsTeam2 = 0;
     			$goalaverageTeam1 = 0;
