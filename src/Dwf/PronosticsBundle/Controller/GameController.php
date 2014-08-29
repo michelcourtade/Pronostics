@@ -118,9 +118,9 @@ class GameController extends Controller
 				else {
 					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
 				}
-				if($currentChampionshipDay)
-					$currentChampionshipDay = $currentChampionshipDay[0];
-				else $currentChampionshipDay = '';
+// 				if($currentChampionshipDay)
+// 					$currentChampionshipDay = $currentChampionshipDay[0];
+// 				else $currentChampionshipDay = '';
 			}
 		}
 		else $currentChampionshipDay = '';
@@ -161,10 +161,10 @@ class GameController extends Controller
     					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
     				else {
     					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+	    				if($currentChampionshipDay)
+	    					$currentChampionshipDay = $currentChampionshipDay[0];
+	    				else $currentChampionshipDay = '';
     				}
-    				if($currentChampionshipDay)
-    					$currentChampionshipDay = $currentChampionshipDay[0];
-    				else $currentChampionshipDay = '';
     			}
     		}
     		else $currentChampionshipDay = '';
@@ -258,10 +258,10 @@ class GameController extends Controller
         				$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
         			else {
         				$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+	        			if($currentChampionshipDay)
+        					$currentChampionshipDay = $currentChampionshipDay[0];
+        				else $currentChampionshipDay = '';
         			}
-        			if($currentChampionshipDay)
-        				$currentChampionshipDay = $currentChampionshipDay[0];
-        			else $currentChampionshipDay = '';
         		}
         	}
         	else $currentChampionshipDay = '';
