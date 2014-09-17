@@ -183,6 +183,7 @@ class GameController extends Controller
 	    	}
 	    	if($event->getSimpleBet()) {
 	    		$forms = array();
+	    		$pronostics = array();
 	    		$i = 0;
 	    		foreach($entities as $entity)
 	    		{
@@ -218,6 +219,7 @@ class GameController extends Controller
 	    				}
 	    			}
 	    			array_push($forms, $form->createView());
+	    			array_push($pronostics, $pronostic);
 	    			$i++;
 	    		}
 	    	}
@@ -231,6 +233,7 @@ class GameController extends Controller
 	    			'forms'	=> $forms,
 	    			'teams'	=> $arrayTeams,
 	    			'results' => $results,
+	    	        'pronostics' => $pronostics,
 	    	);
     	}
     	else return $this->redirect($this->generateUrl('events'));
@@ -277,6 +280,7 @@ class GameController extends Controller
         
             if($event->getSimpleBet()) {
             	$forms = array();
+            	$pronostics = array();
             	$i = 0;
 	            foreach($entities as $entity)
 	            {
@@ -312,6 +316,7 @@ class GameController extends Controller
 		            	}
 	            	}
 	            	array_push($forms, $form->createView());
+	            	array_push($pronostics, $pronostic);
 	            	$i++;
 	            }
             }
@@ -326,6 +331,7 @@ class GameController extends Controller
                     'entities' => $entities,
 	    			'types'     => $types,
             		'forms'	=> $forms,
+                    'pronostics' => $pronostics,
             );
         }
         else return $this->redirect($this->generateUrl('events'));

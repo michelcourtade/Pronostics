@@ -21,6 +21,14 @@
                 {% if entity.winner %}({{ entity.winner }}){% endif %}
             {% endif %}
         </a>
+        {% elseif entity.hasBegan() %}
+        {% if pronostic is defined %}
+        <div class="simple_bet">
+	        		<span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
+	        		<span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
+	        		<span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
+	        		</div>
+	        {% endif %}
         {% else %}
         	{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id, 'form': forms[loop.index - 1]} %}
         {% endif %}

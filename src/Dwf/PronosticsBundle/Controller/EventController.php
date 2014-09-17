@@ -151,6 +151,7 @@ class EventController extends Controller
         $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventAndDate($event, date("Y/m/d"));
         if($event->getSimpleBet()) {
         	$forms_games = array();
+        	$pronostics_games = array();
         	$i = 0;
         	foreach($games as $entity)
         	{
@@ -186,6 +187,7 @@ class EventController extends Controller
         			}
         		}
         		array_push($forms_games, $form->createView());
+        		array_push($pronostics_games, $pronostic);
         		$i++;
         	}
         }
@@ -194,6 +196,7 @@ class EventController extends Controller
         $nextGames = $em->getRepository('DwfPronosticsBundle:Game')->findNextGames($event);
         if($event->getSimpleBet()) {
         	$forms_nextgames = array();
+        	$pronostics_nextgames = array();
         	$i = 0;
         	foreach($nextGames as $entity)
         	{
@@ -229,6 +232,7 @@ class EventController extends Controller
         			}
         		}
         		array_push($forms_nextgames, $form->createView());
+        		array_push($pronostics_nextgames, $pronostic);
         		$i++;
         	}
         }
@@ -263,6 +267,8 @@ class EventController extends Controller
                 'bestDefenses' => $bestDefenses,
         		'forms_games' => $forms_games,
         		'forms_nextgames' => $forms_nextgames,
+                'pronostics_games' => $pronostics_games,
+                'pronostics_nextgames' => $pronostics_nextgames,
         );
     }
     
