@@ -14,7 +14,7 @@
     <h2>Matchs du jour</h2>
 </div>
 <div class="row">
-    
+
     <div class="list-match col-sm-12">
     {% set lastDate = '' %}
         {% for entity in games %}
@@ -35,7 +35,7 @@
     <h2>Prochains Matchs</h2>
 </div>
 <div class="row">
-    
+
     <div class="list-match col-sm-12">
         {% set lastDate = '' %}
         {% for entity in nextGames %}
@@ -47,7 +47,7 @@
             {% set lastDate = entity.date|date('Ymd') %}
         {% else %}
             <p>Plus de match à jouer</p>
-            
+
         {% endfor %}
     </div>
 </div>

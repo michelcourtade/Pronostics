@@ -34,7 +34,7 @@ class PronosticController extends Controller
         $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
         if($pronostic)
             $bestscorer_pronostic = $pronostic[0];
-        
+
         $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findAllByUser($this->getUser());
         $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
@@ -63,7 +63,7 @@ class PronosticController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('game_show', array('id' => $entity->getGame()->getId())));
         }
 
@@ -91,7 +91,7 @@ class PronosticController extends Controller
 
         return $form;
     }
-    
+
     /**
      * Displays a form to create a new Pronostic entity.
      *
@@ -109,7 +109,7 @@ class PronosticController extends Controller
             'form'   => $form->createView(),
         );
     }
-    
+
     /**
      * Displays a form to create a new Pronostic entity.
      *
@@ -130,15 +130,15 @@ class PronosticController extends Controller
 		    	$entity->setGame($game);
 		    	$entity->setUser($this->getUser());
 		    	$entity->setEvent($event);
-		    	
+
 		    	$form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
 		    			'action' => $this->generateUrl('pronostics_create'),
 		    			'method' => 'POST',
 		    	));
-		    	
+
 		    	$form->add('submit', 'submit', array('label' => 'Pronostiquer'));
 		    	//$form   = $this->createCreateForm($entity);
-		    
+
 		    	return array(
 		    	        'event' => $game->getEvent(),
 		    			'entity' => $entity,
@@ -177,7 +177,7 @@ class PronosticController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
-    
+
     /**
      * Displays Pronostics for a specific user.
      *
@@ -188,13 +188,13 @@ class PronosticController extends Controller
     public function showForUserAndEventAction($user_id, $event)
     {
     	$em = $this->getDoctrine()->getManager();
-    
+
     	$user = $em->getRepository('DwfPronosticsBundle:User')->find($user_id);
         //$user = $user[0];
     	if (!$user) {
     		throw $this->createNotFoundException('Unable to find User entity.');
     	}
-    
+
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
     		if($event->getChampionship()) {
@@ -223,7 +223,7 @@ class PronosticController extends Controller
             $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($user, $event, 1);
             $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $user);
     //     	$deleteForm = $this->createDeleteForm($id);
-        
+
                 return array(
                     'user'      => $user,
                     'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
@@ -240,7 +240,7 @@ class PronosticController extends Controller
     	}
     	else throw $this->createNotFoundException('Unable to find Event entity.');
     }
-    
+
     /**
      * Displays Pronostics for a specific event.
      *
@@ -273,7 +273,7 @@ class PronosticController extends Controller
     	    $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
     	    if($pronostic)
     	        $bestscorer_pronostic = $pronostic[0];
-    	    
+
 	    	$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndEvent($this->getUser(), $event, 0);
 	    	$nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
 	    	$nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
@@ -296,7 +296,7 @@ class PronosticController extends Controller
     					$em->persist($entity);
     					$em->flush();
     				}
-	    			
+
 	    			array_push($forms, $form->createView());
     				$i++;
 	    		}
@@ -329,17 +329,17 @@ class PronosticController extends Controller
     public function showForGameAction($gameId)
     {
         $em = $this->getDoctrine()->getManager();
-    
+
         $game = $em->getRepository('DwfPronosticsBundle:Game')->find($gameId);
-                
+
         if (!$game) {
             throw $this->createNotFoundException('Unable to find Game entity.');
         }
-    
+
         $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findAllByGame($game);
-         
+
         //     	$deleteForm = $this->createDeleteForm($id);
-    
+
         return array(
                 'user'      => $this->getUser(),
                 'game'      => $game,
@@ -368,7 +368,7 @@ class PronosticController extends Controller
         if(!$game->hasBegan() && !$game->getPlayed()) {
 	        $editForm = $this->createEditForm($entity);
 	        $deleteForm = $this->createDeleteForm($id);
-	
+
 	        return array(
 	        	'event'			=> $game->getEvent(),
 	            'entity'      => $entity,
@@ -424,7 +424,7 @@ class PronosticController extends Controller
     			'delete_form' => $deleteForm->createView(),
     	);
     }
-    
+
     /**
      * Deletes a Pronostic entity.
      *
