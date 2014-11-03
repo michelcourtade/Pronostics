@@ -37,7 +37,8 @@
         "sonata-project/datagrid-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "dev-master",
         "egeloen/google-map": "dev-master",
-        "ornicar/gravatar-bundle" : "dev-master"
+        "ornicar/gravatar-bundle" : "dev-master",
+        "ob/highcharts-bundle": "1.*"
     },
     "require-dev": {
         "webfactory/exceptions-bundle": "@stable"

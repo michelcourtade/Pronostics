@@ -11,9 +11,9 @@ use Dwf\PronosticsBundle\Result\Result;
 
 class GameAdmin extends Admin
 {
-	
+
 	private $result;
-	
+
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -21,7 +21,11 @@ class GameAdmin extends Admin
         ->add('event')
         ->add('team1')
         ->add('team2')
-        ->add('date')
+        ->add('date', 'sonata_type_datetime_picker', array(
+                //'dp_side_by_side'       => true,
+                //'dp_use_current'        => false,
+                'dp_use_seconds'        => false,
+        ))
         ->add('type')
         ->add('scoreTeam1')
         ->add('scoreTeam2')
@@ -31,6 +35,7 @@ class GameAdmin extends Admin
         ->add('winner')
         ->add('played')
         ->add('comment', 'textarea', array('label' => 'L\'avis de l\'expert', 'required' => false, 'attr' => array('class' => 'tinymce', 'data-theme' => 'advanced')))
+        ->end()
         ;
         if ($this->getSubject() != null && $this->getSubject()->getId() != null) {
             $formMapper
@@ -50,7 +55,7 @@ class GameAdmin extends Admin
             )
             ;
         }
-        
+
     }
 
     // Fields to be shown on filter forms
@@ -81,7 +86,7 @@ class GameAdmin extends Admin
         //->add('scoreTeam2')
         ;
     }
-    
+
     public function postUpdate($game)
     {
         if($game->getPlayed()) {
@@ -91,7 +96,7 @@ class GameAdmin extends Admin
         }
     		//Pronostic::setResultsForGame($game);
     }
-    
+
     public function setResult(Result $result)
     {
     	$this->result = $result;
