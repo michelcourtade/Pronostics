@@ -277,27 +277,33 @@ class GameController extends Controller
             $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($type);
             $entities = $em->getRepository('DwfPronosticsBundle:Game')->findAllByTypeAndEvent($type, $event);
             $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
-        
+
             if($event->getSimpleBet()) {
-            	$forms = array();
-            	$pronostics = array();
-            	$i = 0;
-	            foreach($entities as $entity)
-	            {
-	            	$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
-	            	if($pronostic) {
-	            			$simpleType = new SimplePronosticType();
-	            			$simpleType->setName($entity->getId());
-	            			$form = $this->createForm($simpleType, $pronostic, array(
-	            					'action' => '',
-	            					'method' => 'PUT',
-	            			));
-	            			$form->handleRequest($request);
-	            			if ($form->isValid()) {
-	            				$em->persist($pronostic);
-	            				$em->flush();
-	            			}
-	            	}
+                $forms = array();
+                $pronostics = array();
+                $nbPointsWonByChampionshipDay = 0;
+                $nbPronostics = 0;
+                $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
+                $i = 0;
+                foreach($entities as $entity)
+                {
+                    $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+                    if($pronostic) {
+                        $simpleType = new SimplePronosticType();
+                        $simpleType->setName($entity->getId());
+                        $form = $this->createForm($simpleType, $pronostic, array(
+                            'action' => '',
+                            'method' => 'PUT',
+                        ));
+                        $form->handleRequest($request);
+                        if ($form->isValid()) {
+                            $em->persist($pronostic);
+                            $em->flush();
+                        }
+                        $nbPronostics++;
+                        if($pronostic->getResult() && $event->getChampionship())
+                            $nbPointsWonByChampionshipDay += $pronostic->getResult();
+                    }
 	            	else {
             			$simplePronostic = new Pronostic();
             			$simplePronostic->setGame($entity);
@@ -322,16 +328,21 @@ class GameController extends Controller
             }
             else $forms = "";
             return array(
-            		'teams'	=> $arrayTeams,
+                    'teams'	=> $arrayTeams,
                     'results' => $results,
                     'event' => $event,
-            		'currentChampionshipDay' => $currentChampionshipDay,
+                    'currentChampionshipDay' => $currentChampionshipDay,
+                    'nbPointsWonByChampionshipDay' => $nbPointsWonByChampionshipDay,
                     'user' => $this->getUser(),
                     'entity'    => $gameType,
                     'entities' => $entities,
-	    			'types'     => $types,
-            		'forms'	=> $forms,
+                    'types'     => $types,
+                    'forms'	=> $forms,
                     'pronostics' => $pronostics,
+                    'nbPronostics' => $nbPronostics,
+                    'nbPerfectScore' => $nbPerfectScore,
+                    'nbGoodScore' => $nbGoodScore,
+                    'nbBadScore' => $nbBadScore,
             );
         }
         else return $this->redirect($this->generateUrl('events'));

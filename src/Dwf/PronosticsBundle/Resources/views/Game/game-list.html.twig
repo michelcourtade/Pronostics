@@ -11,10 +11,13 @@
     {% endif %}
     <div class="list-match col-sm-9">
     <div class="tabs-container">
-		<ul class="nav nav-tabs">
-	        <li class="active"><a href="#">Matchs</a></li>
-	        <li><a href="#">Classement {{ title }}</a></li>
-		</ul>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">Matchs</a></li>
+            <li><a href="#">Classement {{ title }}</a></li>
+            {% if event.championship and nbPointsWonByChampionshipDay > 0 %}
+            <li><a href="#">Points gagnés</a></li>
+            {% endif %}
+        </ul>
     <div class="tabs">
     {% set lastDate = '' %}
         {% for entity in entities %}
@@ -61,10 +64,29 @@
 		    </tbody>
   			</table>
         </div>
-	</div>
-	{% else %}
-	<p>Pas encore de classement</p>
+    {% else %}
+        <p>Pas encore de classement</p>
     {% endif %}
-	</div>
-	</div>
+    </div>
+    {% if event.championship and nbPointsWonByChampionshipDay > 0 %}
+    <div style="display:none;" class="tabs">
+        <div class="page-header">
+    <h2>Nb points gagnés: <span class="label label-default">{{ nbPointsWonByChampionshipDay }}</span></h2>
+    {% if nbPronostics %}
+    <h2>Moy. points / pronostic: <span class="label label-default">{{ (nbPointsWonByChampionshipDay / nbPronostics)|round(1, 'floor') }}</span></h2>
+    {% endif %}
+    {% if nbPerfectScore and not event.simpleBet %}
+    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+    {% endif %}
+    {% if nbGoodScore %}
+    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+    {% endif %}
+    {% if nbBadScore %}
+    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
+    {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    </div>
+    </div>
 </div>
