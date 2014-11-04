@@ -27,11 +27,11 @@ class PronosticRepository extends EntityRepository
         if($played)
             $qb->andWhere('p.result > 0');
         //$qb->orderBy('p.expiresAt', 'DESC');
-		
+
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
-	
+
 	public function getNbByUserAndEvent(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event, $played = 1)
 	{
 	    $qb = $this->createQueryBuilder('p')
@@ -44,7 +44,7 @@ class PronosticRepository extends EntityRepository
 	    if($played)
 	        $qb->andWhere('p.result > 0');
 	    //$qb->orderBy('p.expiresAt', 'DESC');
-	
+
 	    $query = $qb->getQuery();
 	    return $query->getSingleScalarResult();
 	}
@@ -56,18 +56,18 @@ class PronosticRepository extends EntityRepository
 		->where('p.user = :user')
 		->setParameter('user', $user)
 		->andWhere('p.result = :result')
-		->setParameter('result', $result)		
+		->setParameter('result', $result)
 		->andWhere('p.event = :event')
 		->setParameter('event', $event)
 		;
 		if($played)
 			$qb->andWhere('p.result > 0');
-	
+
 		$query = $qb->getQuery();
 		return $query->getSingleScalarResult();
 	}
-	
-	
+
+
 	public function findAllByGameAndResult(Dwf\PronosticsBundle\Entity\Game $game, $result = null)
 	{
 		$qb = $this->createQueryBuilder('p')
@@ -76,7 +76,7 @@ class PronosticRepository extends EntityRepository
 		->setParameter('game', $game)
 		//->where('p.expires_at > :date')
 		->orderBy('p.expiresAt', 'DESC');
-	
+
 		$query = $qb->getQuery();
 		//var_dump($query->getSql());
 		return $query->getResult();
@@ -94,12 +94,12 @@ class PronosticRepository extends EntityRepository
 		->groupBy('p.user')
 		->orderBy('total', 'DESC')
 		;
-	
+
 		$query = $qb->getQuery();
 		//var_dump($query->getSql());
 		return $query->getResult();
 	}
-	
+
 	public function getResultsForGroup(Application\Sonata\UserBundle\Entity\Group $group)
 	{
 		$qb = $this->createQueryBuilder('p')
@@ -109,12 +109,12 @@ class PronosticRepository extends EntityRepository
 					->groupBy('p.user')
 					->orderBy('total', 'DESC')
 		;
-	
+
 						$query = $qb->getQuery();
 		//var_dump($query->getSql());
 		return $query->getResult();
 	}
-	
+
 	public function getResultsByEvent(Dwf\PronosticsBundle\Entity\Event $event)
 	{
 		$qb = $this->createQueryBuilder('p')
@@ -124,11 +124,11 @@ class PronosticRepository extends EntityRepository
 				->groupBy('p.user')
 				->orderBy('total', 'DESC')
 			;
-	
+
 		$query = $qb->getQuery();
 		return $query->getResult();
 		}
-	
+
 	public function getResultsByEventAndGroup(Dwf\PronosticsBundle\Entity\Event $event, $group)
 		{
 			$qb = $this->createQueryBuilder('p')
@@ -142,11 +142,11 @@ class PronosticRepository extends EntityRepository
 			->groupBy('p.user')
 			->orderBy('total', 'DESC')
 			;
-		
+
 			$query = $qb->getQuery();
 			return $query->getResult();
 		}
-	
+
 	public function getResultsByEventAndUser(Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\User $user)
 		{
 		    $qb = $this->createQueryBuilder('p')
@@ -158,7 +158,43 @@ class PronosticRepository extends EntityRepository
 		    ->setParameter('user', $user)
 		    ->groupBy('p.user')
 		    ;
-		
+
+		    $query = $qb->getQuery();
+		    return $query->getOneOrNullResult();
+		}
+
+		public function getResultsByEventAndUserGroupedByType(Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\User $user)
+		{
+		    $qb = $this->createQueryBuilder('p')
+		    ->leftJoin('p.user','u')
+		    ->leftJoin('p.game', 'g')
+		    ->leftJoin('g.type', 't')
+		    ->select('SUM(p.result) AS total', 't.position AS type')
+		    ->where('p.event = :event')
+		    ->setParameter('event', $event)
+		    ->andWhere('p.user = :user')
+		    ->setParameter('user', $user)
+		    ->groupBy('g.type')
+		    ;
+
+		    $query = $qb->getQuery();
+		    return $query->getResult();
+		}
+
+		public function getResultsByEventAndUserAndType(Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\User $user, $type)
+		{
+		    $qb = $this->createQueryBuilder('p')
+		    ->leftJoin('p.user','u')
+		    ->select('SUM(p.result) AS total')
+		    ->where('p.event = :event')
+		    ->setParameter('event', $event)
+		    ->andWhere('p.user = :user')
+		    ->setParameter('user', $user)
+		    ->andWhere('g.type = :type')
+		    ->setParameter('type', $type)
+		    ->groupBy('p.user')
+		    ;
+
 		    $query = $qb->getQuery();
 		    return $query->getOneOrNullResult();
 		}
@@ -170,11 +206,11 @@ class PronosticRepository extends EntityRepository
 		->andWhere('p.result > 0')
 		->setParameter('user', $user)
 		->orderBy('p.expiresAt', 'DESC');
-	
+
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
-	
+
 	public function findAllByGame(Dwf\PronosticsBundle\Entity\Game $game, $groups = "")
 	{
 		$list = array();
@@ -194,9 +230,27 @@ class PronosticRepository extends EntityRepository
 	    }
 	    $qb->addOrderBy('p.result', 'DESC');
 	    $qb->addOrderBy('g.id', 'ASC');
-	
+
 	    $query = $qb->getQuery();
 	    return $query->getResult();
 	}
-	
+
+	public function getResultsByEventAndType(Dwf\PronosticsBundle\Entity\Event $event, $type)
+	{
+	    $qb = $this->createQueryBuilder('p')
+	    ->leftJoin('p.user','u')
+	    ->leftJoin('p.game', 'g')
+// 	    ->leftJoin('g.type', 't')
+	    ->select('p', 'SUM(p.result) AS total', 'u.username as username', 'COUNT(p.id) AS nb_pronostics')
+	    ->where('p.event = :event')
+	    ->setParameter('event', $event)
+	    ->andWhere('g.type = :type')
+	    ->setParameter('type', $type)
+	    ->groupBy('p.user')
+	    ;
+	    $qb->addOrderBy('u.username', 'ASC');
+	    $query = $qb->getQuery();
+	    return $query->getResult();
+	}
+
 }

@@ -11,6 +11,7 @@ use Dwf\PronosticsBundle\Entity\Game;
 use Dwf\PronosticsBundle\Form\GameType;
 use Dwf\PronosticsBundle\Form\SimplePronosticType;
 use Dwf\PronosticsBundle\Entity\Pronostic;
+use Ob\HighchartsBundle\Highcharts\Highchart;
 
 /**
  * Game controller.
@@ -39,7 +40,7 @@ class GameController extends Controller
             'types'     => $types,
         );
     }
-    
+
     /**
      * Finds and displays a Game entity.
      *
@@ -62,7 +63,7 @@ class GameController extends Controller
         if($pronostic) {
             $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
             $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
-            
+
             if($entity->getEvent()->getSimpleBet()) {
             	$simpleType = new SimplePronosticType();
             	$simpleType->setName($entity->getId());
@@ -138,7 +139,7 @@ class GameController extends Controller
             //'delete_form' => $deleteForm->createView(),
         );
     }
-    
+
     /**
      * Lists all Game entities.
      *
@@ -148,9 +149,10 @@ class GameController extends Controller
      */
     public function showByEventAction($event)
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$request = $this->getRequest();
-    	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
+        $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
     	if($event) {
     		if($event->getChampionship()) {
     			$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
@@ -166,10 +168,73 @@ class GameController extends Controller
 	    				else $currentChampionshipDay = '';
     				}
     			}
+    			$categories = array();
+                $results = array();
+                $users = $em->getRepository('DwfPronosticsBundle:User')->findAll();
+                foreach ($users as $user)
+                {
+                    $results[$user->getUsername()] = array();
+                    $usersResultsGroupedByType = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUserGroupedByType($event, $user);
+                    foreach ($usersResultsGroupedByType as $userResultGrouped)
+                    {
+                        array_push($results[$user->getUsername()], array($userResultGrouped['type'], intval($userResultGrouped['total'])));
+                    }
+                }
+                $positions = array();
+                foreach ($types as $championshipDay)
+                {
+                    array_push($positions, $championshipDay->getPosition());
+                }
+                //var_dump($results);
+                $finalResult = array();
+                foreach ($results as $user => $userResults)
+                {
+                    $finalResult[$user] = array();
+                    foreach ($positions as $position)
+                    {
+                        $dayOk = false;
+                        foreach ($userResults as $type => $points)
+                        {
+                            if($position == $type)
+                                $dayOk = true;
+                        }
+                        if($dayOk == false)
+                            array_push($finalResult[$user], array($position, 0));
+                        else array_push($finalResult[$user], array($position, $points));
+                    }
+                }
+                //var_dump($finalResult);
+                $series = array();
+                foreach ($finalResult as $user => $userResults)
+                {
+                    $serie = array(
+                        'name'  => $user,
+                        'data'  => $userResults,
+                        'dataLabels' => array('enabled' => true),
+                    );
+                    array_push($series, $serie);
+                }
+    			$yData = array(
+    			        array(
+    			                'min' => 0,
+    			                'title' => array(
+    			                        'text'  => 'Score',
+    			                ),
+    			        ),
+    			);
+    			$ob = new Highchart();
+    			$ob->chart->renderTo('chart');
+    			$ob->chart->type('column');
+    			$ob->title->text('Resultats');
+    			$ob->xAxis->categories($categories);
+    			//$ob->xAxis(array(array('type' => 'category', 'labels' => array('rotation' => -45))));
+    			$ob->yAxis($yData);
+    			$ob->legend->enabled(false);
+    			$ob->series($series);
+
     		}
     		else $currentChampionshipDay = '';
 	    	$entities = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventOrderedByDate($event);
-	    	$types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
 	    	if($event->getChampionship()) {
 	    	  $gameTypeId = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getMaxGameTypeIdByEvent($event);
 	    	  $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($gameTypeId);
@@ -184,6 +249,9 @@ class GameController extends Controller
 	    	if($event->getSimpleBet()) {
 	    		$forms = array();
 	    		$pronostics = array();
+	    		$nbPointsWonByChampionshipDay = 0;
+	    		$nbPronostics = 0;
+	    		$nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
 	    		$i = 0;
 	    		foreach($entities as $entity)
 	    		{
@@ -200,6 +268,9 @@ class GameController extends Controller
 	    					$em->persist($pronostic);
 	    					$em->flush();
 	    				}
+	    				$nbPronostics++;
+	    				if($pronostic->getResult() && $event->getChampionship())
+	    				    $nbPointsWonByChampionshipDay += $pronostic->getResult();
 	    			}
 	    			else {
 	    				$simplePronostic = new Pronostic();
@@ -227,6 +298,7 @@ class GameController extends Controller
 	    	return array(
 	    			'event'		=> $event,
 	    			'currentChampionshipDay' => $currentChampionshipDay,
+	    	        'nbPointsWonByChampionshipDay' => $nbPointsWonByChampionshipDay,
 	    			'user' 		=> $this->getUser(),
 	    			'entities' 	=> $entities,
 	    			'types'     => $types,
@@ -234,6 +306,10 @@ class GameController extends Controller
 	    			'teams'	=> $arrayTeams,
 	    			'results' => $results,
 	    	        'pronostics' => $pronostics,
+	    	        'nbPronostics' => $nbPronostics,
+	    	        'nbPerfectScore' => $nbPerfectScore,
+	    	        'nbGoodScore' => $nbGoodScore,
+	    	        'nbBadScore' => $nbBadScore,
 	    	);
     	}
     	else return $this->redirect($this->generateUrl('events'));
@@ -266,6 +342,52 @@ class GameController extends Controller
         				else $currentChampionshipDay = '';
         			}
         		}
+
+        		$usersResultsByType = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndType($event, $type);
+        		$results = array();
+        		$pronos = array();
+        		foreach ($usersResultsByType as $userResult)
+        		{
+        		    $result = array($userResult['username'], intval($userResult['total']));
+        		    $nbPronos = array($userResult['username'], intval($userResult['nb_pronostics']));
+        		    array_push($results, $result);
+        		    array_push($pronos, $nbPronos);
+        		}
+        		$series = array(
+                            array(
+                                'name'  => 'Points gagnés',
+                                'type'  => 'column',
+                                //'color' => '#4572A7',
+                                //'yAxis' => 1,
+                                'data'  => $results,
+                                'dataLabels' => array('enabled' => true),
+                                ),
+                        array(
+                                'name'  => 'Nb Pronostics',
+                                'type'  => 'column',
+                                'color' => '#4572A7',
+                                //'yAxis' => 1,
+                                'data'  => $pronos,
+                                'dataLabels' => array('enabled' => true),
+                        ),
+                );
+                $yData = array(
+                        array(
+                                'min' => 0,
+                                'title' => array(
+                                        'text'  => 'Score',
+                                ),
+                        ),
+                );
+                $ob = new Highchart();
+                $ob->chart->renderTo('chart');
+                $ob->chart->type('column');
+                $ob->title->text('Resultats');
+                $ob->xAxis(array(array('type' => 'category', 'labels' => array('rotation' => -45))));
+                $ob->yAxis($yData);
+                $ob->legend->enabled(false);
+                $ob->series($series);
+
         	}
         	else $currentChampionshipDay = '';
             $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEvent($type, $event);
@@ -343,6 +465,7 @@ class GameController extends Controller
                     'nbPerfectScore' => $nbPerfectScore,
                     'nbGoodScore' => $nbGoodScore,
                     'nbBadScore' => $nbBadScore,
+                    'chart' => $ob
             );
         }
         else return $this->redirect($this->generateUrl('events'));

@@ -14,8 +14,8 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">Matchs</a></li>
             <li><a href="#">Classement {{ title }}</a></li>
-            {% if event.championship and nbPointsWonByChampionshipDay > 0 %}
-            <li><a href="#">Points gagnés</a></li>
+            {% if event.championship %}
+            <li><a href="#">Résultats</a></li>
             {% endif %}
         </ul>
     <div class="tabs">
@@ -68,23 +68,24 @@
         <p>Pas encore de classement</p>
     {% endif %}
     </div>
-    {% if event.championship and nbPointsWonByChampionshipDay > 0 %}
+    {% if event.championship %}
     <div style="display:none;" class="tabs">
         <div class="page-header">
-    <h2>Nb points gagnés: <span class="label label-default">{{ nbPointsWonByChampionshipDay }}</span></h2>
-    {% if nbPronostics %}
-    <h2>Moy. points / pronostic: <span class="label label-default">{{ (nbPointsWonByChampionshipDay / nbPronostics)|round(1, 'floor') }}</span></h2>
-    {% endif %}
-    {% if nbPerfectScore and not event.simpleBet %}
-    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
-    {% endif %}
-    {% if nbGoodScore %}
-    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
-    {% endif %}
-    {% if nbBadScore %}
-    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
-    {% endif %}
+	    <h2>Nb points gagnés: <span class="label label-default">{{ nbPointsWonByChampionshipDay }}</span></h2>
+	    {% if nbPronostics %}
+	    <h2>Moy. points / pronostic: <span class="label label-default">{{ (nbPointsWonByChampionshipDay / nbPronostics)|round(1, 'floor') }}</span></h2>
+	    {% endif %}
+	    {% if nbPerfectScore and not event.simpleBet %}
+	    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+	    {% endif %}
+	    {% if nbGoodScore %}
+	    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+	    {% endif %}
+	    {% if nbBadScore %}
+	    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
+	    {% endif %}
         </div>
+        <div id="chart" style="margin: 0 auto"></div>
     </div>
     {% endif %}
     </div>

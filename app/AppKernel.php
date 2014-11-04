@@ -32,6 +32,7 @@ class AppKernel extends Kernel
         	new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Dwf\PronosticsBundle\DwfPronosticsBundle(),
             new Dwf\PageBundle\DwfPageBundle(),
+            new Ob\HighchartsBundle\ObHighchartsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -16,4 +16,11 @@
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
     {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
+    {% if chart %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        {{ chart(chart) }}
+        });
+    </script>
+    {% endif %}
 {% endblock %}
