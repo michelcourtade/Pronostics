@@ -76,6 +76,23 @@ class GameTypeResultRepository extends EntityRepository
     
     }
     
+    public function getMaxGameTypeIdByEvent(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('g')
+        ->leftJoin('g.team', 't')
+        //->addSelect('p.user')
+        ->select('MAX(g.gameType) AS id')
+        ->where('g.event = :event')
+        ->setParameter('event', $event)
+        ->groupBy('g.event')
+        ;
+    
+        $query = $qb->getQuery();
+        //         var_dump($query->getSql());
+        return $query->getOneOrNullResult();
+    
+    }
+    
     public function findBestOffensesByEvent(Dwf\PronosticsBundle\Entity\Event $event)
     {
         $qb = $this->createQueryBuilder('g')

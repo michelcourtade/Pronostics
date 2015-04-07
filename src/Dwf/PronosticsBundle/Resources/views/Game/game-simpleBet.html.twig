@@ -22,7 +22,7 @@
             {% endif %}
         </a>
         {% elseif entity.hasBegan() %}
-        {% if pronostic is defined %}
+        {% if pronostic is defined and pronostic is not null %}
         <div class="simple_bet">
 	        		<span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
 	        		<span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
