@@ -3,6 +3,7 @@
 namespace Dwf\PronosticsBundle\Result;
 
 use Dwf\PronosticsBundle\Entity\GameTypeResult;
+use Dwf\PronosticsBundle\Entity\Standing;
 class Result
 {
     protected $em;
@@ -126,6 +127,20 @@ class Result
             $this->em->persist($pronostic);
             $this->em->flush();
 
+           $standing = $this->em->getRepository('DwfPronosticsBundle:Standing')->findByUserAndEvent($pronostic->getUser(), $pronostic->getEvent());
+           if($standing) {
+               $standing->setPoints($standing->getPoints() + $result);
+               $standing->setPronostics($standing->getPronostics() + 1);
+           }
+           else {
+               $standing = new Standing();
+               $standing->setUser($pronostic->getUser());
+               $standing->setEvent($pronostic->getEvent());
+               $standing->setPoints($result);
+               $standing->setPronostics(1);
+           }
+           $this->em->persist($standing);
+           $this->em->flush();
         }
     }
     
