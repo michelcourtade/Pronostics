@@ -23,13 +23,11 @@ class Standing
      */
     private $id;
 
-    
     /**
-     * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $game;
-
+    private $user;
     /**
      * @var integer
      *

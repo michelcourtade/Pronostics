@@ -3,6 +3,7 @@
 namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Dwf;
 
 /**
  * StandingRepository
