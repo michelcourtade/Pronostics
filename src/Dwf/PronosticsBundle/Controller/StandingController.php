@@ -101,8 +101,8 @@ class StandingController extends Controller
     		$userGroup = false;
     		if($groups) {
     			foreach ($groups as $key => $group) {
-
-    				$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
+    				//$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
+    				$entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByEventAndGroup($event, $group);
     				array_push($groupResults, array('group' => $group, 'results' => $entities));
     				//$pronosByGroup[$group->getId()] = $entities;
     			}

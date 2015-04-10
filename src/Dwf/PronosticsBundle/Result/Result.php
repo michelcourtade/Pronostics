@@ -127,18 +127,29 @@ class Result
             $this->em->persist($pronostic);
             $this->em->flush();
 
-           $standing = $this->em->getRepository('DwfPronosticsBundle:Standing')->findByUserAndEvent($pronostic->getUser(), $pronostic->getEvent());
+           $standing = $this->em->getRepository('DwfPronosticsBundle:Standing')->findByUserAndEventAndGame($pronostic->getUser(), $pronostic->getEvent(), $game);
            if($standing) {
-               $standing->setPoints($standing->getPoints() + $result);
-               $standing->setPronostics($standing->getPronostics() + 1);
+               // on supprime le standing eventuel sur le meme game pour pouvoir le recreer par la suite
+               $standing = $standing[0];
+               $this->em->remove($standing);
+               $this->em->flush();
+           }
+           $lastStanding = $this->em->getRepository('DwfPronosticsBundle:Standing')->getMaxPointsByUserAndEventBeforeGame($pronostic->getUser(), $pronostic->getEvent(), $game);
+           if($lastStanding) {
+               // recuperation du nombre de points et nombre de pronostics du dernier standing enregistré
+               $lastStandingPoints = $lastStanding[0]->getPoints();
+               $lastStandingPronostics = $lastStanding[0]->getPronostics();
            }
            else {
-               $standing = new Standing();
-               $standing->setUser($pronostic->getUser());
-               $standing->setEvent($pronostic->getEvent());
-               $standing->setPoints($result);
-               $standing->setPronostics(1);
+               $lastStandingPoints = 0;
+               $lastStandingPronostics = 0;
            }
+           $standing = new Standing();
+           $standing->setUser($pronostic->getUser());
+           $standing->setEvent($pronostic->getEvent());
+           $standing->setPoints($lastStandingPoints + $result);
+           $standing->setPronostics($lastStandingPronostics + 1);
+           $standing->setGame($game);
            $this->em->persist($standing);
            $this->em->flush();
         }

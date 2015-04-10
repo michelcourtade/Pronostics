@@ -240,7 +240,10 @@ class GameController extends Controller
                 $ob->series($series);
 
             }
-            else $currentChampionshipDay = '';
+            else {
+                $currentChampionshipDay = '';
+                $ob = '';
+            }
 	    	$entities = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventOrderedByDate($event);
 	    	if($event->getChampionship()) {
 	    	  $gameTypeId = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getMaxGameTypeIdByEvent($event);

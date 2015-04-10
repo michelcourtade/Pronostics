@@ -49,6 +49,12 @@ class Standing
      * @ORM\Column(name="pronostics", type="integer", nullable=true)
      */
     private $pronostics;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Game")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $game;
 
 
     /**
@@ -176,4 +182,5 @@ class Standing
     {
         return $this->game;
     }
+
 }
