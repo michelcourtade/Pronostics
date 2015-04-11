@@ -79,22 +79,10 @@ class StandingController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
     	if($event) {
-    		if($event->getChampionship()) {
-    			$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
-    			if(count($lastGamePlayed) > 0) {
-    				$lastGamePlayed = $lastGamePlayed[0];
-    				$gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
-    				if($gamesLeftInChampionshipDay)
-    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
-    				else {
-    					$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
-	    				if($currentChampionshipDay)
-	    					$currentChampionshipDay = $currentChampionshipDay[0];
-	    				else $currentChampionshipDay = '';
-    				}
-    			}
-    		}
-    		else $currentChampionshipDay = '';
+    	    $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
+    	    $championshipManager->setEvent($event);
+    	    $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
+
     		$groupResults = array();
     		$user = $this->getUser();
     		$groups = $user->getGroups();

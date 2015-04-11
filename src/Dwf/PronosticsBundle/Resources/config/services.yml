@@ -26,3 +26,6 @@ services:
  dwf_pronosticbundle.invitation.form.data_transformer:
         class: Dwf\PronosticsBundle\Form\DataTransformer\InvitationToCodeTransformer
         arguments: [@doctrine.orm.entity_manager]
+ dwf_pronosticbundle.championshipmanager:
+        class: Dwf\PronosticsBundle\Championship\ChampionshipManager
+        arguments: [ @doctrine.orm.entity_manager ]
