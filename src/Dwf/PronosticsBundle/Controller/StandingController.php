@@ -86,47 +86,59 @@ class StandingController extends Controller
     		$groupResults = array();
     		$user = $this->getUser();
     		$groups = $user->getGroups();
-    		$userGroup = false;
-    		if($groups) {
-    			foreach ($groups as $key => $group) {
-    				//$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
-    				$entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByEventAndGroup($event, $group);
-    				array_push($groupResults, array('group' => $group, 'results' => $entities));
-    				//$pronosByGroup[$group->getId()] = $entities;
-    			}
-    			if($user->getId() == 1) {
-	    			if(sizeof($groupResults) == 0) {
-	    				
-	    				$groups = $em->getRepository('ApplicationSonataUserBundle:Group')->findAll();
-	    				foreach ($groups as $key => $group) {
-	    					$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
-	    					array_push($groupResults, array('group' => $group, 'results' => $entities));
-	    				}
-	    			}
-    			}
-//     			else {
-//     				$group = $em->getRepository('ApplicationSonataUserBundle:Group')->find(4);
-//     				$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
-//     				array_push($groupResults, array('group' => $group, 'results' => $entities));
-//     			}
-    		}
-    		else {
-    			// groupe Autres
-   				$group = $em->getRepository('ApplicationSonataUserBundle:Group')->find(4);
-				$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
-   					array_push($groupResults, array('group' => $group, 'results' => $entities));
-    		}
-    
-    		//var_dump($entities);
+
     		return array(
     				'user'      => $user,
     				'event'		=> $event,
     				'currentChampionshipDay' => $currentChampionshipDay,
-    				'entities' => $entities,
     				'groups'	=> $groups,
-    				'groupResults' => $groupResults,
     		);
     	}
     	else return $this->redirect($this->generateUrl('events'));
+    }
+    
+    /**
+     * Lists standings.
+     *
+     * @Route("/{event}/group/{group}", name="standings_event_group")
+     * @Method("GET")
+     * @Template("DwfPronosticsBundle:Standing:group.html.twig")
+     */
+    public function showByEventAndGroupAction($event, $group)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
+        //$group = $em->getRepository('FOSUserBundle:Group')->find($group);
+        if($event) {
+            $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
+            $championshipManager->setEvent($event);
+            $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
+    
+            $groupResults = array();
+            $user = $this->getUser();
+            $groups = $user->getGroups();
+            $userGroup = false;
+            if($groups) {
+                foreach ($groups as $key => $groupUser) {
+                    //$entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndGroup($event, $group);
+                    if($groupUser->getId() == $group) {
+                        $entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByEventAndGroup($event, $groupUser);
+                        break;
+                    }
+                    //array_push($groupResults, array('group' => $group, 'results' => $entities));
+                    //$pronosByGroup[$group->getId()] = $entities;
+                }
+            }
+            //var_dump($entities);
+            return array(
+                    'user'      => $user,
+                    'event'		=> $event,
+                    'currentChampionshipDay' => $currentChampionshipDay,
+                    'entities' => $entities,
+                    'group'	=> $groupUser,
+                    //'groupResults' => $groupResults,
+            );
+        }
+        else return $this->redirect($this->generateUrl('events'));
     }
 }
