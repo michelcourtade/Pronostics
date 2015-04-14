@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>Classement</li>
+    </ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Classement</h1>
+</div>
+<div class="page-header">
+    <h1>Vos groupes de jeu</h1>
+</div>
+    <table class="records_list table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for group in groups %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ group.name }}</td>
+                <td>
+                    <a href="{{ path('standings_event_group', { 'group': group.id, 'event': event.id }) }}" class="btn btn-sm btn-default">Voir ce groupe</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

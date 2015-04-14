@@ -38,7 +38,8 @@
         "beberlei/DoctrineExtensions": "dev-master",
         "egeloen/google-map": "dev-master",
         "ornicar/gravatar-bundle" : "dev-master",
-        "ob/highcharts-bundle": "1.*"
+        "ob/highcharts-bundle": "1.*",
+        "white-october/pagerfanta-bundle": "~1.0"
     },
     "require-dev": {
         "webfactory/exceptions-bundle": "@stable"

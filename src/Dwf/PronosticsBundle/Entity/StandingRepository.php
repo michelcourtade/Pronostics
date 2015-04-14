@@ -56,15 +56,26 @@ class StandingRepository extends EntityRepository
         ->setParameter('event', $event)
         ->groupBy('s.user')
         ->orderBy('total', 'DESC')
-        
-//         ->where('s.user = :user')
-//         ->setParameter('user', $user)
-//         ->andWhere('s.event = :event')
-//         ->setParameter('event', $event)
-//         ->andWhere('s.game = :game')
-//         ->setParameter('game', $game)
         ;
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+    
+    public function getByEventQuery(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('s')
+        ->select('s','MAX(s.points) AS total', 'MAX(s.pronostics) AS nb_pronostics')
+        ->where('s.event = :event')
+        ->setParameter('event', $event)
+        ->groupBy('s.user')
+        ->orderBy('total', 'DESC')
+        ;
+        $query = $qb->getQuery();
+        return $query;
+    }
+    
+    public function getByEvent(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        return $this->getByEventQuery($event)->getResult();
     }
 }

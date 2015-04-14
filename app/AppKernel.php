@@ -29,10 +29,11 @@ class AppKernel extends Kernel
             new Pix\SortableBehaviorBundle\PixSortableBehaviorBundle(),
             new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
-        	new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Dwf\PronosticsBundle\DwfPronosticsBundle(),
             new Dwf\PageBundle\DwfPageBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
