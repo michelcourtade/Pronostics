@@ -29,3 +29,6 @@ services:
  dwf_pronosticbundle.championshipmanager:
         class: Dwf\PronosticsBundle\Championship\ChampionshipManager
         arguments: [ @doctrine.orm.entity_manager ]
+ dwf_pronosticbundle.highchartmanager:
+        class: Dwf\PronosticsBundle\Championship\HighchartManager
+        arguments: []

@@ -339,68 +339,33 @@ class GameController extends Controller
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         if($event) {
-        	if($event->getChampionship()) {
-        		$lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
-        		if(count($lastGamePlayed) > 0) {
-        			$lastGamePlayed = $lastGamePlayed[0];
-        			$gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
-        			if($gamesLeftInChampionshipDay)
-        				$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
-        			else {
-        				$currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
-	        			if($currentChampionshipDay)
-        					$currentChampionshipDay = $currentChampionshipDay[0];
-        				else $currentChampionshipDay = '';
-        			}
-        		}
+            if($event->getChampionship()) {
+                $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
+                $championshipManager->setEvent($event);
+                $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
 
-        		$usersResultsByType = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndType($event, $type);
-        		$results = array();
-        		$pronos = array();
-        		foreach ($usersResultsByType as $userResult)
-        		{
-        		    $result = array($userResult['username'], intval($userResult['total']));
-        		    $nbPronos = array($userResult['username'], intval($userResult['nb_pronostics']));
-        		    array_push($results, $result);
-        		    array_push($pronos, $nbPronos);
-        		}
-        		$series = array(
-                            array(
-                                'name'  => 'Points gagnés',
-                                'type'  => 'column',
-                                //'color' => '#4572A7',
-                                //'yAxis' => 1,
-                                'data'  => $results,
-                                'dataLabels' => array('enabled' => true),
-                                ),
-                        array(
-                                'name'  => 'Nb Pronostics',
-                                'type'  => 'column',
-                                'color' => '#4572A7',
-                                //'yAxis' => 1,
-                                'data'  => $pronos,
-                                'dataLabels' => array('enabled' => true),
-                        ),
-                );
-                $yData = array(
-                        array(
-                                'min' => 0,
-                                'title' => array(
-                                        'text'  => 'Score',
-                                ),
-                        ),
-                );
-                $ob = new Highchart();
-                $ob->chart->renderTo('chart');
-                $ob->chart->type('column');
-                $ob->title->text('Resultats');
-                $ob->xAxis(array(array('type' => 'category', 'labels' => array('rotation' => -45))));
-                $ob->yAxis($yData);
-                $ob->legend->enabled(false);
-                $ob->series($series);
+                $usersResultsByType = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndType($event, $type);
+                $results = array();
+                $pronos = array();
+                foreach ($usersResultsByType as $userResult)
+                {
+                    $result = array($userResult['username'], intval($userResult['total']));
+                    $nbPronos = array($userResult['username'], intval($userResult['nb_pronostics']));
+                    array_push($results, $result);
+                    array_push($pronos, $nbPronos);
+                }
 
-        	}
-        	else $currentChampionshipDay = '';
+                $chart = $this->get('dwf_pronosticbundle.highchartmanager');
+                $chart->setYdata(array('min' => 0, 'title' => 'Score'));
+                $chart->addSerie(array('name'=> 'Points gagnés', 'object' => $results, 'color' => ''));
+                $chart->addSerie(array('name'=> 'Nb Pronostics', 'object' => $pronos, 'color' => '#4572A7'));
+                $ob = $chart->chart();
+
+            }
+            else {
+                $currentChampionshipDay = '';
+                $ob = '';
+            }
             $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEvent($type, $event);
             $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
             foreach ($teams as $team)
@@ -437,27 +402,27 @@ class GameController extends Controller
                         if($pronostic->getResult() && $event->getChampionship())
                             $nbPointsWonByChampionshipDay += $pronostic->getResult();
                     }
-	            	else {
-            			$simplePronostic = new Pronostic();
-            			$simplePronostic->setGame($entity);
-            			$simplePronostic->setUser($this->getUser());
-            			$simplePronostic->setEvent($entity->getEvent());
-            			$simpleType = new SimplePronosticType();
-            			$simpleType->setName($entity->getId());
-            			$form = $this->createForm($simpleType, $simplePronostic, array(
-            					'action' => '',
-            					'method' => 'POST',
-            			));
-		            	$form->handleRequest($request);
-		            	if ($form->isValid()) {
-		            		$em->persist($simplePronostic);
-		            		$em->flush();
-		            	}
-	            	}
-	            	array_push($forms, $form->createView());
-	            	array_push($pronostics, $pronostic);
-	            	$i++;
-	            }
+                   else {
+                        $simplePronostic = new Pronostic();
+                        $simplePronostic->setGame($entity);
+                        $simplePronostic->setUser($this->getUser());
+                        $simplePronostic->setEvent($entity->getEvent());
+                        $simpleType = new SimplePronosticType();
+                        $simpleType->setName($entity->getId());
+                        $form = $this->createForm($simpleType, $simplePronostic, array(
+                                'action' => '',
+                                'method' => 'POST',
+                        ));
+                      $form->handleRequest($request);
+                        if ($form->isValid()) {
+                            $em->persist($simplePronostic);
+                            $em->flush();
+                        }
+                    }
+                    array_push($forms, $form->createView());
+                    array_push($pronostics, $pronostic);
+                   $i++;
+                }
             }
             else $forms = "";
             return array(
