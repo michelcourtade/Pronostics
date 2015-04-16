@@ -1,0 +1,28 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+<ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{{ event.name }} - Evolution de votre score</li>
+</ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Evolution de votre score</h1>
+</div>
+<div class="col-sm-3">
+    {% include "DwfPronosticsBundle:Standing:standing-menu.html.twig" %}
+</div>
+<div id="chart" style="margin: 0 auto" class="col-sm-9"></div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
+    {% if chart %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        {{ chart(chart) }}
+        });
+    </script>
+    {% endif %}
+{% endblock %}

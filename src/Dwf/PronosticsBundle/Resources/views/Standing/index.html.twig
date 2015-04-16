@@ -10,5 +10,4 @@
         <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Classement général</h1>
     </div>
 {% include "DwfPronosticsBundle:Standing:standing.html.twig" %}
-<a href="{{ path('standings_event_groups', {'event': event.id }) }}">Résultats par groupe</a>
 {% endblock %}

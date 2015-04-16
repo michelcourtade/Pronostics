@@ -20,7 +20,7 @@
         </ul>
     <div class="tabs">
     {% set lastDate = '' %}
-        {% for entity in entities %}
+        {% for entity in games %}
         	{% if event.simpleBet %}
             	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
             {% else %}

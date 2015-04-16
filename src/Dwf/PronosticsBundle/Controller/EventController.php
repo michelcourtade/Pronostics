@@ -191,7 +191,10 @@ class EventController extends Controller
         		$i++;
         	}
         }
-        else $forms_games = "";
+        else {
+            $forms_games = "";
+            $pronostics_games = "";
+        }
         
         $nextGames = $em->getRepository('DwfPronosticsBundle:Game')->findNextGames($event);
         if($event->getSimpleBet()) {
@@ -236,7 +239,10 @@ class EventController extends Controller
         		$i++;
         	}
         }
-        else $forms_nextgames = "";
+        else {
+            $forms_nextgames = "";
+            $pronostics_nextgames = "";
+        }
         $scorers = $em->getRepository('DwfPronosticsBundle:Scorer')->findBestScorersByEvent($event, 25);
         $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         foreach ($players as $player)

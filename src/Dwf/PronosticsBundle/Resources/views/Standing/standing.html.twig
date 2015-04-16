@@ -1,3 +1,7 @@
+    <div class="col-sm-3">
+        {% include "DwfPronosticsBundle:Standing:standing-menu.html.twig" %}
+    </div>
+    <div class="col-sm-9">
     {% if pager is defined and pager.haveToPaginate %}
     <div class="pagerfanta">
     {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
@@ -46,3 +50,4 @@
     {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
     </div>
     {% endif %}
+    </div>
