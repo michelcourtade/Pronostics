@@ -12,6 +12,10 @@
 <div class="page-header">
     <h1>Vos groupes de jeu</h1>
 </div>
+<div class="col-sm-3">
+    {% include "DwfPronosticsBundle:Standing:standing-menu.html.twig" %}
+</div>
+<div class="col-sm-9">
     <table class="records_list table table-striped">
         <thead>
             <tr>
@@ -32,4 +36,5 @@
         {% endfor %}
         </tbody>
     </table>
+</div>
 {% endblock %}
