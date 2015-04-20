@@ -1,0 +1,34 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>Prochains matchs</li>
+    </ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Prochains matchs</h1>
+</div>
+<div class="col-sm-3">
+    {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
+</div>
+<div class="row">
+    <div class="list-match col-sm-12">
+        {% set lastDate = '' %}
+        {% for entity in nextGames %}
+        	{% if event.simpleBet %}
+            	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'forms': forms_nextgames, 'pronostic': pronostics_nextgames[loop.index - 1]} %}
+            {% else %}
+            	{% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+            {% endif %}
+            {% set lastDate = entity.date|date('Ymd') %}
+        {% else %}
+            <p>Plus de match à jouer</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+{% endblock %}

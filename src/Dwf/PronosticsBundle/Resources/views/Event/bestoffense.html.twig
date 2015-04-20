@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>Meilleures attaques</li>
+    </ul>
+<div class="page-header">
+    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleures attaques</h1>
+</div>
+<div class="col-sm-3">
+    {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
+</div>
+{% if bestOffenses %}
+<div class="row">
+<div class="col-sm-9">
+    <div class="panel panel-default row">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Classement meilleures attaques (sans les buts csc)</div>
+  <!-- Table -->
+    <table class="table">
+    <thead>
+    <tr>
+    <th>#</th>
+    <th>Equipe</th>
+    <th>Nb buts</th>
+{#     <th>Nb matchs</th>#}
+    </tr>
+    </thead>
+    <tbody>
+    {% for result in bestOffenses %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+        {% if teams[result.team_id].getWebPath %}
+            <img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
+        {% endif %}
+        {{ result.name }}
+        </td>
+        <td>{{ result.total }}</td>
+{#         <td>{{ result.nbGames }}</td>#}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+{% endblock %}

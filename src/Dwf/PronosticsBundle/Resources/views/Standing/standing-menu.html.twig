@@ -1,7 +1,7 @@
 <ul class="list-group">
-    <li class="list-group-item"><a href="{{ path('standings_event', {'event': event.id }) }}">Classement général</a></li>
-    <li class="list-group-item"><a href="{{ path('standings_event_groups', {'event': event.id }) }}">Classement groupes</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'standings_event') %} active{% endif %}"><a href="{{ path('standings_event', {'event': event.id }) }}">Classement général</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'standings_event_groups') %} active{% endif %}"><a href="{{ path('standings_event_groups', {'event': event.id }) }}">Classement groupes</a></li>
     {% if event.championship %}
-        <li class="list-group-item"><a href="{{ path('standings_event_evoscore', {'event': event.id }) }}">Evolution score</a></li>
+        <li class="list-group-item{% if(app.request.attributes.get("_route") == 'standings_event_evoscore') %} active{% endif %}"><a href="{{ path('standings_event_evoscore', {'event': event.id }) }}">Evolution score</a></li>
     {% endif %}
 </ul>
