@@ -3,8 +3,13 @@
     <h2 class="col-sm-12">{{ entity.game.date|date('d/m/Y') }}</h2>
 </div>
 {% endif %}
+
 <div class="match row">
-    <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>
+    <p class="date col-xs-12">
+    <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> - 
+    {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}
+    </p>
+{#     <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>#}
     <div class="team{% if(entity.game.getWhoLose() == 1) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
             <span class="hidden-xs hidden-sm">{{ entity.game.team1.name }}</span>
@@ -15,21 +20,21 @@
     <div class="score col-xs-3 col-sm-2 col-md-2">
         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
 
-        	{% if event.simpleBet %}
-	        	{% if entity.game.played or entity.game.hasBegan() %}
-	        	<div class="simple_bet">
-	        		<span{% if entity.simpleBet == "1" %} class='active'{% endif %}>1</span>
-	        		<span{% if entity.simpleBet == "N" %} class='active'{% endif %}>N</span>
-	        		<span{% if entity.simpleBet == "2" %} class='active'{% endif %}>2</span>
-	        	</div>
-	        	{% else %}
-	        		{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.game.id, 'form': forms[loop.index - 1]} %}
-	        	{% endif %}
-        	{% else %}
-	            <strong>{{ entity.score }}</strong>
-	            {% if entity.game.type.canHaveOvertime and entity.overtime %}
-	                {{ entity.scoreAfterOvertime }}
-	                {% if entity.winner %}({{ entity.winner }}){% endif %}
+            {% if event.simpleBet %}
+                {% if entity.game.played or entity.game.hasBegan() %}
+                <div class="simple_bet">
+                    <span{% if entity.simpleBet == "1" %} class='active'{% endif %}>1</span>
+                    <span{% if entity.simpleBet == "N" %} class='active'{% endif %}>N</span>
+                    <span{% if entity.simpleBet == "2" %} class='active'{% endif %}>2</span>
+                </div>
+                {% else %}
+                    {% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.game.id, 'form': forms[loop.index - 1]} %}
+                {% endif %}
+            {% else %}
+                <strong>{{ entity.score }}</strong>
+                {% if entity.game.type.canHaveOvertime and entity.overtime %}
+                    {{ entity.scoreAfterOvertime }}
+                    {% if entity.winner %}({{ entity.winner }}){% endif %}
             	{% endif %}
             {% endif %}
             {% if entity.game.played %}
