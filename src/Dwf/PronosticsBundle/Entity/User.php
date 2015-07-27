@@ -32,7 +32,8 @@ class User extends BaseUser
     protected $invitation;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Application\Sonata\UserBundle\Entity\Group")
+     * @ ORM\ManyToMany(targetEntity="Application\Sonata\UserBundle\Entity\Group")
+     * @ORM\ManyToMany(targetEntity="Dwf\PronosticsBundle\Entity\Contest")
      * @ORM\JoinTable(name="fos_user_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}

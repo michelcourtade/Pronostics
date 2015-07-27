@@ -10,6 +10,9 @@
     {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}
     </p>
 {#     <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>#}
+    <div class="points pts-{{ entity.result }} col-xs-3 col-sm-2 col-md-2">
+        {% if entity.result %}{{ entity.result }} pts{% endif %}
+    </div>
     <div class="team{% if(entity.game.getWhoLose() == 1) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
             <span class="hidden-xs hidden-sm">{{ entity.game.team1.name }}</span>
@@ -50,10 +53,8 @@
             <img src='/{{ entity.game.team2.getWebPath }}' />
         </a>
     </div>
-    <div class="points pts-{{ entity.result }} col-xs-3 col-sm-2 col-md-1">
-        {% if entity.result %}{{ entity.result }} pts{% endif %}
-    </div>
-    <div class="actions col-xs-2 col-sm-2 col-md-1">
+
+    <div class="actions col-xs-2 col-sm-2 col-md-2">
     <a class="btn btn-default" href="{{ path('game_show', { 'id': entity.game.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
     {% if not entity.game.played and not entity.game.hasBegan() and not event.simpleBet %}
     <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id }) }}" title="Modifier"><span class="glyphicon glyphicon-screenshot"></span></a>
