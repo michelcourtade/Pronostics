@@ -1,0 +1,7 @@
+<ul>
+    {% for contest in contests %}
+        <li>{{ contest.name }}</li>
+    {% else %}
+        <li>Create a contest</li>
+    {% endfor %}
+</ul>

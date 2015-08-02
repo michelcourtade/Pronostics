@@ -36,9 +36,9 @@ class EventController extends Controller
             $event = $entities[0];
             return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
         }
-        
+
         return array(
-        	'event' => "",
+            'event' => "",
             'user' => $this->getUser(),
             'events' => $entities,
         );

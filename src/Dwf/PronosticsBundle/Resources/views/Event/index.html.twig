@@ -22,6 +22,7 @@
                 <td>{% if event.finishDate %}{{ event.finishDate|date('d/m/Y H:i') }}{% endif %}<br /></td>
                 <td><a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-default">Entrer</a></td>
             </tr>
+            <tr><td colspan="4">{{ render(controller("DwfPronosticsBundle:Contest:index", { 'event': event })) }}</td></tr>
         {% endfor %}
         </tbody>
     </table>
