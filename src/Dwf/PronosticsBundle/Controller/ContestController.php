@@ -11,11 +11,13 @@ use Dwf\PronosticsBundle\Entity\Game;
 use Dwf\PronosticsBundle\Entity\Pronostic;
 use Dwf\PronosticsBundle\Form\GameType;
 use Dwf\PronosticsBundle\Form\SimplePronosticType;
+use Dwf\PronosticsBundle\Form\Type\ContestFormType;
+use Dwf\PronosticsBundle\Entity\Contest;
 
 /**
  * Contest controller.
  *
- * @Route("/contests")
+ * @Route("/")
  */
 class ContestController extends Controller
 {
@@ -23,16 +25,35 @@ class ContestController extends Controller
     /**
      * Lists all Contests entities for a user in an event
      *
-     * @Route("/", name="contests")
-     * @Method("GET")
+     * @Route("/{event}/contests", name="contests")
+     * @Method({"GET","PUT"})
      * @Template()
      */
-    public function indexAction(Dwf\PronosticsBundle\Entity\Event $event)
+    public function listAction($event)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $request = $this->getRequest();
+        $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         $contests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByUserAndEvent($this->getUser(), $event);
-        
-        return array("contests" => $contests);
+        $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
+        $contest = new Contest('');
+//             $contest->setName('');
+        $contest->setOwner($this->getUser());
+        $contest->setEvent($event);
+        $form = $this->createForm($contestType, $contest, array(
+                'action' => $this->generateUrl('contests', array('event' => $event->getId())),
+                'method' => 'PUT',
+        ));
+        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em->persist($contest);
+            $em->flush();
+            return $this->redirect($this->generateUrl('events'));
+        }
+        $contestForm = $form->createView();
+
+        return array("contests" => $contests,
+                     "contestForm" => $contestForm);
     }
 }

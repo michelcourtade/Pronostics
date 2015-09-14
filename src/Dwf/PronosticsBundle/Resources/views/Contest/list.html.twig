@@ -1,0 +1,8 @@
+{% if contests %}
+    <ul>
+    {% for contest in contests %}
+        <li>{{ contest.name }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% include "DwfPronosticsBundle:Contest:create.html.twig" with {'contestForm': contestForm } %}

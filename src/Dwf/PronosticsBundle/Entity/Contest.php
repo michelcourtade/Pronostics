@@ -10,6 +10,7 @@ use Application\Sonata\UserBundle\Entity\Group as BaseSonataGroup;
  *
  * @ORM\Table("contests")
  * @ORM\Entity(repositoryClass="Dwf\PronosticsBundle\Entity\ContestRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Contest extends BaseSonataGroup
 {
@@ -22,12 +23,6 @@ class Contest extends BaseSonataGroup
      */
     protected $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    protected $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\User")
@@ -53,7 +48,7 @@ class Contest extends BaseSonataGroup
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetime")
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -66,29 +61,6 @@ class Contest extends BaseSonataGroup
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Contest
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -112,6 +84,17 @@ class Contest extends BaseSonataGroup
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if(!$this->getCreatedAt())
+        {
+            $this->createdAt = new \DateTime();
+        }
     }
 
     /**
@@ -137,6 +120,14 @@ class Contest extends BaseSonataGroup
         return $this->updatedAt;
     }
 
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+    
     /**
      * Set owner
      *

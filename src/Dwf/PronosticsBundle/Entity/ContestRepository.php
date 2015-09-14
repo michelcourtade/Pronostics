@@ -3,7 +3,7 @@
 namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-
+use Dwf;
 /**
  * ContestRepository
  *
@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class ContestRepository extends EntityRepository
 {
+    public function findAllByUserAndEvent(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('c')
+        ->select("c.id, c.name")
+        ->where('c.owner = :user')
+        ->setParameter('user', $user)
+        ->andWhere('c.event = :event')
+        ->setParameter('event', $event)
+        //->orderBy('c.createdAt', 'ASC')
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
 }
