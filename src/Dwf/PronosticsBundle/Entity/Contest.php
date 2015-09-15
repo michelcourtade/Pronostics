@@ -4,6 +4,7 @@ namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Sonata\UserBundle\Entity\Group as BaseSonataGroup;
+use FOS\UserBundle\Entity\Group as BaseGroup;
 
 /**
  * Contest
@@ -12,7 +13,7 @@ use Application\Sonata\UserBundle\Entity\Group as BaseSonataGroup;
  * @ORM\Entity(repositoryClass="Dwf\PronosticsBundle\Entity\ContestRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Contest extends BaseSonataGroup
+class Contest extends BaseGroup
 {
     /**
      * @var integer

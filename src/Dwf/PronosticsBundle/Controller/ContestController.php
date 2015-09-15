@@ -56,4 +56,58 @@ class ContestController extends Controller
         return array("contests" => $contests,
                      "contestForm" => $contestForm);
     }
+    
+    /**
+     * Show a Contest entity
+     *
+     * @Route("/contest/{contestId}", name="contest_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showAction($contestId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $event = $contest->getEvent();
+        
+        if($event->getChampionship()) {
+            $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
+            $championshipManager->setEvent($event);
+            $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
+        }
+        else $currentChampionshipDay = '';
+        
+        $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
+        foreach ($players as $player)
+        {
+            $arrayPlayers[$player->getId()] = $player;
+        }
+        
+        $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
+        foreach ($teams as $team)
+        {
+            $arrayTeams[$team->getId()] = $team;
+        }
+        $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
+        $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
+        $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
+        $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
+        $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
+        
+        return array(
+                'contest' => $contest,
+                'user' => $this->getUser(),
+                'event' => $event,
+                'currentChampionshipDay' => $currentChampionshipDay,
+                'teams'     => $arrayTeams,
+                'players'   => $arrayPlayers,
+                'nbPronostics' => $nb,
+                'nbPerfectScore' => $nbPerfectScore,
+                'nbGoodScore' => $nbGoodScore,
+                'nbBadScore' => $nbBadScore,
+                'total'         => $total,
+        );
+    }
+    
 }
