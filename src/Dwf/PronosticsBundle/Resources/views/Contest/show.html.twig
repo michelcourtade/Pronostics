@@ -1,36 +1,42 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+    {% block breadcrumb %}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     <li>{{ contest.name }}
     </ul>
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {{ contest.name }}</h1>
-</div>
-<div class="col-sm-3">
-    {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
-</div>
-<div class="col-sm-9">
-{% if total %}
+    {% endblock %}
+    {% block contest_header %}
     <div class="page-header">
-    <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
-    {% if nbPronostics %}
-    <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
-    {% endif %}
-    {% if nbPerfectScore and not event.simpleBet %}
-    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
-    {% endif %}
-    {% if nbGoodScore %}
-    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
-    {% endif %}
-    {% if nbBadScore %}
-    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
-    {% endif %}
+        <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %}{{ contest.name }} - <small>{{ event.name }}</small></h1>
     </div>
-{% endif %}
-</div>
+    <div class="col-sm-12">
+        {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
+    </div>
+    {% endblock %}
+    <div class="col-sm-12">
+    {% block content %}
+    {% if total %}
+        <div class="page-header">
+        <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
+        {% if nbPronostics %}
+        <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
+        {% endif %}
+        {% if nbPerfectScore and not event.simpleBet %}
+        <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+        {% endif %}
+        {% if nbGoodScore %}
+        <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+        {% endif %}
+        {% if nbBadScore %}
+        <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
+        {% endif %}
+        </div>
+    {% endif %}
+    {% endblock %}
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
