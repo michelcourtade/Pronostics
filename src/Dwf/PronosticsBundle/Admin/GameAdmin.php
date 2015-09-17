@@ -21,11 +21,12 @@ class GameAdmin extends Admin
         ->add('event')
         ->add('team1')
         ->add('team2')
-        ->add('date', 'sonata_type_datetime_picker', array(
-                //'dp_side_by_side'       => true,
-                //'dp_use_current'        => false,
-                'dp_use_seconds'        => false,
-        ))
+        ->add('date')
+//         , 'sonata_type_datetime_picker', array(
+//                 //'dp_side_by_side'       => true,
+//                 //'dp_use_current'        => false,
+//                 'dp_use_seconds'        => false,
+//         ))
         ->add('type')
         ->add('scoreTeam1')
         ->add('scoreTeam2')

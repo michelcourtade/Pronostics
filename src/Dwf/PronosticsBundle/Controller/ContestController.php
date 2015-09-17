@@ -56,7 +56,7 @@ class ContestController extends Controller
         return array("contests" => $contests,
                      "contestForm" => $contestForm);
     }
-    
+
     /**
      * Show a Contest entity
      *
@@ -70,20 +70,20 @@ class ContestController extends Controller
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
-        
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
         else $currentChampionshipDay = '';
-        
+
         $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         foreach ($players as $player)
         {
             $arrayPlayers[$player->getId()] = $player;
         }
-        
+
         $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
         foreach ($teams as $team)
         {
@@ -94,7 +94,7 @@ class ContestController extends Controller
         $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
         $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
-        
+
         return array(
                 'contest' => $contest,
                 'user' => $this->getUser(),
@@ -109,7 +109,7 @@ class ContestController extends Controller
                 'total'         => $total,
         );
     }
-    
+
     /**
      * Standings for a contest
      *
@@ -126,11 +126,13 @@ class ContestController extends Controller
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
-    
+
             $groupResults = array();
             $user = $this->getUser();
             $groups = $user->getGroups();
             $userGroup = false;
+            $entities = array();
+            $groupUser = array();
             if($groups) {
                 foreach ($groups as $key => $groupUser) {
                     if($groupUser->getId() == $contestId) {
@@ -139,6 +141,7 @@ class ContestController extends Controller
                     }
                 }
             }
+            else $entities = "";
             return array(
                     'contest'                   => $contest,
                     'user'                      => $user,
@@ -150,7 +153,7 @@ class ContestController extends Controller
         }
         else return $this->redirect($this->generateUrl('events'));
     }
-    
+
     /**
      * Admin for a contest
      *
@@ -167,7 +170,7 @@ class ContestController extends Controller
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
-    
+
             $groupResults = array();
             $user = $this->getUser();
             $groups = $user->getGroups();
@@ -191,7 +194,7 @@ class ContestController extends Controller
         }
         else return $this->redirect($this->generateUrl('events'));
     }
-    
+
     /**
      * Lists all Game entities of an event
      *
@@ -302,7 +305,7 @@ class ContestController extends Controller
         }
         else return $this->redirect($this->generateUrl('events'));
     }
-    
+
     /**
      * Displays Pronostics for a specific contest.
      *
@@ -336,7 +339,7 @@ class ContestController extends Controller
             $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
             if($pronostic)
                 $bestscorer_pronostic = $pronostic[0];
-    
+
             $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndEvent($this->getUser(), $event, 0);
             $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
             $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
@@ -359,7 +362,7 @@ class ContestController extends Controller
                         $em->persist($entity);
                         $em->flush();
                     }
-    
+
                     array_push($forms, $form->createView());
                     $i++;
                 }

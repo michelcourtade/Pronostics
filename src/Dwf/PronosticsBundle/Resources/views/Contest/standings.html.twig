@@ -6,7 +6,7 @@
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     <li><a href="{{ path('standings_event', {'event': event.id }) }}">{{ event.name }} - {% trans %}Standings{% endtrans %}</a></li>
-    <li>{{ group.name }}</li>
+    <li>{%if group %}{{ group.name }}{% endif %}</li>
     </ul>
     {% endblock %}
     {% block contest_header %}
@@ -68,7 +68,7 @@
     {% endif %}
     </div>
     {% else %}
-        <p>{% trans %}Contest not found{% endtrans %}</p>
+        <p>{% trans %}You have no Contest{% endtrans %}</p>
     {% endif %}
     {% endblock %}
 {% endblock %}
