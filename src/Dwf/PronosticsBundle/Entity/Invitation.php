@@ -26,6 +26,12 @@ class Invitation
 
 	/** @ORM\OneToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) */
 	protected $user;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Contest")
+	 * @ORM\JoinColumn(nullable=true)
+	 */
+	private $contest;
 
 	public function __construct()
 	{
@@ -77,4 +83,63 @@ class Invitation
 	{
 		return $this->code;
 	}
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Invitation
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Set sent
+     *
+     * @param boolean $sent
+     * @return Invitation
+     */
+    public function setSent($sent)
+    {
+        $this->sent = $sent;
+
+        return $this;
+    }
+
+    /**
+     * Get sent
+     *
+     * @return boolean 
+     */
+    public function getSent()
+    {
+        return $this->sent;
+    }
+
+    /**
+     * Set contest
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Contest $contest
+     * @return Invitation
+     */
+    public function setContest(\Dwf\PronosticsBundle\Entity\Contest $contest = null)
+    {
+        $this->contest = $contest;
+
+        return $this;
+    }
+
+    /**
+     * Get contest
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Contest 
+     */
+    public function getContest()
+    {
+        return $this->contest;
+    }
 }

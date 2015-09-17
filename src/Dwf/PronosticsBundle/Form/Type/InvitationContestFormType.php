@@ -1,15 +1,17 @@
 <?php
 namespace Dwf\PronosticsBundle\Form\Type;
 
-use FOS\UserBundle\Form\Type\RegistrationFormType as BaseRegistrationFormType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class RegistrationFormType extends BaseRegistrationFormType
+class InvitationContestFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->add('invitation', 'dwf_pronosticsbundle_invitation_type');
+        //$builder->add('invitation', 'dwf_pronosticsbundle_invitation_type');
+        $builder->add('email');
 //         $builder->add('groups', 'entity', array(
 //                                             'class'         => 'ApplicationSonataUserBundle:Group',
 //                                             'label'         => 'Groupe',
@@ -24,8 +26,18 @@ class RegistrationFormType extends BaseRegistrationFormType
 //         );
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+                'data_class' => 'Dwf\PronosticsBundle\Entity\Invitation'
+        ));
+    }
+    
     public function getName()
     {
-        return 'dwf_pronosticsbundle_user_registration';
+        return 'dwf_pronosticsbundle_invitation_contest';
     }
 }

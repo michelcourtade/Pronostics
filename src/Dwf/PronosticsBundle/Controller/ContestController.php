@@ -13,6 +13,8 @@ use Dwf\PronosticsBundle\Form\GameType;
 use Dwf\PronosticsBundle\Form\SimplePronosticType;
 use Dwf\PronosticsBundle\Form\Type\ContestFormType;
 use Dwf\PronosticsBundle\Entity\Contest;
+use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
+use Dwf\PronosticsBundle\Entity\Invitation;
 
 /**
  * Contest controller.
@@ -158,12 +160,13 @@ class ContestController extends Controller
      * Admin for a contest
      *
      * @Route("/contests/{contestId}/admin", name="contest_admin")
-     * @Method("GET")
+     * @Method({"GET","PUT"})
      * @Template("DwfPronosticsBundle:Contest:admin.html.twig")
      */
     public function adminAction($contestId)
     {
         $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
         if($contest) {
@@ -171,25 +174,31 @@ class ContestController extends Controller
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
 
-            $groupResults = array();
-            $user = $this->getUser();
-            $groups = $user->getGroups();
-            $userGroup = false;
-            if($groups) {
-                foreach ($groups as $key => $groupUser) {
-                    if($groupUser->getId() == $contestId) {
-                        $entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByEventAndGroup($event, $groupUser);
-                        break;
-                    }
-                }
+            $invitationType = new InvitationContestFormType("Dwf\PronosticsBundle\Entity\Invitation");
+            $invitation = new Invitation();
+            //             $contest->setName('');
+            $invitation->setUser($this->getUser());
+            $invitation->setContest($contest);
+            $form = $this->createForm($invitationType, $invitation, array(
+                    'action' => '',
+                    'method' => 'PUT',
+            ));
+            $form->add('submit', 'submit', array('label' => 'Send'));
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $invitation->setInvitationCode();
+                $em->persist($invitation);
+                $em->flush();
+                return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
+            $invitationForm = $form->createView();
+            
             return array(
                     'contest'                   => $contest,
-                    'user'                      => $user,
+                    'user'                      => $this->getUser(),
                     'event'                     => $event,
                     'currentChampionshipDay'    => $currentChampionshipDay,
-                    'entities'                  => $entities,
-                    'group'                     => $groupUser,
+                    'invitationForm'            => $invitationForm,
             );
         }
         else return $this->redirect($this->generateUrl('events'));

@@ -33,15 +33,6 @@
     </div>
     {% endif %}
     {{ form_widget(form.plainPassword.second, {'attr': { 'class': 'form-control last', 'placeholder': 'Vérification' }}) }}
-       
-    {% if form_errors(form.groups) %} 
-    <div class='alert alert-danger'>
-    {{ form_errors(form.groups) }}
-    </div>
-    {% endif %}
-    <p>Choisissez un ou plusieurs groupe de jeu et entrez votre code d'invitation reçu par mail</p>
-    {{ form_widget(form.groups, {'attr': { 'class': 'form-control first', 'placeholder': 'Groupes' }}) }}
-    
     {% if form_errors(form.invitation) %} 
     <div class='alert alert-danger'>
     {{ form_errors(form.invitation) }}

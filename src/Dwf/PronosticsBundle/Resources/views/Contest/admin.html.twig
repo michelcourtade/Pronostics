@@ -1,0 +1,29 @@
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
+
+{% block body -%}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{% trans %}Admin{% endtrans %}</li>
+    </ul>
+    {% endblock %}
+    {% block contest_header %}
+    {{ parent() }}
+    {% endblock %}
+    {% block content %}
+    <div class="page-header">
+        <h2>{{ event.name }} - {% trans %}Admin{% endtrans %}</h2>
+    </div>
+{{ form_start(invitationForm) }}
+    {{ form_errors(invitationForm) }}
+        <div class="input-group">
+        {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation'}}) }}
+            <span class="input-group-btn">
+            {{ form_widget(invitationForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+            </span>
+        </div>
+    {{ form_rest(invitationForm) }}
+{{ form_end(invitationForm) }}
+    {% endblock %}
+{% endblock %}

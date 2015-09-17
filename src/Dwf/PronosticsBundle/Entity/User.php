@@ -52,4 +52,8 @@ class User extends BaseUser
     }
 
 
+    public function getParent()
+    {
+        return 'FOSUserBundle';
+    }
 }
