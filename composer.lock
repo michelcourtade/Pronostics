@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "5848be1143d7e4913f3ffb3740f9c1bf",
-    "content-hash": "6d7c0d76e63562c56725e209436b4507",
     "packages": [
         {
             "name": "avalanche123/imagine-bundle",
@@ -1743,7 +1742,7 @@
             ],
             "authors": [
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 }
             ],
@@ -1809,7 +1808,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -2699,12 +2698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "c0ad2a5161fabed9b7ba2d872ef5a79d45368007"
+                "reference": "b60b81b3a7799a57faa83b655424922fe47b24d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/c0ad2a5161fabed9b7ba2d872ef5a79d45368007",
-                "reference": "c0ad2a5161fabed9b7ba2d872ef5a79d45368007",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/b60b81b3a7799a57faa83b655424922fe47b24d9",
+                "reference": "b60b81b3a7799a57faa83b655424922fe47b24d9",
                 "shasum": ""
             },
             "require": {
@@ -2713,7 +2712,7 @@
                 "knplabs/knp-menu": ">=2.0,<3.0",
                 "knplabs/knp-menu-bundle": ">=2.0,<3.0.0",
                 "sonata-project/block-bundle": "^2.3.8",
-                "sonata-project/core-bundle": "^2.3.6",
+                "sonata-project/core-bundle": "^2.3.9",
                 "sonata-project/exporter": "~1.0",
                 "symfony/class-loader": "~2.3",
                 "symfony/config": "^2.3.9",
@@ -2779,7 +2778,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-09-17 12:18:29"
+            "time": "2015-09-19 20:17:35"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -2913,12 +2912,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "740faff31ceda763a9887bc05141c3040d2ec2cf"
+                "reference": "55f44c11efdd8c579d2aea414fbe1415a2a4001f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/740faff31ceda763a9887bc05141c3040d2ec2cf",
-                "reference": "740faff31ceda763a9887bc05141c3040d2ec2cf",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/55f44c11efdd8c579d2aea414fbe1415a2a4001f",
+                "reference": "55f44c11efdd8c579d2aea414fbe1415a2a4001f",
                 "shasum": ""
             },
             "require": {
@@ -2974,7 +2973,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2015-08-28 08:47:17"
+            "time": "2015-09-18 10:20:21"
         },
         {
             "name": "sonata-project/datagrid-bundle",
@@ -4195,15 +4194,16 @@
         {
             "name": "zendframework/zend-json",
             "version": "2.3.0",
+            "target-dir": "Zend/Json",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-json.git",
-                "reference": "cf8e594a8a6516d06c25a3dc07e3be462fbea84d"
+                "url": "https://github.com/zendframework/Component_ZendJson.git",
+                "reference": "eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-json/zipball/cf8e594a8a6516d06c25a3dc07e3be462fbea84d",
-                "reference": "cf8e594a8a6516d06c25a3dc07e3be462fbea84d",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendJson/zipball/eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e",
+                "reference": "eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e",
                 "shasum": ""
             },
             "require": {
@@ -4211,16 +4211,12 @@
                 "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "dev-master",
                 "zendframework/zend-http": "self.version",
                 "zendframework/zend-server": "self.version"
             },
             "suggest": {
                 "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-server": "Zend\\Server component",
-                "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
+                "zendframework/zend-server": "Zend\\Server component"
             },
             "type": "library",
             "extra": {
@@ -4230,8 +4226,8 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Zend\\Json\\": "src/"
+                "psr-0": {
+                    "Zend\\Json\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4239,42 +4235,37 @@
                 "BSD-3-Clause"
             ],
             "description": "provides convenience methods for serializing native PHP to JSON and decoding JSON to native PHP",
-            "homepage": "https://github.com/zendframework/zend-json",
             "keywords": [
                 "json",
                 "zf2"
             ],
-            "time": "2014-03-12 16:10:15"
+            "time": "2014-03-12 17:04:14"
         },
         {
             "name": "zendframework/zend-stdlib",
             "version": "2.3.0",
+            "target-dir": "Zend/Stdlib",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zend-stdlib.git",
-                "reference": "426b5396e89e7da2db9678bc9a0b57865f84fe0f"
+                "url": "https://github.com/zendframework/Component_ZendStdlib.git",
+                "reference": "d1c481b8a43f2f079b16d3567960ba539e9dacaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/426b5396e89e7da2db9678bc9a0b57865f84fe0f",
-                "reference": "426b5396e89e7da2db9678bc9a0b57865f84fe0f",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/d1c481b8a43f2f079b16d3567960ba539e9dacaa",
+                "reference": "d1c481b8a43f2f079b16d3567960ba539e9dacaa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.23"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "dev-master",
                 "zendframework/zend-eventmanager": "self.version",
-                "zendframework/zend-filter": "self.version",
                 "zendframework/zend-serializer": "self.version",
                 "zendframework/zend-servicemanager": "self.version"
             },
             "suggest": {
                 "zendframework/zend-eventmanager": "To support aggregate hydrator usage",
-                "zendframework/zend-filter": "To support naming strategy hydrator usage",
                 "zendframework/zend-serializer": "Zend\\Serializer component",
                 "zendframework/zend-servicemanager": "To support hydrator plugin manager usage"
             },
@@ -4286,20 +4277,19 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Zend\\Stdlib\\": "src/"
+                "psr-0": {
+                    "Zend\\Stdlib\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "homepage": "https://github.com/zendframework/zend-stdlib",
             "keywords": [
                 "stdlib",
                 "zf2"
             ],
-            "time": "2014-03-12 16:10:15"
+            "time": "2014-03-14 16:22:22"
         }
     ],
     "packages-dev": [

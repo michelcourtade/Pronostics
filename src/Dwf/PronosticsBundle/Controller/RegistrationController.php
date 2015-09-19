@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationController extends BaseController
 {
-    public function registerAction(Request $request)
+    public function registerAction()
     {
         $form = $this->container->get('fos_user.registration.form');
         $formHandler = $this->container->get('fos_user.registration.form.handler');
@@ -16,28 +16,28 @@ class RegistrationController extends BaseController
         $process = $formHandler->process($confirmationEnabled);
         if ($process) {
             $user = $form->getData();
-            $contestId = $form->getData("contest");
-            $authUser = false;
+
+            var_dump($user);
+            exit();
+            $this->container->get('logger')->info(
+                sprintf('New user registration: %s', $user)
+            );
+
             if ($confirmationEnabled) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $route = 'fos_user_registration_check_email';
             } else {
-                $authUser = true;
+                $this->authenticateUser($user);
                 $route = 'fos_user_registration_confirmed';
             }
 
             $this->setFlash('fos_user_success', 'registration.flash.user_created');
             $url = $this->container->get('router')->generate($route);
-            $response = new RedirectResponse($url);
 
-            if ($authUser) {
-                $this->authenticateUser($user, $response);
-            }
-
-            return $response;
+            return new RedirectResponse($url);
         }
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.twig', array(
             'form' => $form->createView(),
         ));
     }
