@@ -9,33 +9,33 @@ use Dwf\PronosticsBundle\Form\DataTransformer\InvitationToCodeTransformer;
 
 class InvitationFormType extends AbstractType
 {
-	protected $invitationTransformer;
+    protected $invitationTransformer;
 
-	public function __construct(InvitationToCodeTransformer $invitationTransformer)
-	{
-		$this->invitationTransformer = $invitationTransformer;
-	}
+    public function __construct(InvitationToCodeTransformer $invitationTransformer)
+    {
+        $this->invitationTransformer = $invitationTransformer;
+    }
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder->addViewTransformer($this->invitationTransformer, true);
-	}
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer($this->invitationTransformer, true);
+    }
 
-	public function setDefaultOptions(OptionsResolverInterface $resolver)
-	{
-		$resolver->setDefaults(array(
-				'class' => 'Dwf\PronosticsBundle\Entity\Invitation',
-				'required' => true,
-		));
-	}
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+                'class' => 'Dwf\PronosticsBundle\Entity\Invitation',
+                'required' => true,
+        ));
+    }
 
-	public function getParent()
-	{
-		return 'text';
-	}
+    public function getParent()
+    {
+        return 'text';
+    }
 
-	public function getName()
-	{
-		return 'dwf_pronosticsbundle_invitation_type';
-	}
+    public function getName()
+    {
+        return 'dwf_pronosticsbundle_invitation_type';
+    }
 }

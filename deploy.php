@@ -2,8 +2,23 @@
 
 // doc in http://deployer.org/docs
 
-require 'recipe/common.php';
+require 'recipe/symfony.php';
 
+// Symfony shared dirs
+set('shared_dirs', ['app/logs']);
+
+// Symfony shared files
+set('shared_files', ['app/config/parameters.yml']);
+
+// Symfony writable dirs
+set('writable_dirs', ['app/cache', 'app/logs']);
+
+// Assets
+set('assets', ['web/css', 'web/images', 'web/js']);
+
+// Environment vars
+env('env_vars', 'SYMFONY_ENV=prod');
+env('env', 'prod');
 set('keep_releases', 10);
 
 task('install', function () {
@@ -28,8 +43,8 @@ after('deploy', 'success');
 
 server('prod', 'albator.dwf.fr', 22)
     ->user('pronostics-rugby')
-    ->identityFile()
     ->forwardAgent()
+    ->identityFile()
     ->stage('production')
     ->env('deploy_path', '/var/www/clients/client3/web94/web/prod')
     ->env('branch', 'develop')
@@ -44,4 +59,4 @@ server('preprod', 'albator.dwf.fr', 22)
     ->env('branch', 'cleanup')
 ;
 
-set('repository', 'git@github.com:michelcourtade/pronostics.git');
+set('repository', 'git@github.com:michelcourtade/Pronostics.git');

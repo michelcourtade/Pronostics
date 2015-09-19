@@ -23,6 +23,11 @@ class RegistrationFormType extends BaseRegistrationFormType
 //                                             )
 //         );
     }
+    
+    public function getParent()
+    {
+        return 'fos_user_registration';
+    }
 
     public function getName()
     {
