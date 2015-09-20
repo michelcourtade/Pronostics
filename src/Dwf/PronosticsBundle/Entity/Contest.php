@@ -3,8 +3,8 @@
 namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Application\Sonata\UserBundle\Entity\Group as BaseSonataGroup;
-use FOS\UserBundle\Entity\Group as BaseGroup;
+// use Application\Sonata\UserBundle\Model\Group as BaseSonataGroup;
+use FOS\UserBundle\Model\Group as BaseGroup;
 
 /**
  * Contest

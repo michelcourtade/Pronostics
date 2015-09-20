@@ -2,8 +2,8 @@
 
 namespace Dwf\PronosticsBundle\Entity;
 
-use FOS\UserBundle\Entity\User as BaseUser;
-use Sonata\UserBundle\Entity\User as BaseSonataUser;
+use FOS\UserBundle\Model\User as BaseUser;
+// use Sonata\UserBundle\Entity\User as BaseSonataUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
