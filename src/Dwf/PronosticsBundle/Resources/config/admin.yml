@@ -117,3 +117,25 @@ services:
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
             - [ setMailer, [@dwf_pronosticbundle.mailer]]
+    sonata.admin.contest:
+        class: Dwf\PronosticsBundle\Admin\ContestAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Contests" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Contest
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.dwf_user:
+        class: Dwf\PronosticsBundle\Admin\DwfUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Users" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\User
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]

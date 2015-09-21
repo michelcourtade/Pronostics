@@ -26,12 +26,12 @@ security:
             context:            user
             form_login:
                 provider:       fos_userbundle
-                login_path:     /login
+                login_path:     /admin/login
                 use_forward:    false
-                check_path:     /login_check
+                check_path:     /admin/login_check
                 failure_path:   null
             logout:
-                path:           /logout
+                path:           /admin/logout
                 target:         /admin
             anonymous:          true
                

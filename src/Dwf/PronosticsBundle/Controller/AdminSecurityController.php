@@ -22,16 +22,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class AdminSecurityController extends ContainerAware
+class AdminSecurityController extends Controller
 {
     /**
      * Admin security controller login action from SonataUserBundle
      *
-     * @Route("/admin/login", name="admin_login")
+     * @Route("/admin/login", name="dwf_pronosticsbundle_admin_login")
      * @Method({"GET","POST"})
-     * @Template()
+     * @Template("DwfPronosticsBundle:Security:log in.html.twig")
      */
-        public function loginAction()
+    public function loginAction()
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
@@ -73,7 +73,7 @@ class AdminSecurityController extends ContainerAware
 
             return new RedirectResponse($refererUri && $refererUri != $request->getUri() ? $refererUri : $this->container->get('router')->generate('sonata_admin_dashboard'));
         }
-        $template = 'FOSUserBundle:Security:login.html.twig';
+        $template = 'DwfPronosticsBundle:Security:login.html.twig';
         return $this->container->get('templating')->renderResponse($template, array(
                 'last_username' => $lastUsername,
                 'error'         => $error,
@@ -91,18 +91,32 @@ class AdminSecurityController extends ContainerAware
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function renderLogin(array $data)
-    {
-        $template = sprintf('FOSUserBundle:Security:login.html.%s', $this->container->getParameter('fos_user.template.engine'));
+//     protected function renderLogin(array $data)
+//     {
+//         $template = sprintf('DwfPronosticsBundle:Security:login.html.%s', $this->container->getParameter('fos_user.template.engine'));
 
-        return $this->container->get('templating')->renderResponse($template, $data);
-    }
+//         return $this->container->get('templating')->renderResponse($template, $data);
+//     }
 
+    /**
+     * Admin security controller login check action from SonataUserBundle
+     *
+     * @Route("/admin/login_check", name="dwf_pronosticsbundle_admin_login_check")
+     * @Method({"GET","POST"})
+     * @Template("DwfPronosticsBundle:Security:basez_login.html.twig")
+     */
     public function checkAction()
     {
         throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
     }
 
+    /**
+     * Admin security controller logout action from SonataUserBundle
+     *
+     * @Route("/admin/logout", name="dwf_pronosticsbundle_admin_logout")
+     * @Method({"GET","POST"})
+     * @Template("DwfPronosticsBundle:Security:basez_login.html.twig")
+     */
     public function logoutAction()
     {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
