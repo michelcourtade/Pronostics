@@ -36,7 +36,23 @@ class ContestController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-        $contests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByUserAndEvent($this->getUser(), $event);
+        $myContests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByOwnerAndEvent($this->getUser(), $event);
+        //$otherContests = $em->getRepository('DwfPronosticsBundle:Contest')->findInvitedContestByUserAndEvent($this->getUser(), $event);
+        $groups = $this->getUser()->getGroups();
+        $otherContests = array();
+        if($groups) {
+            foreach ($groups as $group) {
+                if($group->getEvent()->getId() == $event->getId()) {
+                    if($group->getOwner()->getId() != $this->getUser()->getId()) {
+                        array_push($otherContests, $group);
+                    }
+                }
+            }
+        } else {
+            $arrayContests = '';
+        }
+        
+
         $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
         $contest = new Contest('');
 //             $contest->setName('');
@@ -55,7 +71,8 @@ class ContestController extends Controller
         }
         $contestForm = $form->createView();
 
-        return array("contests" => $contests,
+        return array("myContests" => $myContests,
+                        "otherContests" => $otherContests,
                      "contestForm" => $contestForm);
     }
 
@@ -159,7 +176,7 @@ class ContestController extends Controller
     /**
      * Admin for a contest
      *
-     * @Route("/contests/{contestId}/admin", name="contest_admin")
+     * @Route("/contests/{contestId}/configure", name="contest_admin")
      * @Method({"GET","PUT"})
      * @Template("DwfPronosticsBundle:Contest:admin.html.twig")
      */

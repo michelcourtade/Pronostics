@@ -93,6 +93,13 @@ class Event
      */
     private $nbPointsForWin;
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="bestScorer", type="boolean")
+     */
+    private $bestScorer;
+    
     
     /**
      * @var file
@@ -531,5 +538,29 @@ class Event
     public function getChampionship()
     {
         return $this->championship;
+    }
+
+    /**
+     * Set bestScorer
+     *
+     * @param boolean $bestScorer
+     *
+     * @return Event
+     */
+    public function setBestScorer($bestScorer)
+    {
+        $this->bestScorer = $bestScorer;
+
+        return $this;
+    }
+
+    /**
+     * Get bestScorer
+     *
+     * @return boolean
+     */
+    public function getBestScorer()
+    {
+        return $this->bestScorer;
     }
 }

@@ -16,11 +16,11 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
          - { name: "form.type", alias: "dwf_pronosticsbundle_user_registration" }
-# dwf_pronosticsbunble.registration_listener:
-#        class: Dwf\PronosticsBundle\EventListener\RegistrationListener
-#        arguments: []
-#        tags:
-#            - { name: kernel.event_subscriber }
+ dwf_pronosticsbunble.registration_listener:
+        class: Dwf\PronosticsBundle\EventListener\RegistrationListener
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }
  dwf_pronosticbundle.invitation.form.type:
         class: Dwf\PronosticsBundle\Form\Type\InvitationFormType
         arguments: [@dwf_pronosticbundle.invitation.form.data_transformer]

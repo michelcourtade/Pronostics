@@ -1,7 +1,9 @@
-<ul class="nav nav-pills">
+<ul class="nav nav-pills nav-justified">
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_show') %}class="active"{% endif %}><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{% trans %}Home{% endtrans %}</a></li>
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_standings') %}class="active"{% endif %}><a href="{{ path('contest_standings', {'contestId': contest.id }) }}">{% trans %}Standings{% endtrans %}</a></li>
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_games') %}class="active"{% endif %}><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}Games{% endtrans %}</a></li>
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_pronostics') %}class="active"{% endif %}><a href="{{ path('contest_pronostics', {'contestId': contest.id }) }}">{% trans %}Pronostics{% endtrans %}</a></li>
+    {% if user.id == contest.owner.id %}
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_admin') %}class="active"{% endif %}><a href="{{ path('contest_admin', {'contestId': contest.id }) }}">{% trans %}Admin{% endtrans %}</a></li>
+    {% endif %}
 </ul>
