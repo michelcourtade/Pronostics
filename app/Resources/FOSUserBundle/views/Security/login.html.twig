@@ -1,10 +1,6 @@
-{% extends '::base.html.twig' %}
+{% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block title %}Identification - Pronostics{% endblock %}
-{% block bodyclass %} class="login"{% endblock %}
-{% block body %}
-{#     {% block fos_user_content %}{% endblock %}#}
-    {% block fos_user_content %}
+{% block fos_user_content %}
         {% if error %}
             <div>{{ error|trans }}</div>
         {% endif %}
@@ -27,5 +23,4 @@
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'identifier" />
             <p class="change">Je n'ai pas de compte, <a href="{{ path("fos_user_registration_register") }}">créer mon compte</a></p>
         </form>
-    {% endblock fos_user_content %}
-{% endblock %}
+{% endblock fos_user_content %}
