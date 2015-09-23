@@ -17,13 +17,13 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
                 'France' => array('iso' =>'FRA', 'national' => '1'),
                 'Angleterre' => array('iso' =>'GBR', 'national' => '1'),
 
-        )
+        );
         foreach ($teams as $name => $infos) {
             $team = new Team();
             $team->setName($$name);
             $team->setIso($infos['iso']);
             $team->setNational($infos['national']);
-            $manager->persist($sport);
+            $manager->persist($team);
             $manager->flush();
         }
     }
