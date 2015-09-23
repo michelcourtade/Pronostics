@@ -47,7 +47,7 @@ server('prod', 'albator.dwf.fr', 22)
     ->identityFile()
     ->stage('production')
     ->env('deploy_path', '/var/www/clients/client3/web94/web/prod')
-    ->env('branch', 'develop')
+    ->env('branch', 'withoutsonatauser')
 ;
 
 server('preprod', 'albator.dwf.fr', 22)
