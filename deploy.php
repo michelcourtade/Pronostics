@@ -23,7 +23,7 @@ set('keep_releases', 10);
 
 task('install', function () {
     cd('{{deploy_path}}/current');
-    run('composer install');
+    run('composer update');
 });
 
 /**
