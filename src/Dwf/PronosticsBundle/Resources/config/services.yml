@@ -7,9 +7,18 @@ services:
  dwf_pronosticbundle.result:
         class: Dwf\PronosticsBundle\Result\Result
         arguments: [ @doctrine.orm.entity_manager ]
- dwf_pronosticbundle.mailer:
-        class: Dwf\PronosticsBundle\Mailer\Mailer
-        arguments: ['@mailer']
+ dwf_pronosticbundle.user_mailer:
+        class: Dwf\PronosticsBundle\Mailer\UserMailer
+        arguments: 
+            0: '@mailer' 
+            1: '@router'
+            2: '@templating'
+            3: 
+                confirmation.template: %fos_user.registration.confirmation.template%
+                resetting_password.template: %fos_user.resetting.email.template%
+                from_email:
+                    confirmation: %fos_user.registration.confirmation.from_email%
+                    resetting_password: %fos_user.resetting.email.from_email%
  
  dwf_pronosticbundle.type.registration_form:
         class: Dwf\PronosticsBundle\Form\Type\RegistrationFormType

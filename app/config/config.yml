@@ -112,10 +112,15 @@ fos_user:
     firewall_name:  main
     user_class:     Dwf\PronosticsBundle\Entity\User
     #user_class:     Application\Sonata\UserBundle\Entity\User
-    #from_email:
-     #   address:        michel@dwf.fr
-     #   sender_name:    MichelDwf
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    Pronostics
+    resetting:
+        email:
+            template: email/password_resetting.email.twig
     registration:
+        confirmation:
+            enabled: true
         form:
             type: dwf_pronosticsbundle_user_registration
     group:
@@ -123,6 +128,7 @@ fos_user:
         group_manager: fos_user.group_manager.default                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
 
     service:
+        mailer: fos_user.mailer.twig_swift
         user_manager: fos_user.user_manager.default                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
 
 sonata_admin:

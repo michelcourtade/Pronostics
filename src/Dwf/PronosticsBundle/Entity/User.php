@@ -27,7 +27,7 @@ class User extends BaseUser
     /**
      * @ORM\OneToOne(targetEntity="Invitation", mappedBy="user")
      * @ORM\JoinColumn(referencedColumnName="code")
-     * @Assert\NotNull(message="Code invitation invalide")
+     * @ Assert\NotNull(message="Code invitation invalide")
      */
     protected $invitation;
     

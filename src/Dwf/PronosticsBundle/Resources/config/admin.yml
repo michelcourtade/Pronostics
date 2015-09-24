@@ -116,7 +116,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
-            - [ setMailer, [@dwf_pronosticbundle.mailer]]
+            - [ setMailer, [@dwf_pronosticbundle.user_mailer]]
     sonata.admin.contest:
         class: Dwf\PronosticsBundle\Admin\ContestAdmin
         tags:
