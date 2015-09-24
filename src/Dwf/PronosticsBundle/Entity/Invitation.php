@@ -24,7 +24,7 @@ class Invitation
 	 */
 	protected $sent = false;
 
-	/** @ORM\OneToMany(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) */
+	/** @ORM\OneToMany(targetEntity="User", mappedBy="invitation", cascade={"persist", "merge"}) */
 	protected $user;
 
 	/**
@@ -141,5 +141,29 @@ class Invitation
     public function getContest()
     {
         return $this->contest;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \Dwf\PronosticsBundle\Entity\User $user
+     *
+     * @return Invitation
+     */
+    public function addUser(\Dwf\PronosticsBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \Dwf\PronosticsBundle\Entity\User $user
+     */
+    public function removeUser(\Dwf\PronosticsBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
     }
 }

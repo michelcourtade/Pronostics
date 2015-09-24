@@ -8,7 +8,7 @@ require 'recipe/symfony.php';
 set('shared_dirs', ['app/logs']);
 
 // Symfony shared files
-set('shared_files', ['app/config/parameters.yml']);
+set('shared_files', ['app/config/parameters.yml', 'web/uploads/documents']);
 
 // Symfony writable dirs
 set('writable_dirs', ['app/cache', 'app/logs']);
