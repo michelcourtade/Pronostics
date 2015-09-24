@@ -24,7 +24,7 @@ class Invitation
 	 */
 	protected $sent = false;
 
-	/** @ORM\OneToMany(targetEntity="User", mappedBy="invitation", cascade={"persist", "merge"}) */
+	/** @ORM\ManyToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) */
 	protected $user;
 
 	/**
