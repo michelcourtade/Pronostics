@@ -20,7 +20,7 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
         );
         foreach ($teams as $name => $infos) {
             $team = new Team();
-            $team->setName($$name);
+            $team->setName($name);
             $team->setIso($infos['iso']);
             $team->setNational($infos['national']);
             $manager->persist($team);
