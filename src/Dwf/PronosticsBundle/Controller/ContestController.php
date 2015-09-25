@@ -214,6 +214,7 @@ class ContestController extends Controller
                 $invitation->setInvitationCode();
                 $em->persist($invitation);
                 $em->flush();
+                $this->get('user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationForm = $form->createView();
@@ -640,5 +641,20 @@ class ContestController extends Controller
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');
+    }
+    
+    /**
+     * Register form filled with invitation and email
+     *
+     * @Route("/register/{invitation}/{email}", name="dwf_pronosticsbundle_invitation_confirm")
+     * @Method("GET")
+     * @Template("FOSUserBundle:Registration:register.html.twig")
+     */
+    public function invitationConfirmAction($invitation, $email)
+    {
+        return array(
+            'invitation' => $invitation,
+            'email'     => $email,
+        );
     }
 }

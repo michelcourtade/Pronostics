@@ -114,13 +114,14 @@ fos_user:
     #user_class:     Application\Sonata\UserBundle\Entity\User
     from_email:
         address:        contact@dwf.fr
-        sender_name:    Pronostics
+        sender_name:    Application Pronostics Rugby
     resetting:
         email:
-            template: email/password_resetting.email.twig
+            template: email/resetting.email.html.twig
     registration:
         confirmation:
             enabled: true
+            template: email/confirmation.email.html.twig
         form:
             type: dwf_pronosticsbundle_user_registration
     group:
@@ -128,7 +129,8 @@ fos_user:
         group_manager: fos_user.group_manager.default                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
 
     service:
-        mailer: fos_user.mailer.twig_swift
+        #mailer: fos_user.mailer.twig_swift
+        mailer: dwf_pronosticbundle.user_swift_mailer
         user_manager: fos_user.user_manager.default                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
 
 sonata_admin:
@@ -181,6 +183,13 @@ sonata_block:
         #sonata.media.block.media:
         #sonata.media.block.gallery:
         #sonata.media.block.feature_media:
+
+dwf_pronosticsbundle:
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    Application Pronostics Rugby
+    invitation:
+        template: email/invitation.email.html.twig
         
 parameters:
     #sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin
