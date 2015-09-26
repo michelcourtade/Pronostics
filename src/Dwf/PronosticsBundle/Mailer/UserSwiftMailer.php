@@ -10,14 +10,16 @@ use Dwf\PronosticsBundle\Entity\Invitation;
 
 class UserSwiftMailer extends TwigSwiftMailer implements MailerInterface
 {
+
     public function sendInvitationEmailMessage(UserInterface $user, Invitation $invitation)
     {
         $template = $this->parameters['template']['invitation'];
-        $url = $this->router->generate('dwf_pronosticsbundle_invitation_confirm', array('invitation' => $invitation->getCode(), 'email' => $invitation->getEmail()), true);
+        $url = $this->router->generate('fos_user_registration_register', array('invitation' => $invitation->getCode(), 'email' => $invitation->getEmail()), true);
     
         $context = array(
                 'user' => $user,
-                'confirmationUrl' => $url
+                'confirmationUrl' => $url,
+                'invitation_code' => $invitation->getCode()
         );
     
         $this->sendMessage($template, $context, $this->parameters['from_email']['invitation'], $invitation->getEmail());

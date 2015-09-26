@@ -1,0 +1,73 @@
+registration:
+    email:
+        subject: Bienvenue sur Pronostics Rugby %username% !
+        message: |
+            Bonjour %username% !
+
+            Pour valider votre compte utilisateur sur Pronostics, merci de vous rendre sur %confirmationUrl%
+
+            Cordialement,
+            L'équipe Pronostics.
+        message_html: |
+            <html>
+            <body>
+            <p>Bonjour %username% !
+
+            <p>Pour valider votre compte utilisateur sur Pronostics, merci de vous rendre sur %confirmationUrl%</p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe Pronostics.</p>
+            </body>
+            </html>
+resetting:
+    email:
+        subject: Réinitialiser votre mot de passe
+        message: |
+            Bonjour %username% !
+
+            Vous pouvez reinitialiser votre mot de passe en cliquant sur %confirmationUrl
+
+            Cordialement,
+            L'équipe Pronostics
+        message_html: |
+            <html>
+            <body>
+            <p>Bonjour %username% !
+
+            <p>Vous pouvez reinitialiser votre mot de passe sur Pronostics en cliquant sur %confirmationUrl%</p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe Pronostics.</p>
+            </body>
+            </html>
+invitation:
+    email:
+        subject: Pronostics Rugby : vous venez d'etre invité par %username% !
+        message: |
+            Bonjour,
+
+            L'utilisateur %username% vient de vous inviter à participer à une compétition sur le site Pronostics Rugby.
+
+            Pour rejoindre la compétition, merci de vous rendre sur le lien suivant %confirmationUrl% ou de rentrer le code suivant lors de la création de votre profil :
+            %invitation_code%
+
+            A très vite sur Pronostics !
+            Cordialement,
+            L'équipe Pronostics.
+        message_html: |
+            <html>
+            <body>
+            <p>Bonjour,</p>
+
+            <p>L'utilisateur %username% vient de vous inviter à participer à une compétition sur le site Pronostics Rugby.</p>
+
+            <p>Pour rejoindre la compétition, merci de vous rendre sur le lien suivant %confirmationUrl% ou de rentrer le code suivant lors de la création de votre profil :</p>
+            <p><span>%invitation_code%</span></p>
+
+            <p>A très vite sur Pronostics !</p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe Pronostics.</p>
+            </body>
+            </html>
+            

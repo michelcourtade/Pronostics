@@ -184,7 +184,7 @@ sonata_block:
         #sonata.media.block.gallery:
         #sonata.media.block.feature_media:
 
-dwf_pronosticsbundle:
+dwf_pronostics:
     from_email:
         address:        contact@dwf.fr
         sender_name:    Application Pronostics Rugby

@@ -214,7 +214,12 @@ class ContestController extends Controller
                 $invitation->setInvitationCode();
                 $em->persist($invitation);
                 $em->flush();
-                $this->get('user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
+                $this->get('dwf_pronosticbundle.user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
+                $this->addFlash(
+                        'success',
+                        'Your invitation has been sent to '.$invitation->getEmail().'!'
+                );
+                
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationForm = $form->createView();

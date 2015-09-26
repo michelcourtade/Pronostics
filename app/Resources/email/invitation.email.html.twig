@@ -2,18 +2,18 @@
 
 {% block subject %}
 {% autoescape false %}
-{{ 'invitation.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+{{ 'invitation.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl, '%invitation_code%': invitation_code}) }}
 {% endautoescape %}
 {% endblock %}
 
 {% block body_text %}
 {% autoescape false %}
-{{ 'invitation.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+{{ 'invitation.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl, '%invitation_code%': invitation_code}) }}
 {% endautoescape %}
 {% endblock %}
 
 {% block body_html %}
 {% autoescape false %}
-{{ 'invitation.email.message_html'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+{{ 'invitation.email.message_html'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl, '%invitation_code%': invitation_code}) }}
 {% endautoescape %}
 {% endblock %}
