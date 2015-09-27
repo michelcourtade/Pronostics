@@ -15,7 +15,12 @@
     <div class="page-header">
         <h2>{{ event.name }} - {% trans %}Admin{% endtrans %}</h2>
     </div>
-{{ form_start(invitationForm) }}
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
+        </ul>
+    <div class="tabs">
+    {{ form_start(invitationForm) }}
     {{ form_errors(invitationForm) }}
         <div class="input-group">
         {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation'}}) }}
@@ -24,6 +29,18 @@
             </span>
         </div>
     {{ form_rest(invitationForm) }}
-{{ form_end(invitationForm) }}
+    {{ form_end(invitationForm) }}
+    {% if invitationsAlreadySent %}
+    <div class="panel panel-default">
+    <div class="panel-heading">{% trans %}Invitations already sent to{% endtrans %}</div>
+    <ul class="list-group">
+        {% for invitation in invitationsAlreadySent %}
+            <li class="list-group-item">{{ invitation.email }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+    </div>
+    </div>
     {% endblock %}
 {% endblock %}

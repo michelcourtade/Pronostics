@@ -199,9 +199,9 @@ class ContestController extends Controller
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
 
+            $invitationsAlreadySent = $em->getRepository('DwfPronosticsBundle:Invitation')->findByUser($this->getUser());
             $invitationType = new InvitationContestFormType("Dwf\PronosticsBundle\Entity\Invitation");
             $invitation = new Invitation();
-            //             $contest->setName('');
             $invitation->setUser($this->getUser());
             $invitation->setContest($contest);
             $form = $this->createForm($invitationType, $invitation, array(
@@ -211,14 +211,22 @@ class ContestController extends Controller
             $form->add('submit', 'submit', array('label' => 'Send'));
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $invitation->setInvitationCode();
-                $em->persist($invitation);
-                $em->flush();
-                $this->get('dwf_pronosticbundle.user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
-                $this->addFlash(
-                        'success',
-                        'Your invitation has been sent to '.$invitation->getEmail().'!'
-                );
+                $existingInvitation = $em->getRepository('DwfPronosticsBundle:Invitation')->findByEmail($invitation->getEmail());
+                if($existingInvitation) {
+                    $this->addFlash(
+                            'info',
+                            'Invitation already sent for '.$invitation->getEmail().' !'
+                    );
+                } else {
+                    $invitation->setInvitationCode();
+                    $em->persist($invitation);
+                    $em->flush();
+                    $this->get('dwf_pronosticbundle.user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
+                    $this->addFlash(
+                            'success',
+                            'Your invitation has been sent to '.$invitation->getEmail().' !'
+                    );
+                }
                 
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
@@ -230,6 +238,7 @@ class ContestController extends Controller
                     'event'                     => $event,
                     'currentChampionshipDay'    => $currentChampionshipDay,
                     'invitationForm'            => $invitationForm,
+                    'invitationsAlreadySent'    => $invitationsAlreadySent,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
