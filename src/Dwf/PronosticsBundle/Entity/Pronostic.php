@@ -87,6 +87,14 @@ class Pronostic
     private $winner;
     
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="SliceScore")
+     * @ORM\JoinColumn(name="slicescore", referencedColumnName="id", nullable=true)
+     */
+    private $sliceScore;
+    
+    /**
      * @var string
      *
      * possible values : 1 / N / 2

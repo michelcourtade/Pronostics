@@ -504,7 +504,31 @@ class ContestController extends Controller
         if($entity->getScoreTeam2() > 0 || $entity->getScoreTeam2Overtime() > 0)
             $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')->findScorersByGameAndTeam($entity, $entity->getTeam2());
         else $scorersTeam2 = "";
+        $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
+        $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
         $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+        if(!$pronostic) {
+            $pronostic = new Pronostic();
+            $pronostic->setGame($entity);
+            $pronostic->setUser($this->getUser());
+            $pronostic->setEvent($entity->getEvent());
+        }
+        if($entity->getEvent()->getSimpleBet()) {
+            $simpleType = new SimplePronosticType();
+            $simpleType->setName($entity->getId());
+            $form = $this->createForm($simpleType, $pronostic, array(
+                    'action' => '',
+                    'method' => 'PUT',
+            ));
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $em->persist($pronostic);
+                $em->flush();
+            }
+        } else {
+            // TODO : normal pronostic
+        }
+        /*
         if($pronostic) {
             $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
             $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
@@ -542,7 +566,7 @@ class ContestController extends Controller
                     $em->flush();
                 }
             }
-        }
+        }*/
 
         if($entity->hasBegan() || $entity->getPlayed()) {
             $user = $this->getUser();

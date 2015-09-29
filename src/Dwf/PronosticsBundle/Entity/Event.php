@@ -68,6 +68,13 @@ class Event
     /**
      * @var boolean
      *
+     * @ORM\Column(name="scoreDiff", type="boolean")
+     */
+    private $scoreDiff;
+    
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="championship", type="boolean")
      */
     private $championship;
@@ -562,5 +569,29 @@ class Event
     public function getBestScorer()
     {
         return $this->bestScorer;
+    }
+
+    /**
+     * Set scoreDiff
+     *
+     * @param boolean $scoreDiff
+     *
+     * @return Event
+     */
+    public function setScoreDiff($scoreDiff)
+    {
+        $this->scoreDiff = $scoreDiff;
+
+        return $this;
+    }
+
+    /**
+     * Get scoreDiff
+     *
+     * @return boolean
+     */
+    public function getScoreDiff()
+    {
+        return $this->scoreDiff;
     }
 }

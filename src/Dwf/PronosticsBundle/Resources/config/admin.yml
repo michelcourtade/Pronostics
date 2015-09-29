@@ -22,6 +22,16 @@ services:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.slice_score:
+        class: Dwf\PronosticsBundle\Admin\SliceScoreAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Tranches de score" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\SliceScore
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
     sonata.admin.game_type:
         class: Dwf\PronosticsBundle\Admin\GameTypeAdmin
         tags:
