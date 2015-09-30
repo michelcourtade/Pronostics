@@ -21,7 +21,7 @@
         </a>
     </div>
     <div class="score col-xs-3 col-sm-2 col-md-2">
-        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+{#         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">#}
 
             {% if event.simpleBet %}
                 {% if entity.game.played or entity.game.hasBegan() %}
@@ -44,7 +44,7 @@
             	<br />Résultat : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
             {% endif %}
 
-        </a>
+{#         </a>#}
     </div>
     <div class="team ext{% if(entity.game.getWhoLose() == 2) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
         <a href="{{ path('game_show', { 'id': entity.game.id }) }}">

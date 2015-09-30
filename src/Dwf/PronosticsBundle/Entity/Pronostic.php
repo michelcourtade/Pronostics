@@ -550,4 +550,28 @@ class Pronostic
     {
         return $this->simpleBet;
     }
+
+    /**
+     * Set sliceScore
+     *
+     * @param \Dwf\PronosticsBundle\Entity\SliceScore $sliceScore
+     *
+     * @return Pronostic
+     */
+    public function setSliceScore(\Dwf\PronosticsBundle\Entity\SliceScore $sliceScore = null)
+    {
+        $this->sliceScore = $sliceScore;
+
+        return $this;
+    }
+
+    /**
+     * Get sliceScore
+     *
+     * @return \Dwf\PronosticsBundle\Entity\SliceScore
+     */
+    public function getSliceScore()
+    {
+        return $this->sliceScore;
+    }
 }

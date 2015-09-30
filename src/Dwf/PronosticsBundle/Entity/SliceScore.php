@@ -107,4 +107,9 @@ class SliceScore
     {
         return $this->sports;
     }
+    
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

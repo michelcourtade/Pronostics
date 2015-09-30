@@ -34,11 +34,13 @@ class SimplePronosticType extends AbstractType
                             'class' => 'Dwf\PronosticsBundle\Entity\SliceScore',
                             'query_builder' => function (SliceScoreRepository $er) use ($options) {
                                 return $er->createQueryBuilder('s')
-                                ->where('s.sports IN (:sports)')
-                                ->setParameter('sports', array($options['data']->getEvent()->getSport()))
-                                ->orderBy('s.name', 'ASC');
+                                ->leftJoin('s.sports', 'sp')
+                                ->where('sp.id = :sport')
+                                ->setParameter('sport', array($options['data']->getEvent()->getSport()))
+                                ->orderBy('s.id', 'ASC');
                             },
                             'multiple' => false,
+                            'required' => false,
                     ))
             ->add('user', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'))
             ->add('game', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Game'))

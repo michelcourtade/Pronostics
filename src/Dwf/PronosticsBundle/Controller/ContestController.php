@@ -472,7 +472,7 @@ class ContestController extends Controller
                     'entity'    => $gameType,
                     'games' => $games,
                     'types'     => $types,
-                    'forms'	=> $forms,
+                    'forms' => $forms,
                     'pronostics' => $pronostics,
                     'nbPronostics' => $nbPronostics,
                     'nbPerfectScore' => $nbPerfectScore,
@@ -522,6 +522,9 @@ class ContestController extends Controller
             ));
             $form->handleRequest($request);
             if ($form->isValid()) {
+                if($pronostic->getSimpleBet() == "N") {
+                    $pronostic->setSliceScore(null);
+                }
                 $em->persist($pronostic);
                 $em->flush();
             }
