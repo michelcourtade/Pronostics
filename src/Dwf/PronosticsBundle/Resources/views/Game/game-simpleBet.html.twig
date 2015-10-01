@@ -22,15 +22,18 @@
             {% endif %}
         </a>
         {% elseif entity.hasBegan() %}
-        {% if pronostic is defined and pronostic is not null %}
-        <div class="simple_bet">
-            <span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
-            <span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
-            <span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
-        </div>
+            {% if pronostic is defined and pronostic is not null %}
+                <div class="simple_bet">
+                    <span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
+                    <span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
+                    <span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
+                </div>
+                {% if pronostic.sliceScore %}
+                    {% trans %}Difference{% endtrans %}: {{ pronostic.sliceScore }}
+                {% endif %}
             {% endif %}
         {% else %}
-        	{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id, 'form': forms[loop.index - 1]} %}
+            {% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id, 'form': forms[loop.index - 1]} %}
         {% endif %}
     </div>
     <div class="team ext{% if(entity.getWhoLose() == 2) %} looser{% endif %} col-xs-3 col-sm-3 col-md-3">

@@ -368,7 +368,7 @@ class Game
     
     public function hasBegan() 
     {
-    	return ($this->getDate()->format('U') < time());	
+        return (intval($this->getDate()->format('U')) < time());
     }
     
     public function hasOvertime()

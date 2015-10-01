@@ -59,6 +59,9 @@
                         <span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
                         <span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
                     </div>
+                    {% if pronostic.sliceScore %}
+                        {% trans %}Difference{% endtrans %}: {{ pronostic.sliceScore }}
+                    {% endif %}
                 {% endif %}
             {% else %}
                 {% trans %}My bet :{% endtrans %} <span class="prono">{{ pronostic.score }}</span>
