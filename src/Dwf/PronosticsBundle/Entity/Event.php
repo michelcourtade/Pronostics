@@ -142,6 +142,12 @@ class Event
      */
     private $nbPointsForWrongSimpleBet;
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForRightSliceScore", type="integer", nullable=true)
+     */
+    private $nbPointsForRightSliceScore;
     
     /**
      * @var boolean
@@ -780,5 +786,29 @@ class Event
     public function getNbPointsForRightBetWithScore()
     {
         return $this->nbPointsForRightBetWithScore;
+    }
+
+    /**
+     * Set nbPointsForRightSliceScore
+     *
+     * @param integer $nbPointsForRightSliceScore
+     *
+     * @return Event
+     */
+    public function setNbPointsForRightSliceScore($nbPointsForRightSliceScore)
+    {
+        $this->nbPointsForRightSliceScore = $nbPointsForRightSliceScore;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForRightSliceScore
+     *
+     * @return integer
+     */
+    public function getNbPointsForRightSliceScore()
+    {
+        return $this->nbPointsForRightSliceScore;
     }
 }

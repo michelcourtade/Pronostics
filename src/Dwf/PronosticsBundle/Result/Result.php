@@ -26,8 +26,16 @@ class Result
                     || (($game->getWhoWin() == 2) && ($pronostic->getSimpleBet() == 2)) 
                     || (($game->getWhoWin() == 0) && ($pronostic->getSimpleBet() == 'N'))) {
                     $result = $game->getEvent()->getNbPointsForRightSimpleBet();
+                    if(($pronostic->getSliceScore())
+                    && (($game->getScoreTeam1() > 0) || ($game->getScoreTeam2() > 0))
+                    && (($game->getScoreDifference() >= $pronostic->getSliceScore()->getMin()) 
+                         && ($game->getScoreDifference() <= $pronostic->getSliceScore()->getMax())))
+                    {
+                        $result .= $game->getEvent()->getNbPointsForRightSliceScore();
+                    }
                 }
                 else $result = $game->getEvent()->getNbPointsForWrongSimpleBet();
+                
             }
             // pronostic avec score
             else {
@@ -156,62 +164,72 @@ class Result
     
     public function setResultsForGroup(\Dwf\PronosticsBundle\Entity\Game $game)
     {
-    	$results = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGame($game);
-    	//var_dump($results); exit();
-    	if(!$results) {
-    		if($game->getEvent()->getChampionship()) {
-    			$nbPointsTeam1 = 0;
-    			$nbPointsTeam2 = 0;
-    			$goalaverageTeam1 = 0;
-    			$goalaverageTeam2 = 0;
-    			if($game->getType()->getPosition() > 1) {
-    				$gameType = $this->em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($game->getEvent(), $game->getType()->getPosition() - 1);
-    				$lastResultsTeam1 = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEventAndTeam($gameType, $game->getEvent(), $game->getTeam1());
-    				if($lastResultsTeam1) {
-    					$nbPointsTeam1 = $lastResultsTeam1[0]["total"];
-    					$goalaverageTeam1 = $lastResultsTeam1[0]["goals"];
-    				}
-    				$lastResultsTeam2 = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEventAndTeam($gameType, $game->getEvent(), $game->getTeam2());
-    				if($lastResultsTeam2) {
-    					$nbPointsTeam2 = $lastResultsTeam2[0]["total"];
-    					$goalaverageTeam2 = $lastResultsTeam2[0]["goals"];
-    				}
-    				
-    			}
-    		}
-	        $result = new GameTypeResult();
-	        $result->setEvent($game->getEvent());
-	        $result->setGameType($game->getType());
-	        $result->setTeam($game->getTeam1());
-	        $result->setGame($game);
-	        if($game->getWhoWin() == 1)
-	            $nbPoints = $game->getEvent()->getNbPointsForWin();
-	        elseif($game->getWhoWin() == 0)
-	            $nbPoints = $game->getEvent()->getNbPointsForDraw();
-	        else $nbPoints = $game->getEvent()->getNbPointsForLoss();
-	        
-	        $result->setResult($nbPoints + $nbPointsTeam1);
-	        $result->setGoalaverage(($game->getScoreTeam1() - $game->getScoreTeam2()) + $goalaverageTeam1);
-	        
-	        $this->em->persist($result);
-	        $this->em->flush();
-	        
-	        $result = new GameTypeResult();
-	        $result->setEvent($game->getEvent());
-	        $result->setGameType($game->getType());
-	        $result->setTeam($game->getTeam2());
-	        $result->setGame($game);
-	        if($game->getWhoWin() == 2)
-	            $nbPoints = $game->getEvent()->getNbPointsForWin();
-	        elseif($game->getWhoWin() == 0)
-	            $nbPoints = $game->getEvent()->getNbPointsForDraw();
-	        else $nbPoints = $game->getEvent()->getNbPointsForLoss();
-	        $result->setResult($nbPoints + $nbPointsTeam2);
-	        $result->setGoalaverage(($game->getScoreTeam2() - $game->getScoreTeam1()) + $goalaverageTeam2);
-	        
-	        $this->em->persist($result);
-	        $this->em->flush();
-    	}
+        //$results = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGame($game);
+        $results = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->findByGame($game);
+        //var_dump($results);exit();
+        if($results) {
+            // on supprime les results eventuels sur le meme game pour pouvoir les recreer par la suite
+            foreach ($results as $result) {
+                $this->em->remove($result);
+                $this->em->flush();
+            }
+        }
+        
+        //var_dump($results); exit();
+        //if(!$results) {
+            $nbPointsTeam1 = 0;
+            $nbPointsTeam2 = 0;
+            $goalaverageTeam1 = 0;
+            $goalaverageTeam2 = 0;
+            if($game->getEvent()->getChampionship()) {
+                if($game->getType()->getPosition() > 1) {
+                    $gameType = $this->em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($game->getEvent(), $game->getType()->getPosition() - 1);
+                    $lastResultsTeam1 = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEventAndTeam($gameType, $game->getEvent(), $game->getTeam1());
+                    if($lastResultsTeam1) {
+                        $nbPointsTeam1 = $lastResultsTeam1[0]["total"];
+                        $goalaverageTeam1 = $lastResultsTeam1[0]["goals"];
+                    }
+                    $lastResultsTeam2 = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEventAndTeam($gameType, $game->getEvent(), $game->getTeam2());
+                    if($lastResultsTeam2) {
+                        $nbPointsTeam2 = $lastResultsTeam2[0]["total"];
+                        $goalaverageTeam2 = $lastResultsTeam2[0]["goals"];
+                    }
+                }
+            }
+            
+            $result = new GameTypeResult();
+            $result->setEvent($game->getEvent());
+            $result->setGameType($game->getType());
+            $result->setTeam($game->getTeam1());
+            $result->setGame($game);
+            if($game->getWhoWin() == 1)
+                $nbPoints = $game->getEvent()->getNbPointsForWin();
+            elseif($game->getWhoWin() == 0)
+                $nbPoints = $game->getEvent()->getNbPointsForDraw();
+            else $nbPoints = $game->getEvent()->getNbPointsForLoss();
+            
+            $result->setResult($nbPoints + $nbPointsTeam1);
+            $result->setGoalaverage(($game->getScoreTeam1() - $game->getScoreTeam2()) + $goalaverageTeam1);
+            
+            $this->em->persist($result);
+            $this->em->flush();
+            
+            $result = new GameTypeResult();
+            $result->setEvent($game->getEvent());
+            $result->setGameType($game->getType());
+            $result->setTeam($game->getTeam2());
+            $result->setGame($game);
+            if($game->getWhoWin() == 2)
+                $nbPoints = $game->getEvent()->getNbPointsForWin();
+            elseif($game->getWhoWin() == 0)
+                $nbPoints = $game->getEvent()->getNbPointsForDraw();
+            else $nbPoints = $game->getEvent()->getNbPointsForLoss();
+            $result->setResult($nbPoints + $nbPointsTeam2);
+            $result->setGoalaverage(($game->getScoreTeam2() - $game->getScoreTeam1()) + $goalaverageTeam2);
+            
+            $this->em->persist($result);
+            $this->em->flush();
+        //}
     
     }
 }

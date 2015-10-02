@@ -13,6 +13,8 @@ class SliceScoreAdmin extends Admin
     {
         $formMapper
         ->add('name')
+        ->add('min')
+        ->add('max')
         ->add('sports','entity', array('required' => false,
                                         'class' => 'Dwf\PronosticsBundle\Entity\Sport',
                                         'expanded' => true,
@@ -33,6 +35,8 @@ class SliceScoreAdmin extends Admin
     {
         $listMapper
         ->addIdentifier('name')
+        ->add('min')
+        ->add('max')
         ->add('sports')
         ;
     }
