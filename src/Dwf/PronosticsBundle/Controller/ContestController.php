@@ -231,6 +231,7 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationForm = $form->createView();
+            $users = $em->getRepository('DwfPronosticsBundle:User')->getOtherUsersByContest($this->getUser(), $contest);
 
             return array(
                     'contest'                   => $contest,
@@ -239,6 +240,7 @@ class ContestController extends Controller
                     'currentChampionshipDay'    => $currentChampionshipDay,
                     'invitationForm'            => $invitationForm,
                     'invitationsAlreadySent'    => $invitationsAlreadySent,
+                    'users'                     => $users,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -350,6 +352,7 @@ class ContestController extends Controller
                     'nbGoodScore'                   => $nbGoodScore,
                     'nbBadScore'                    => $nbBadScore,
                     'chart'                         => '',
+                    'gameType'                      => '',
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -462,23 +465,23 @@ class ContestController extends Controller
                 $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
             }
             return array(
-                    'contest' => $contest,
-                    'teams'	=> $arrayTeams,
-                    'results' => $results,
-                    'event' => $event,
-                    'currentChampionshipDay' => $currentChampionshipDay,
-                    'nbPointsWonByChampionshipDay' => $nbPointsWonByChampionshipDay,
-                    'user' => $this->getUser(),
-                    'entity'    => $gameType,
-                    'games' => $games,
-                    'types'     => $types,
-                    'forms' => $forms,
-                    'pronostics' => $pronostics,
-                    'nbPronostics' => $nbPronostics,
-                    'nbPerfectScore' => $nbPerfectScore,
-                    'nbGoodScore' => $nbGoodScore,
-                    'nbBadScore' => $nbBadScore,
-                    'chart' => $ob
+                    'contest'                       => $contest,
+                    'teams'                         => $arrayTeams,
+                    'results'                       => $results,
+                    'event'                         => $event,
+                    'currentChampionshipDay'        => $currentChampionshipDay,
+                    'nbPointsWonByChampionshipDay'  => $nbPointsWonByChampionshipDay,
+                    'user'                          => $this->getUser(),
+                    'gameType'                      => $gameType,
+                    'games'                         => $games,
+                    'types'                         => $types,
+                    'forms'                         => $forms,
+                    'pronostics'                    => $pronostics,
+                    'nbPronostics'                  => $nbPronostics,
+                    'nbPerfectScore'                => $nbPerfectScore,
+                    'nbGoodScore'                   => $nbGoodScore,
+                    'nbBadScore'                    => $nbBadScore,
+                    'chart'                         => $ob
             );
         }
         else return $this->redirect($this->generateUrl('events'));

@@ -2,9 +2,9 @@
     {% if types %}
     <div class="col-sm-3">
         <ul class="list-group">
-        	<li class="list-group-item"><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+        	<li class="list-group-item{% if not gameType %} active{% endif %}"><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
         {% for type in types %}
-            <li class="list-group-item"><a href="{{ path('contest_games_by_type', { 'type': type.id, 'contestId': contest.id }) }}">{{ type }}</a></li>
+            <li class="list-group-item{% if gameType and gameType.id == type.id %} active{% endif %}"><a href="{{ path('contest_games_by_type', { 'type': type.id, 'contestId': contest.id }) }}">{{ type }}</a></li>
         {% endfor %}
         </ul>
     </div>
@@ -14,7 +14,9 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{% trans %}Games{% endtrans %}</a></li>
             {% if results %}
-            <li><a href="#">{% trans %}Standings{% endtrans %} {{ title }}</a></li>
+                {% if event.championship or (not event.championship and gameType) %}
+                    <li><a href="#">{% trans %}Standings{% endtrans %}{% if not gameType %} {{ event.name }}{% else %} {{ gameType.name }}{% endif %}</a></li>
+                {% endif %}
             {% endif %}
             {% if event.championship %}
             <li><a href="#">{% trans %}Results{% endtrans %}</a></li>
@@ -29,15 +31,15 @@
                 {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
             {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
-            {% else %}
-            <p>{% trans %}There are no games {% endtrans %}</p>
+        {% else %}
+                <p>{% trans %}There are no games {% endtrans %}</p>
         {% endfor %}
     </div>
     <div style="display:none;" class="tabs">
         {% if results %}
         <div class="panel panel-default row">
         <!-- Default panel contents -->
-        <div class="panel-heading">{% trans %}Standings{% endtrans %} {{ title }}</div>
+        <div class="panel-heading">{% trans %}Standings{% endtrans %}{% if not gameType %} {{ event.name }}{% else %} {{ gameType.name }}{% endif %}</div>
             <table class="table">
             <thead>
             <tr>

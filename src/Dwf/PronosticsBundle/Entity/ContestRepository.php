@@ -42,4 +42,5 @@ class ContestRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+    
 }

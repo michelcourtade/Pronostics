@@ -3,7 +3,7 @@
 namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-
+use Dwf;
 
 /**
  * PronosticRepository
@@ -32,6 +32,17 @@ class UserRepository extends EntityRepository
         //->where('p.expires_at > :date')
         ->setParameter('username', $username)
         //->orderBy('p.expiresAt', 'DESC');
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
+    public function getOtherUsersByContest(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Contest $contest)
+    {
+        $qb = $this->createQueryBuilder('u')
+        ->join("u.groups", "c")
+        ->where('c.id = :contest')
+        ->setParameter('contest', $contest->getId())
         ;
         $query = $qb->getQuery();
         return $query->getResult();

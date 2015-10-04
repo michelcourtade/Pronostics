@@ -13,9 +13,9 @@
     {% endblock %}
     {% block content %}
     <div class="page-header">
-        <h2>{{ event.name }} - {% trans %}All games{% endtrans %}</h2>
+        <h2>{% if gameType %}{% trans %}Games{% endtrans %} - {{ gameType.name }}{% else %}{% trans %}All games{% endtrans %}{% endif %}</h2>
     </div>
-    {% include "DwfPronosticsBundle:Contest:games-list.html.twig" with {'title': event.name } %}
+    {% include "DwfPronosticsBundle:Contest:games-list.html.twig" %}
     {% endblock %}
 {% endblock %}
 {% block javascripts %}

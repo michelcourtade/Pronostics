@@ -18,6 +18,9 @@
     <div class="tabs-container">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
+            {% if users %}
+                <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
+            {% endif %}
         </ul>
     <div class="tabs">
     {{ form_start(invitationForm) }}
@@ -41,6 +44,19 @@
     </div>
     {% endif %}
     </div>
+    {% if users %}
+        <div style="display:none;" class="tabs">
+        <ul class="list-group">
+        {% for player in users %}
+            <li class="list-group-item">{{ player.username }}</li>
+        {% endfor %}
+        </ul>
+        </div>
+    {% endif %}
     </div>
+    {% endblock %}
+    {% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
     {% endblock %}
 {% endblock %}

@@ -52,7 +52,7 @@ class Contest extends BaseGroup
      * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
      */
     private $updatedAt;
-
+    
 
     /**
      * Get id
@@ -179,4 +179,5 @@ class Contest extends BaseGroup
     {
         return $this->name;
     }
+
 }
