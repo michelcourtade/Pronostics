@@ -31,7 +31,7 @@ class Result
                     && (($game->getScoreDifference() >= $pronostic->getSliceScore()->getMin()) 
                          && ($game->getScoreDifference() <= $pronostic->getSliceScore()->getMax())))
                     {
-                        $result .= $game->getEvent()->getNbPointsForRightSliceScore();
+                        $result += $game->getEvent()->getNbPointsForRightSliceScore();
                     }
                 }
                 else $result = $game->getEvent()->getNbPointsForWrongSimpleBet();

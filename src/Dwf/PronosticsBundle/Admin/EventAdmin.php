@@ -47,6 +47,7 @@ class EventAdmin extends Admin
             ->add('nbPointsForRightSliceScore', 'integer', array('label' => 'Nb points pour bon écart de score trouvé', 'required' => false))
         ->end()
         ->with('Pronostics classiques', array('description' => 'Informations sur les pronostics "classiques" avec score'))
+            ->add('nbPointsForRightBetWithScore', 'integer', array('label' => 'Nb points bon pronostic avec score', 'required' => false))
             ->add('nbPointsForRightBet', 'integer', array('label' => 'Nb points bon pronostic', 'required' => false))
             ->add('nbPointsForWrongBet', 'integer', array('label' => 'Nb points mauvais pronostic', 'required' => false))
             ->add('nbPointsForAlmostRightBet', 'integer', array('label' => 'Nb points bon pronostic mais pas exact', 'required' => false))

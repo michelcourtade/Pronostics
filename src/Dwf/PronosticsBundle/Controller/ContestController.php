@@ -15,6 +15,7 @@ use Dwf\PronosticsBundle\Form\Type\ContestFormType;
 use Dwf\PronosticsBundle\Entity\Contest;
 use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
 use Dwf\PronosticsBundle\Entity\Invitation;
+use Dwf\PronosticsBundle\Form\Type\ContestType;
 
 /**
  * Contest controller.
@@ -233,6 +234,23 @@ class ContestController extends Controller
             $invitationForm = $form->createView();
             $users = $em->getRepository('DwfPronosticsBundle:User')->getOtherUsersByContest($this->getUser(), $contest);
 
+            $contestType = new ContestType("Dwf\PronosticsBundle\Entity\Contest");
+            $contestForm = $this->createForm($contestType, $contest, array(
+                    'action' => '',
+                    'method' => 'PUT',
+            ));
+            $contestForm->add('submit', 'submit', array('label' => 'Change'));
+            $contestForm->handleRequest($request);
+            if ($contestForm->isValid()) {
+                $em->persist($contest);
+                $em->flush();
+                $this->addFlash(
+                        'success',
+                        'Your contest name has changed to '.$contest->getName().' !'
+                );
+                return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
+            }
+            $contestForm = $contestForm->createView();
             return array(
                     'contest'                   => $contest,
                     'user'                      => $this->getUser(),
@@ -241,6 +259,7 @@ class ContestController extends Controller
                     'invitationForm'            => $invitationForm,
                     'invitationsAlreadySent'    => $invitationsAlreadySent,
                     'users'                     => $users,
+                    'contestForm'               => $contestForm,
             );
         }
         else return $this->redirect($this->generateUrl('events'));

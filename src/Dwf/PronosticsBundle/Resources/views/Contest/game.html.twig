@@ -135,6 +135,9 @@
                     <span class="hidden-xs">{{ entity.team2.name }}</span>
                     <span class="hidden-sm hidden-md hidden-lg">{{ entity.team2.iso }}</span>
                     {% endif %}
+                    {% if pronostic.sliceScore %}
+                        / {% trans %}Difference{% endtrans %}: {{ pronostic.sliceScore }}
+                    {% endif %}
                 {% else %}
                     {{ pronostic.score }}
                     {% if pronostic.game.type.canHaveOvertime and pronostic.overtime %}    
