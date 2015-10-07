@@ -68,12 +68,16 @@ class ContestController extends Controller
         if ($form->isValid()) {
             $em->persist($contest);
             $em->flush();
+            $this->addFlash(
+                    'success',
+                    $this->get('translator')->trans('Your contest has been created.')
+            );
             return $this->redirect($this->generateUrl('events'));
         }
         $contestForm = $form->createView();
 
         return array("myContests" => $myContests,
-                        "otherContests" => $otherContests,
+                     "otherContests" => $otherContests,
                      "contestForm" => $contestForm);
     }
 
@@ -216,7 +220,7 @@ class ContestController extends Controller
                 if($existingInvitation) {
                     $this->addFlash(
                             'info',
-                            'Invitation already sent for '.$invitation->getEmail().' !'
+                            $this->get('translator')->trans('Invitation already sent for ').$invitation->getEmail().' !'
                     );
                 } else {
                     $invitation->setInvitationCode();
@@ -225,7 +229,7 @@ class ContestController extends Controller
                     $this->get('dwf_pronosticbundle.user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
                     $this->addFlash(
                             'success',
-                            'Your invitation has been sent to '.$invitation->getEmail().' !'
+                            $this->get('translator')->trans('Your invitation has been sent to ').$invitation->getEmail().' !'
                     );
                 }
                 
@@ -239,14 +243,14 @@ class ContestController extends Controller
                     'action' => '',
                     'method' => 'PUT',
             ));
-            $contestForm->add('submit', 'submit', array('label' => 'Change'));
+            $contestForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('Change name')));
             $contestForm->handleRequest($request);
             if ($contestForm->isValid()) {
                 $em->persist($contest);
                 $em->flush();
                 $this->addFlash(
                         'success',
-                        'Your contest name has changed to '.$contest->getName().' !'
+                        $this->get('translator')->trans('Your contest name has changed to ').$contest->getName().' !'
                 );
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
@@ -261,6 +265,39 @@ class ContestController extends Controller
                     'users'                     => $users,
                     'contestForm'               => $contestForm,
             );
+        }
+        else return $this->redirect($this->generateUrl('events'));
+    }
+    
+    /**
+     * Delete a contest created by current user
+     *
+     * @Route("/contest/{contestId}/delete", name="contest_delete")
+     * @Method("GET")
+     * @Template()
+     */
+    public function deleteAction($contestId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $event = $contest->getEvent();
+        if($contest) {
+            if($contest->getOwner() == $this->getUser()) {
+                $em->remove($contest);
+                $em->flush();
+                $this->addFlash(
+                        'success',
+                        $this->get('translator')->trans('Your contest has been successfully deleted.')
+                );
+                return $this->redirect($this->generateUrl('events'));
+            }
+            $this->addFlash(
+                    'danger',
+                    $this->get('translator')->trans('You can\'t delete contest from another user.')
+            );
+            return $this->redirect($this->generateUrl('events'));
+            
         }
         else return $this->redirect($this->generateUrl('events'));
     }
