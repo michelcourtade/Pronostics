@@ -40,7 +40,8 @@
         "ob/highcharts-bundle": "1.*",
         "white-october/pagerfanta-bundle": "~1.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "doctrine/doctrine-fixtures-bundle": "^2.2"
+        "doctrine/doctrine-fixtures-bundle": "^2.2",
+        "hwi/oauth-bundle": "0.3.*"
     },
     "require-dev": {
         "webfactory/exceptions-bundle": "@stable"

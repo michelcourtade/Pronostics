@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new Dwf\PageBundle\DwfPageBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

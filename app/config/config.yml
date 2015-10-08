@@ -184,6 +184,32 @@ sonata_block:
         #sonata.media.block.gallery:
         #sonata.media.block.feature_media:
 
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_name: main
+    resource_owners:
+        any_name:
+            type:                facebook
+            client_id:           1577354722518614
+            client_secret:       eddb911bcc21ef4fcd51c0b78839e699
+            options:
+                display: popup #dialog is optimized for popup window
+                auth_type: rerequest # Re-asking for Declined Permission
+
+    # an optional setting to configure a query string parameter which can be used to redirect
+    # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
+    # redirect the user to /my/destination after facebook authenticates them.  If this is not
+    # set then the user will be redirected to the original resource that they requested, or
+    # the base address if no resource was requested.  This is similar to the behaviour of
+    # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
+    # target_path_parameter: _destination
+
+    # an optional setting to use the HTTP REFERER header to be used in case no
+    # previous URL was stored in the session (i.e. no resource was requested).
+    # This is similar to the behaviour of
+    # [using the referring URL for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html#using-the-referring-url).
+    # use_referer: true
+    
 dwf_pronostics:
     from_email:
         address:        contact@dwf.fr
