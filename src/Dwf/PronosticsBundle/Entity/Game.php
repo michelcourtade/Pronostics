@@ -368,7 +368,7 @@ class Game
     
     public function hasBegan() 
     {
-    	return ($this->getDate()->format('U') < time());	
+        return (intval($this->getDate()->format('U')) < time());
     }
     
     public function hasOvertime()
@@ -522,12 +522,9 @@ class Game
      */
     public function addScorer(\Dwf\PronosticsBundle\Entity\Scorer $scorers)
     {
-        //$this->scorers[] = $scorers;
-    	$scorers->setGame($this);
-    	$scorers->setEvent($this->getEvent());
-    	$this->scorers->add($scorers);
-    	 
-    	//$this->scorers[] = $scorers;
+        $scorers->setGame($this);
+        $scorers->setEvent($this->getEvent());
+        $this->scorers->add($scorers);
 
         return $this;
     }
@@ -550,5 +547,10 @@ class Game
     public function getScorers()
     {
         return $this->scorers;
+    }
+    
+    public function getScoreDifference()
+    {
+        return abs($this->getScoreTeam1() - $this->getScoreTeam2());
     }
 }

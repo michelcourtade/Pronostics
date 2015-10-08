@@ -13,9 +13,18 @@
     {% endblock %}
     {% block content %}
     <div class="page-header">
-        <h2>{{ event.name }} - {% trans %}Admin{% endtrans %}</h2>
+        <h2>{% trans %}Admin{% endtrans %}</h2>
     </div>
-{{ form_start(invitationForm) }}
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Rules{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Manage{% endtrans %}</a></li>
+        </ul>
+    <div class="tabs">
+    <div class="panel">
+    {{ form_start(invitationForm) }}
     {{ form_errors(invitationForm) }}
         <div class="input-group">
         {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation'}}) }}
@@ -24,6 +33,66 @@
             </span>
         </div>
     {{ form_rest(invitationForm) }}
-{{ form_end(invitationForm) }}
+    {{ form_end(invitationForm) }}
+    </div>
+    {% if invitationsAlreadySent %}
+    <div class="panel panel-default">
+    <div class="panel-heading">{% trans %}Invitations already sent to{% endtrans %}</div>
+    <ul class="list-group">
+        {% for invitation in invitationsAlreadySent %}
+            <li class="list-group-item">{{ invitation.email }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+    </div>
+        <div style="display:none;" class="tabs">
+        {% if users %}
+            <ul class="list-group">
+            {% for player in users %}
+                <li class="list-group-item">{{ player.username }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+        <p>{% trans %}No users in your contest.{% endtrans %}</p>
+        {% endif %}
+        </div>
+        <div style="display:none;" class="tabs">
+        </div>
+        <div style="display:none;" class="tabs">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Contest properties{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+            {{ form_start(contestForm, {'attr': {'class':'navbar-form'}}) }}
+            {{ form_errors(contestForm) }}
+            <div class="input-group">
+            {{ form_widget(contestForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Change name'}}) }}
+            <span class="input-group-btn">
+            {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+            </span>
+            </div>
+            {{ form_rest(contestForm) }}
+            {{ form_end(contestForm) }}
+            </div>
+        </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Danger zone{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+                <p>{% trans %}Be careful with this button below ! Deleting a contest can't be undone !{% endtrans %}</p>
+                <button type="button" class="btn btn-default" data-href="{{ path('contest_delete', {'contestId': contest.id }) }}" id='delete-contest'>
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> {% trans %}Delete contest{% endtrans %}
+                </button>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
     {% endblock %}
 {% endblock %}

@@ -48,7 +48,7 @@
 {#             <label for="password">{{ 'security.login.password'|trans }}</label>#}
 {#         <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required="required" />#}
     <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'inscrire" />
-    <p class="change">J'ai déjà un compte, <a href="{{ path("sonata_user_security_login") }}">me logguer</a></p>
+    <p class="change">J'ai déjà un compte, <a href="{{ path("fos_user_security_login") }}">me logguer</a></p>
 {#     </form>#}
     {{ form_rest(form) }}
 {{ form_end(form) }}

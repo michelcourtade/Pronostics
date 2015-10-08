@@ -72,8 +72,8 @@ doctrine:
                 connection:       default
                 #auto_mapping: true
                 mappings:
-                    ApplicationSonataUserBundle: ~
-                    SonataUserBundle: ~
+                    #ApplicationSonataUserBundle: ~
+                    #SonataUserBundle: ~
                     FOSUserBundle: ~
                     DwfPronosticsBundle: ~
                     DwfPageBundle: ~
@@ -112,18 +112,26 @@ fos_user:
     firewall_name:  main
     user_class:     Dwf\PronosticsBundle\Entity\User
     #user_class:     Application\Sonata\UserBundle\Entity\User
-    #from_email:
-     #   address:        michel@dwf.fr
-     #   sender_name:    MichelDwf
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    Application Pronostics Rugby
+    resetting:
+        email:
+            template: email/resetting.email.html.twig
     registration:
+        confirmation:
+            enabled: true
+            template: email/confirmation.email.html.twig
         form:
             type: dwf_pronosticsbundle_user_registration
     group:
-        group_class:   Application\Sonata\UserBundle\Entity\Group
-        group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+        group_class:   Dwf\PronosticsBundle\Entity\Group
+        group_manager: fos_user.group_manager.default                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
 
     service:
-        user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+        #mailer: fos_user.mailer.twig_swift
+        mailer: dwf_pronosticbundle.user_swift_mailer
+        user_manager: fos_user.user_manager.default                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
 
 sonata_admin:
     templates:
@@ -143,18 +151,18 @@ sonata_admin:
         object_permissions: [VIEW, EDIT, DELETE, UNDELETE, OPERATOR, MASTER, OWNER]
         
         
-sonata_user:
-    security_acl: true
-    manager_type: orm # can be orm or mongodb
-    class:
-        user: Dwf\PronosticsBundle\Entity\User
-    profile:
-        dashboard:
-            blocks:
-                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Bienvenue !</h2> <ul class='nav-profile'><li><a href='/1_reglement' class='btn btn-default'>Règlement</a></li><li><a href='/' class='btn btn-default'>Aller pronostiquer</a></li></ul>"} }
-        register:
-            form:
-                type: dwf_pronosticsbundle_user_registration
+#sonata_user:
+#    security_acl: true
+#    manager_type: orm # can be orm or mongodb
+#    class:
+#        user: Dwf\PronosticsBundle\Entity\User
+#    profile:
+#        dashboard:
+#            blocks:
+#                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Bienvenue !</h2> <ul class='nav-profile'><li><a href='/1_reglement' class='btn btn-default'>Règlement</a></li><li><a href='/' class='btn btn-default'>Aller pronostiquer</a></li></ul>"} }
+#        register:
+#            form:
+#                type: dwf_pronosticsbundle_user_registration
     
 sonata_block:
     default_contexts: [cms]
@@ -162,8 +170,8 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts:   [admin]
         
-        sonata.user.block.menu:    # used to display the menu in profile pages
-        sonata.user.block.account: # used to display menu option (login option)
+        #sonata.user.block.menu:    # used to display the menu in profile pages
+        #sonata.user.block.account: # used to display menu option (login option)
         
         #sonata.admin_doctrine_orm.block.audit:
         #    contexts:   [admin]
@@ -175,7 +183,14 @@ sonata_block:
         #sonata.media.block.media:
         #sonata.media.block.gallery:
         #sonata.media.block.feature_media:
+
+dwf_pronostics:
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    Application Pronostics Rugby
+    invitation:
+        template: email/invitation.email.html.twig
         
 parameters:
-    sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin
-    sonata.user.admin.user.entity: Dwf\PronosticsBundle\Entity\User
+    #sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin
+    #sonata.user.admin.user.entity: Dwf\PronosticsBundle\Entity\User

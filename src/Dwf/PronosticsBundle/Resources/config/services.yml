@@ -7,20 +7,32 @@ services:
  dwf_pronosticbundle.result:
         class: Dwf\PronosticsBundle\Result\Result
         arguments: [ @doctrine.orm.entity_manager ]
- dwf_pronosticbundle.mailer:
-        class: Dwf\PronosticsBundle\Mailer\Mailer
-        arguments: ['@mailer']
+ dwf_pronosticbundle.user_swift_mailer:
+        class: Dwf\PronosticsBundle\Mailer\UserSwiftMailer
+        arguments: 
+            0: '@mailer' 
+            1: '@router'
+            2: '@twig'
+            3: 
+                template:
+                    confirmation: %fos_user.registration.confirmation.template%
+                    resetting: %fos_user.resetting.email.template%
+                    invitation: %dwf_pronostics.invitation.template%
+                from_email:
+                    confirmation: %fos_user.registration.confirmation.from_email%
+                    resetting: %fos_user.resetting.email.from_email%
+                    invitation: %dwf_pronostics.from_email%
  
  dwf_pronosticbundle.type.registration_form:
         class: Dwf\PronosticsBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]
         tags:
          - { name: "form.type", alias: "dwf_pronosticsbundle_user_registration" }
-# dwf_pronosticsbunble.registration_listener:
-#        class: Dwf\PronosticsBundle\EventListener\RegistrationListener
-#        arguments: []
-#        tags:
-#            - { name: kernel.event_subscriber }
+ dwf_pronosticsbunble.registration_listener:
+        class: Dwf\PronosticsBundle\EventListener\RegistrationListener
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }
  dwf_pronosticbundle.invitation.form.type:
         class: Dwf\PronosticsBundle\Form\Type\InvitationFormType
         arguments: [@dwf_pronosticbundle.invitation.form.data_transformer]

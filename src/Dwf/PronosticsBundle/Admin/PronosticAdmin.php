@@ -16,6 +16,7 @@ class PronosticAdmin extends Admin
         ->add('user')
         ->add('game')
         ->add('simpleBet', 'choice',array('expanded' => true,'choices' => array('1' => '1', 'N' => 'N', '2' => '2'), 'required' => false))
+        ->add('sliceScore')
         ->add('scoreTeam1')
         ->add('scoreTeam2')
         ->add('overtime')

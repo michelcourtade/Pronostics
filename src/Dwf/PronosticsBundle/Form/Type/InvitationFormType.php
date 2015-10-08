@@ -25,7 +25,7 @@ class InvitationFormType extends AbstractType
     {
         $resolver->setDefaults(array(
                 'class' => 'Dwf\PronosticsBundle\Entity\Invitation',
-                'required' => true,
+                //'required' => false,
         ));
     }
 

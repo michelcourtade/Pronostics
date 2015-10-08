@@ -19,21 +19,7 @@
     <div class="col-sm-12">
     {% block content %}
     {% if total %}
-        <div class="page-header">
-        <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
-        {% if nbPronostics %}
-        <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
-        {% endif %}
-        {% if nbPerfectScore and not event.simpleBet %}
-        <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
-        {% endif %}
-        {% if nbGoodScore %}
-        <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
-        {% endif %}
-        {% if nbBadScore %}
-        <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
-        {% endif %}
-        </div>
+        {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total } %}
     {% endif %}
     {% endblock %}
     </div>

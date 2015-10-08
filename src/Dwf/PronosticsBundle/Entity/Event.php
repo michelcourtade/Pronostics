@@ -68,6 +68,13 @@ class Event
     /**
      * @var boolean
      *
+     * @ORM\Column(name="scoreDiff", type="boolean")
+     */
+    private $scoreDiff;
+    
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="championship", type="boolean")
      */
     private $championship;
@@ -92,6 +99,62 @@ class Event
      * @ORM\Column(name="nbPointsForWin", type="integer", nullable=true)
      */
     private $nbPointsForWin;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForRightBet", type="integer", nullable=true)
+     */
+    private $nbPointsForRightBet;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForRightBetWithScore", type="integer", nullable=true)
+     */
+    private $nbPointsForRightBetWithScore;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForWrongBet", type="integer", nullable=true)
+     */
+    private $nbPointsForWrongBet;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForAlmostRightBet", type="integer", nullable=true)
+     */
+    private $nbPointsForAlmostRightBet;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForRightSimpleBet", type="integer", nullable=true)
+     */
+    private $nbPointsForRightSimpleBet;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForWrongSimpleBet", type="integer", nullable=true)
+     */
+    private $nbPointsForWrongSimpleBet;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbPointsForRightSliceScore", type="integer", nullable=true)
+     */
+    private $nbPointsForRightSliceScore;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="bestScorer", type="boolean")
+     */
+    private $bestScorer;
     
     
     /**
@@ -531,5 +594,221 @@ class Event
     public function getChampionship()
     {
         return $this->championship;
+    }
+
+    /**
+     * Set bestScorer
+     *
+     * @param boolean $bestScorer
+     *
+     * @return Event
+     */
+    public function setBestScorer($bestScorer)
+    {
+        $this->bestScorer = $bestScorer;
+
+        return $this;
+    }
+
+    /**
+     * Get bestScorer
+     *
+     * @return boolean
+     */
+    public function getBestScorer()
+    {
+        return $this->bestScorer;
+    }
+
+    /**
+     * Set scoreDiff
+     *
+     * @param boolean $scoreDiff
+     *
+     * @return Event
+     */
+    public function setScoreDiff($scoreDiff)
+    {
+        $this->scoreDiff = $scoreDiff;
+
+        return $this;
+    }
+
+    /**
+     * Get scoreDiff
+     *
+     * @return boolean
+     */
+    public function getScoreDiff()
+    {
+        return $this->scoreDiff;
+    }
+
+    /**
+     * Set nbPointsForRightBet
+     *
+     * @param integer $nbPointsForRightBet
+     *
+     * @return Event
+     */
+    public function setNbPointsForRightBet($nbPointsForRightBet)
+    {
+        $this->nbPointsForRightBet = $nbPointsForRightBet;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForRightBet
+     *
+     * @return integer
+     */
+    public function getNbPointsForRightBet()
+    {
+        return $this->nbPointsForRightBet;
+    }
+
+    /**
+     * Set nbPointsForWrongBet
+     *
+     * @param integer $nbPointsForWrongBet
+     *
+     * @return Event
+     */
+    public function setNbPointsForWrongBet($nbPointsForWrongBet)
+    {
+        $this->nbPointsForWrongBet = $nbPointsForWrongBet;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForWrongBet
+     *
+     * @return integer
+     */
+    public function getNbPointsForWrongBet()
+    {
+        return $this->nbPointsForWrongBet;
+    }
+
+    /**
+     * Set nbPointsForAlmostRightBet
+     *
+     * @param integer $nbPointsForAlmostRightBet
+     *
+     * @return Event
+     */
+    public function setNbPointsForAlmostRightBet($nbPointsForAlmostRightBet)
+    {
+        $this->nbPointsForAlmostRightBet = $nbPointsForAlmostRightBet;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForAlmostRightBet
+     *
+     * @return integer
+     */
+    public function getNbPointsForAlmostRightBet()
+    {
+        return $this->nbPointsForAlmostRightBet;
+    }
+
+    /**
+     * Set nbPointsForRightSimpleBet
+     *
+     * @param integer $nbPointsForRightSimpleBet
+     *
+     * @return Event
+     */
+    public function setNbPointsForRightSimpleBet($nbPointsForRightSimpleBet)
+    {
+        $this->nbPointsForRightSimpleBet = $nbPointsForRightSimpleBet;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForRightSimpleBet
+     *
+     * @return integer
+     */
+    public function getNbPointsForRightSimpleBet()
+    {
+        return $this->nbPointsForRightSimpleBet;
+    }
+
+    /**
+     * Set nbPointsForWrongSimpleBet
+     *
+     * @param integer $nbPointsForWrongSimpleBet
+     *
+     * @return Event
+     */
+    public function setNbPointsForWrongSimpleBet($nbPointsForWrongSimpleBet)
+    {
+        $this->nbPointsForWrongSimpleBet = $nbPointsForWrongSimpleBet;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForWrongSimpleBet
+     *
+     * @return integer
+     */
+    public function getNbPointsForWrongSimpleBet()
+    {
+        return $this->nbPointsForWrongSimpleBet;
+    }
+
+    /**
+     * Set nbPointsForRightBetWithScore
+     *
+     * @param integer $nbPointsForRightBetWithScore
+     *
+     * @return Event
+     */
+    public function setNbPointsForRightBetWithScore($nbPointsForRightBetWithScore)
+    {
+        $this->nbPointsForRightBetWithScore = $nbPointsForRightBetWithScore;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForRightBetWithScore
+     *
+     * @return integer
+     */
+    public function getNbPointsForRightBetWithScore()
+    {
+        return $this->nbPointsForRightBetWithScore;
+    }
+
+    /**
+     * Set nbPointsForRightSliceScore
+     *
+     * @param integer $nbPointsForRightSliceScore
+     *
+     * @return Event
+     */
+    public function setNbPointsForRightSliceScore($nbPointsForRightSliceScore)
+    {
+        $this->nbPointsForRightSliceScore = $nbPointsForRightSliceScore;
+
+        return $this;
+    }
+
+    /**
+     * Get nbPointsForRightSliceScore
+     *
+     * @return integer
+     */
+    public function getNbPointsForRightSliceScore()
+    {
+        return $this->nbPointsForRightSliceScore;
     }
 }

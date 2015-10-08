@@ -3,7 +3,7 @@ namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity 
+/** @ORM\Entity
  * @ORM\Table("invitations")
  * @ORM\HasLifecycleCallbacks
  * */
@@ -24,9 +24,9 @@ class Invitation
 	 */
 	protected $sent = false;
 
-	/** @ORM\OneToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) */
+	/** @ORM\ManyToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) */
 	protected $user;
-	
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Contest")
 	 * @ORM\JoinColumn(nullable=true)
@@ -73,12 +73,12 @@ class Invitation
 	{
 		$this->user = $user;
 	}
-	
+
 	public function setInvitationCode()
 	{
 		$this->code = substr(md5(uniqid(rand(), true)), 0, 6);
 	}
-	
+
 	public function getId()
 	{
 		return $this->code;
@@ -113,7 +113,7 @@ class Invitation
     /**
      * Get sent
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSent()
     {
@@ -136,10 +136,34 @@ class Invitation
     /**
      * Get contest
      *
-     * @return \Dwf\PronosticsBundle\Entity\Contest 
+     * @return \Dwf\PronosticsBundle\Entity\Contest
      */
     public function getContest()
     {
         return $this->contest;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \Dwf\PronosticsBundle\Entity\User $user
+     *
+     * @return Invitation
+     */
+    public function addUser(\Dwf\PronosticsBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \Dwf\PronosticsBundle\Entity\User $user
+     */
+    public function removeUser(\Dwf\PronosticsBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
     }
 }

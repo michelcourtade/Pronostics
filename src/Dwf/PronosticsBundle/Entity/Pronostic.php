@@ -87,6 +87,14 @@ class Pronostic
     private $winner;
     
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="SliceScore")
+     * @ORM\JoinColumn(name="slicescore", referencedColumnName="id", nullable=true)
+     */
+    private $sliceScore;
+    
+    /**
      * @var string
      *
      * possible values : 1 / N / 2
@@ -541,5 +549,29 @@ class Pronostic
     public function getSimpleBet()
     {
         return $this->simpleBet;
+    }
+
+    /**
+     * Set sliceScore
+     *
+     * @param \Dwf\PronosticsBundle\Entity\SliceScore $sliceScore
+     *
+     * @return Pronostic
+     */
+    public function setSliceScore(\Dwf\PronosticsBundle\Entity\SliceScore $sliceScore = null)
+    {
+        $this->sliceScore = $sliceScore;
+
+        return $this;
+    }
+
+    /**
+     * Get sliceScore
+     *
+     * @return \Dwf\PronosticsBundle\Entity\SliceScore
+     */
+    public function getSliceScore()
+    {
+        return $this->sliceScore;
     }
 }

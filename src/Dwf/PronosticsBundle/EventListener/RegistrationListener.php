@@ -24,7 +24,7 @@ class RegistrationListener implements EventSubscriberInterface
         $user = $event->getForm()->getData();
         $invitation = $user->getInvitation();
         if($invitation) {
-            $user->addGroup($invitation);
+            $user->addGroup($invitation->getContest());
         }
     }
 }

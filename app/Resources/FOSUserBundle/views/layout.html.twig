@@ -4,28 +4,28 @@
 {% block bodyclass %} class="login"{% endblock %}
 {% block body %}
 {#     {% block fos_user_content %}{% endblock %}#}
-{#     {% block fos_user_content %}#}
+    {% block fos_user_content %}
         {% if error %}
             <div>{{ error|trans }}</div>
         {% endif %}
-        
+
         <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
             <h2 class="form-signin-heading">Identifiez-vous</h2>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-        
+
 {#             <label for="username">{{ 'security.login.username'|trans }}</label>#}
             <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control first" placeholder="Nom d'utilisateur" required="required" />
-        
+
 {#             <label for="password">{{ 'security.login.password'|trans }}</label>#}
             <input type="password" id="password" name="_password" class="form-control last" placeholder="Mot de passe" required="required" />
-        
+
             <label for="remember_me">
                 <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
                 Rester connecté
             </label>
-        
+
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'identifier" />
-            <p class="change">Je n'ai pas de compte, <a href="{{ path("sonata_user_registration_register") }}">créer mon compte</a></p>
+            <p class="change">Je n'ai pas de compte, <a href="{{ path("fos_user_registration_register") }}">créer mon compte</a></p>
         </form>
-{#     {% endblock fos_user_content %}#}
+    {% endblock fos_user_content %}
 {% endblock %}

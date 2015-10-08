@@ -8,7 +8,7 @@ require 'recipe/symfony.php';
 set('shared_dirs', ['app/logs']);
 
 // Symfony shared files
-set('shared_files', ['app/config/parameters.yml']);
+set('shared_files', ['app/config/parameters.yml', 'web/uploads/documents']);
 
 // Symfony writable dirs
 set('writable_dirs', ['app/cache', 'app/logs']);
@@ -23,7 +23,7 @@ set('keep_releases', 10);
 
 task('install', function () {
     cd('{{deploy_path}}/current');
-    run('composer install');
+    run('composer update');
 });
 
 /**
@@ -47,7 +47,7 @@ server('prod', 'albator.dwf.fr', 22)
     ->identityFile()
     ->stage('production')
     ->env('deploy_path', '/var/www/clients/client3/web94/web/prod')
-    ->env('branch', 'develop')
+    ->env('branch', 'withoutsonatauser')
 ;
 
 server('preprod', 'albator.dwf.fr', 22)

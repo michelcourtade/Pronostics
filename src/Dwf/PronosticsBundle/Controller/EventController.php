@@ -32,10 +32,6 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
-        if(count($entities) == 1) {
-            $event = $entities[0];
-            return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
-        }
 
         return array(
             'event' => "",
@@ -43,7 +39,7 @@ class EventController extends Controller
             'events' => $entities,
         );
     }
-    
+
     /**
      * Lists all passed Events entities.
      *
@@ -54,20 +50,20 @@ class EventController extends Controller
     public function oldAction()
     {
     	$em = $this->getDoctrine()->getManager();
-    
+
     	$entities = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
     	if(count($entities) == 1) {
     		$event = $entities[0];
     		return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
     	}
-    
+
     	return array(
     			'event' => "",
     			'user' => $this->getUser(),
     			'events' => $entities,
     	);
     }
-    
+
     /**
      * Finds and displays a Event entity.
      *
@@ -87,7 +83,7 @@ class EventController extends Controller
         else {
             $this->getRequest()->getSession()->set('event', $entity);
             return $this->redirect($this->generateUrl('event_home', array('event' => $entity->getId())));
-            
+
         }
     }
 
@@ -101,15 +97,15 @@ class EventController extends Controller
     public function pronosticsAction($event)
     {
         $em = $this->getDoctrine()->getManager();
-    
+
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-        
+
         $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
         if($pronostic)
             $bestscorer_pronostic = $pronostic[0];
-        
+
         $pronostics = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndEvent($this->getUser(), $event);
-                
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -117,7 +113,7 @@ class EventController extends Controller
                 'pronostics' => $pronostics,
         );
     }
-    
+
     /**
      * Show infos for an event
      *
@@ -130,7 +126,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
@@ -154,7 +150,7 @@ class EventController extends Controller
         $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
         $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
-        
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -168,7 +164,7 @@ class EventController extends Controller
                 'total'         => $total,
         );
     }
-    
+
     /**
      * Show best offenses for an event
      *
@@ -181,7 +177,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
@@ -200,7 +196,7 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-    
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -210,7 +206,7 @@ class EventController extends Controller
                 'bestOffenses' => $bestOffenses,
         );
     }
-    
+
     /**
      * Show best defenses for an event
      *
@@ -223,14 +219,14 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
         else $currentChampionshipDay = '';
-    
+
         $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         foreach ($players as $player)
         {
@@ -243,7 +239,7 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-    
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -252,7 +248,7 @@ class EventController extends Controller
                 'bestDefenses' => $bestDefenses,
         );
     }
-    
+
     /**
      * Show games of the day for an event
      *
@@ -265,14 +261,14 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
         else $currentChampionshipDay = '';
-    
+
         $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventAndDate($event, date("Y/m/d"));
         if($event->getSimpleBet()) {
             $forms_games = array();
@@ -326,7 +322,7 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-    
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -350,7 +346,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
@@ -411,7 +407,7 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-    
+
         return array(
                 'user' => $this->getUser(),
                 'event' => $event,
@@ -432,7 +428,7 @@ class EventController extends Controller
     public function scorersAction($event)
     {
         $em = $this->getDoctrine()->getManager();
-    
+
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         $scorers = $em->getRepository('DwfPronosticsBundle:Scorer')->findBestScorersByEvent($event);
         $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
@@ -447,5 +443,5 @@ class EventController extends Controller
                 'players'   => $arrayPlayers,
         );
     }
-    
+
 }

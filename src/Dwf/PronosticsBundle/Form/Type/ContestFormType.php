@@ -18,7 +18,7 @@ class ContestFormType extends AbstractType
 
     public function getName()
     {
-        return 'dwf_pronosticsbundle_contest_type';
+        return 'dwf_pronosticsbundle_contest_form_type';
     }
     
     /**

@@ -12,10 +12,10 @@ use Dwf;
  */
 class ContestRepository extends EntityRepository
 {
-    public function findAllByUserAndEvent(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event)
+    public function findAllByOwnerAndEvent(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event)
     {
         $qb = $this->createQueryBuilder('c')
-        ->select("c.id, c.name")
+        //->select("c.id, c.name")
         ->where('c.owner = :user')
         ->setParameter('user', $user)
         ->andWhere('c.event = :event')
@@ -25,4 +25,22 @@ class ContestRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+    
+    public function findInvitedContestByUserAndEvent(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('c')
+        //->select('c.id, c.name')
+        ->from("DwfPronosticsBundle:Contest", "c")
+        ->join('DwfPronosticsBundle:User','u', 'WITH', 'ug.group_id = c.id')
+        ->join('fos_user_user_group', 'ug', 'WITH', 'ug.user_id = u.id')
+        ->where('c.owner != :user')
+        ->setParameter('user', $user)
+        ->andWhere('c.event = :event')
+        ->setParameter('event', $event)
+        //->orderBy('c.createdAt', 'ASC')
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
 }

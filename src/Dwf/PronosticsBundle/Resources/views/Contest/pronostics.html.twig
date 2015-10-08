@@ -8,32 +8,20 @@
     <li>Mes pronostics</li>
     </ul>
     {% endblock %}
+    
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}
+    
     {% block content %}
     <div class="page-header">
         <h2>{% trans %}My bets{% endtrans %}</h2>
     </div>
-{% if total %}
-    <div class="page-header">
-    <h2>Nb points gagnés: <span class="label label-default">{{ total.total }}</span></h2>
-    {% if nbPronostics %}
-    <h2>Moy. points / pronostic: <span class="label label-default">{{ (total.total / nbPronostics)|round(1, 'floor') }}</span></h2>
+    {% if total %}
+        {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total} %}
     {% endif %}
-    {% if nbPerfectScore and not event.simpleBet %}
-    <h2>Nb scores exacts trouvés (5 points): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
-    {% endif %}
-    {% if nbGoodScore %}
-    <h2>Nb pronostics gagnants (3 points): <span class="label label-default">{{ nbGoodScore }}</span></h2>
-    {% endif %}
-    {% if nbBadScore %}
-    <h2>Nb pronostics perdants (1 point): <span class="label label-default">{{ nbBadScore }}</span></h2>
-    {% endif %}
-    </div>
-{% endif %}
 
-<div class="list-match col-sm-12">
+    <div class="list-match col-sm-12">
     {% set lastDate = '' %}
     {% for entity in entities %}
         {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
@@ -41,18 +29,22 @@
     {% else %}
         <p>Pas encore de pronostic enregistré. Allez voir la <a href="{{ path('games_event', {'event': event.id }) }}">liste des matchs</a> pour pronostiquer.</p>
     {% endfor %}
-</div>
-<div class="page-header">
-    <h2>{% trans %}My best scorer{% endtrans %}</h2>
-</div>
-{% if bestscorer_pronostic %}
-    <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - Nb buts : {{ bestscorer_pronostic.goals }}</h2>
-    <div class="center"><a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-lg btn-primary">Modifier</a></div>
-{% else %}
-    <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">Pronostiquer</a></div>
-{% endif %}
+    </div>
+    {% if event.bestScorer %}
+        <div class="page-header">
+            <h2>{% trans %}My best scorer{% endtrans %}</h2>
+        </div>
+        {% if bestscorer_pronostic %}
+            <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - Nb buts : {{ bestscorer_pronostic.goals }}</h2>
+            <div class="center"><a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-lg btn-primary">Modifier</a></div>
+        {% else %}
+            <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">Pronostiquer</a></div>
+        {% endif %}
+    {% endif %}
+    {% endblock %}
+
 {% endblock %}
-{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
