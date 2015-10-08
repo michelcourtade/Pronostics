@@ -347,39 +347,28 @@ class ContestController extends Controller
                 foreach($games as $entity)
                 {
                     $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
-                    if($pronostic) {
-                        $simpleType = new SimplePronosticType();
-                        $simpleType->setName($entity->getId());
-                        $form = $this->createForm($simpleType, $pronostic, array(
-                                'action' => '',
-                                'method' => 'PUT',
-                        ));
-                        $form->handleRequest($request);
-                        if ($form->isValid()) {
-                            $em->persist($pronostic);
-                            $em->flush();
-                        }
-                        $nbPronostics++;
-                        if($pronostic->getResult() && $event->getChampionship())
-                            $nbPointsWonByChampionshipDay += $pronostic->getResult();
+                    if(!$pronostic) {
+                        $pronostic = new Pronostic();
+                        $pronostic->setGame($entity);
+                        $pronostic->setUser($this->getUser());
+                        $pronostic->setEvent($entity->getEvent());
                     }
-                    else {
-                        $simplePronostic = new Pronostic();
-                        $simplePronostic->setGame($entity);
-                        $simplePronostic->setUser($this->getUser());
-                        $simplePronostic->setEvent($entity->getEvent());
-                        $simpleType = new SimplePronosticType();
-                        $simpleType->setName($entity->getId());
-                        $form = $this->createForm($simpleType, $simplePronostic, array(
-                                'action' => '',
-                                'method' => 'POST',
-                        ));
-                        $form->handleRequest($request);
-                        if ($form->isValid()) {
-                            $em->persist($simplePronostic);
-                            $em->flush();
+                    
+                    $simpleType = new SimplePronosticType();
+                    $simpleType->setName($entity->getId());
+                    $form = $this->createForm($simpleType, $pronostic, array(
+                            'action' => '',
+                            'method' => 'PUT',
+                    ));
+                    $form->handleRequest($request);
+                    if ($form->isValid()) {
+                        if($pronostic->getSimpleBet() == "N") {
+                            $pronostic->setSliceScore(null);
                         }
+                        $em->persist($pronostic);
+                        $em->flush();
                     }
+
                     array_push($forms, $form->createView());
                     array_push($pronostics, $pronostic);
                     $i++;

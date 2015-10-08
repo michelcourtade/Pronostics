@@ -24,8 +24,8 @@ class SimplePronosticType extends AbstractType
     {
         $builder
             //->add('game')
-            ->add('simpleBet', 'choice', 
-                                array('expanded' => true, 
+            ->add('simpleBet', 'choice',
+                                array('expanded' => true,
                                         'choices' => array('1' => '1','N' => 'N','2' => '2'),
                                         //'attr' => array('onclick'=>'$("#dwf_pronosticsbundle_pronostic").submit()')
             ))

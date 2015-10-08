@@ -19,9 +19,11 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Rules{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Manage{% endtrans %}</a></li>
         </ul>
     <div class="tabs">
+    <div class="panel">
     {{ form_start(invitationForm) }}
     {{ form_errors(invitationForm) }}
         <div class="input-group">
@@ -32,6 +34,7 @@
         </div>
     {{ form_rest(invitationForm) }}
     {{ form_end(invitationForm) }}
+    </div>
     {% if invitationsAlreadySent %}
     <div class="panel panel-default">
     <div class="panel-heading">{% trans %}Invitations already sent to{% endtrans %}</div>
@@ -53,6 +56,8 @@
         {% else %}
         <p>{% trans %}No users in your contest.{% endtrans %}</p>
         {% endif %}
+        </div>
+        <div style="display:none;" class="tabs">
         </div>
         <div style="display:none;" class="tabs">
         <div class="panel panel-default">
