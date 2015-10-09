@@ -23,4 +23,5 @@
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'identifier" />
             <p class="change">Je n'ai pas de compte, <a href="{{ path("fos_user_registration_register") }}">créer mon compte</a></p>
         </form>
+        {{ render(url('hwi_oauth_connect')) }}
 {% endblock fos_user_content %}

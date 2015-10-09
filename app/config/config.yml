@@ -185,16 +185,26 @@ sonata_block:
         #sonata.media.block.feature_media:
 
 hwi_oauth:
-    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    connect:
+        account_connector: dwf_pronosticsbundle.user_provider
     firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
+            facebook: facebook_id
     resource_owners:
-        any_name:
+        facebook:
             type:                facebook
-            client_id:           1577354722518614
-            client_secret:       eddb911bcc21ef4fcd51c0b78839e699
-            options:
-                display: popup #dialog is optimized for popup window
-                auth_type: rerequest # Re-asking for Declined Permission
+            client_id:           %oauth.facebook.id%
+            client_secret:       %oauth.facebook.secret%
+            #options:
+                #display: popup #dialog is optimized for popup window
+                #auth_type: rerequest # Re-asking for Declined Permission
+            infos_url:     "https://graph.facebook.com/me?fields=id,name,email,picture.type(square)"
+            paths:
+                email:          email
+                profilepicture: picture.data.url
 
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will

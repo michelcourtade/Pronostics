@@ -23,6 +23,9 @@ services:
                     resetting: %fos_user.resetting.email.from_email%
                     invitation: %dwf_pronostics.from_email%
  
+ dwf_pronosticsbundle.user_provider:
+        class: Dwf\PronosticsBundle\OAuth\UserProvider
+        arguments: [@fos_user.user_manager,{facebook: facebook_id}]
  dwf_pronosticbundle.type.registration_form:
         class: Dwf\PronosticsBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]
