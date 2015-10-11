@@ -26,6 +26,8 @@ class UserProvider extends FOSUBUserProvider
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
+        var_dump($response->getProfilePicture());
+        exit();
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
         $setter = 'set'.ucfirst($service);
@@ -40,6 +42,8 @@ class UserProvider extends FOSUBUserProvider
         //we connect current user
         $user->$setter_id($username);
         $user->$setter_token($response->getAccessToken());
+        if(!$user->getProfilePicture())
+            $user->setProfilePicture($response->getProfilePicture());
         $this->userManager->updateUser($user);
     }
     /**
@@ -50,7 +54,9 @@ class UserProvider extends FOSUBUserProvider
         $username = $response->getUsername();
         $nickname = $response->getNickname();
         $email = $response->getEmail();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+
+        //$user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $user = $this->userManager->findUserBy(array('email' => $email));
         //when the user is registrating
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();
@@ -64,18 +70,30 @@ class UserProvider extends FOSUBUserProvider
             //I have set all requested data with the user's username
             //modify here with relevant data
             $user->setUsername($nickname);
-            $user->setEmail($email);
-            $user->setPlainPassword($username);
+            if($email)
+                $user->setEmail($email);
+            else $user->setEmail($username);
+            
+            $user->setProfilePicture($response->getProfilePicture());
+            if(!$user->getPassword()) {
+                // generate unique token
+                $secret = md5(uniqid(rand(), true));
+                $user->setPassword($secret);
+            }
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
             return $user;
         }
         //if user exists - go with the HWIOAuth way
-        $user = parent::loadUserByOAuthUserResponse($response);
         $serviceName = $response->getResourceOwner()->getName();
-        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $setterId = 'set' . ucfirst($serviceName) . 'Id';
+        $user->$setterId($response->getUsername());
+        $user->setProfilePicture($response->getProfilePicture());
+        $this->userManager->updateUser($user);
+        $user = parent::loadUserByOAuthUserResponse($response);
+        $setterToken = 'set' . ucfirst($serviceName) . 'AccessToken';
         //update access token
-        $user->$setter($response->getAccessToken());
+        $user->$setterToken($response->getAccessToken());
         return $user;
     }
 }

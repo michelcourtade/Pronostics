@@ -82,10 +82,14 @@
                 <h3 class="panel-title">{% trans %}Danger zone{% endtrans %}</h3>
             </div>
             <div class="panel-body">
-                <p>{% trans %}Be careful with this button below ! Deleting a contest can't be undone !{% endtrans %}</p>
+                <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Be careful with this button ! Deleting a contest can't be undone ! Your bets will still be availables but your friends in this contest won't see your results anymore.{% endtrans %}</p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-6 center">
                 <button type="button" class="btn btn-default" data-href="{{ path('contest_delete', {'contestId': contest.id }) }}" id='delete-contest'>
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> {% trans %}Delete contest{% endtrans %}
                 </button>
+                </div>
             </div>
         </div>
         </div>
