@@ -14,6 +14,7 @@ use Dwf\PronosticsBundle\Form\SimplePronosticType;
 use Dwf\PronosticsBundle\Form\Type\ContestFormType;
 use Dwf\PronosticsBundle\Entity\Contest;
 use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
+use Dwf\PronosticsBundle\Form\Type\InvitationContestOpenFormType;
 use Dwf\PronosticsBundle\Entity\Invitation;
 use Dwf\PronosticsBundle\Form\Type\ContestType;
 
@@ -224,6 +225,7 @@ class ContestController extends Controller
                     );
                 } else {
                     $invitation->setInvitationCode();
+                    $invitation->setSent(true);
                     $em->persist($invitation);
                     $em->flush();
                     $this->get('dwf_pronosticbundle.user_swift_mailer')->sendInvitationEmailMessage($this->getUser(), $invitation);
@@ -255,12 +257,43 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $contestForm = $contestForm->createView();
+            
+            // invitation without an email => open contest with invitation code
+            $invitationContestOpenType = new InvitationContestOpenFormType("Dwf\PronosticsBundle\Entity\Invitation");
+            $invitationContest = $em->getRepository('DwfPronosticsBundle:Invitation')->findAllByUserAndContestAndEmail($this->getUser(), $contest, null);
+            if(!$invitationContest) {
+                $invitationContest = new Invitation();
+                $invitationContest->setUser($this->getUser());
+                $invitationContest->setContest($contest);
+            }
+            $formContest = $this->createForm($invitationContestOpenType, $invitationContest, array(
+                    'action' => '',
+                    'method' => 'PUT',
+            ));
+            $formContest->add('submit', 'submit', array('label' => $this->get('translator')->trans('Generate new access code')));
+            $formContest->handleRequest($request);
+            if ($formContest->isValid()) {
+                $invitationContest->setInvitationCode();
+                $invitationContest->setSent(true);
+                $em->persist($invitationContest);
+                $em->flush();
+                $this->addFlash(
+                        'success',
+                        $this->get('translator')->trans('Your contest is now open to others with one unique code : ').$invitation->getCode().' !'
+                );
+                
+            
+                return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
+            }
+            $invitationFormContest = $formContest->createView();
             return array(
                     'contest'                   => $contest,
                     'user'                      => $this->getUser(),
                     'event'                     => $event,
                     'currentChampionshipDay'    => $currentChampionshipDay,
                     'invitationForm'            => $invitationForm,
+                    'invitationFormContest'     => $invitationFormContest,
+                    'invitationCode'            => $invitationContest->getCode() ? $invitationContest->getCode() : null,
                     'invitationsAlreadySent'    => $invitationsAlreadySent,
                     'users'                     => $users,
                     'contestForm'               => $contestForm,

@@ -48,12 +48,16 @@
               <p class="navbar-text navbar-right">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {% if app.user.profilePicture %}
+                    <a href="{{ path('fos_user_profile_show') }}">
                     <img src="{{ app.user.profilePicture }}" class="avatar" />
+                    </a>
                 {% elseif gravatar_exists(app.user.email) %}
+                    <a href="{{ path('fos_user_profile_show') }}">
                     <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
+                    </a>
                 {% endif %}
 {#                     {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}#}
-						{{ app.user.username }}
+                        <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a>
 {#                     <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>#}
                     <a href="{{ path('fos_user_security_logout') }}"  class="glyphicon glyphicon-remove"></a>
                 {% else %}

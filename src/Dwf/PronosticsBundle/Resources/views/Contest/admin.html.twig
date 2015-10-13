@@ -17,11 +17,41 @@
     </div>
     <div class="tabs-container">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
+            <li class="active"><a href="#">{% trans %}Access{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Rules{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Manage{% endtrans %}</a></li>
         </ul>
+        <div class="tabs">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Contest access{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+            {% if invitationCode %}
+                <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Your acces code : {% endtrans %}</p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-6 center">
+                    {{ invitationCode }}
+                </div>
+            {% endif %}
+            <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Generating access code will allow you to open your contest to multiple users very easily. {% endtrans %}</p>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-6 center">
+                {{ form_start(invitationFormContest) }}
+                {{ form_errors(invitationFormContest) }}
+                <div class="input-group">
+                    {{ form_widget(invitationFormContest.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                </div>
+                {{ form_rest(invitationFormContest) }}
+                {{ form_end(invitationFormContest) }}
+            </div>
+            </div>
+            </div>
+        </div>
     <div class="tabs">
     <div class="panel">
     {{ form_start(invitationForm) }}
@@ -40,7 +70,7 @@
     <div class="panel-heading">{% trans %}Invitations already sent to{% endtrans %}</div>
     <ul class="list-group">
         {% for invitation in invitationsAlreadySent %}
-            <li class="list-group-item">{{ invitation.email }}</li>
+            {% if invitation.email %}<li class="list-group-item">{{ invitation.email }}</li>{% endif %}
         {% endfor %}
     </ul>
     </div>

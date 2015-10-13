@@ -6,13 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 /** @ORM\Entity
  * @ORM\Table("invitations")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Dwf\PronosticsBundle\Entity\InvitationRepository")
  * */
 class Invitation
 {
 	/** @ORM\Id @ORM\Column(type="string", length=6) */
 	protected $code;
 
-	/** @ORM\Column(type="string", length=256) */
+	/** @ORM\Column(type="string", length=256, nullable=true) */
 	protected $email;
 
 	/**
