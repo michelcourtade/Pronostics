@@ -205,7 +205,7 @@ class ContestController extends Controller
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
 
-            $invitationsAlreadySent = $em->getRepository('DwfPronosticsBundle:Invitation')->findByUser($this->getUser());
+            $invitationsAlreadySent = $em->getRepository('DwfPronosticsBundle:Invitation')->findAllByUserAndContest($this->getUser(), $contest);
             $invitationType = new InvitationContestFormType("Dwf\PronosticsBundle\Entity\Invitation");
             $invitation = new Invitation();
             $invitation->setUser($this->getUser());
@@ -217,7 +217,7 @@ class ContestController extends Controller
             $form->add('submit', 'submit', array('label' => 'Send'));
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $existingInvitation = $em->getRepository('DwfPronosticsBundle:Invitation')->findByEmail($invitation->getEmail());
+                $existingInvitation = $em->getRepository('DwfPronosticsBundle:Invitation')->findAllByEmailAndContest($invitation->getEmail(), $contest);
                 if($existingInvitation) {
                     $this->addFlash(
                             'info',
@@ -279,7 +279,7 @@ class ContestController extends Controller
                 $em->flush();
                 $this->addFlash(
                         'success',
-                        $this->get('translator')->trans('Your contest is now open to others with one unique code : ').$invitation->getCode().' !'
+                        $this->get('translator')->trans('Your contest is now open to others with one unique code : ').$invitationContest->getCode().' !'
                 );
                 
             

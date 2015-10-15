@@ -31,4 +31,28 @@ class InvitationRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getOneOrNullResult();
     }
+    
+    public function findAllByUserAndContest(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Contest $contest)
+    {
+        $qb = $this->createQueryBuilder('i')
+        ->where('i.user = :user')
+        ->setParameter('user', $user)
+        ->andWhere('i.contest = :contest')
+        ->setParameter('contest', $contest);
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
+    public function findAllByEmailAndContest($email, Dwf\PronosticsBundle\Entity\Contest $contest)
+    {
+        $qb = $this->createQueryBuilder('i')
+        ->where('i.email = :email')
+        ->setParameter('email', $email)
+        ->andWhere('i.contest = :contest')
+        ->setParameter('contest', $contest);
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
 }

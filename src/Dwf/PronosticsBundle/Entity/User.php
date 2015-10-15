@@ -25,7 +25,7 @@ class User extends BaseUser
     protected $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="Invitation", mappedBy="user")
+     * @ORM\ManyToOne(targetEntity="Invitation", inversedBy="user")
      * @ORM\JoinColumn(referencedColumnName="code")
      * @ Assert\NotNull(message="Code invitation invalide")
      */

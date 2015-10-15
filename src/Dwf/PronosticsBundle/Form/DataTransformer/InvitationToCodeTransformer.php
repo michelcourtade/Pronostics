@@ -46,8 +46,8 @@ class InvitationToCodeTransformer implements DataTransformerInterface
 SELECT i
 FROM DwfPronosticsBundle:Invitation i
 WHERE i.code = :code
-AND NOT EXISTS(SELECT 1 FROM DwfPronosticsBundle:User u WHERE u.invitation = i)
 DQL;
+//AND NOT EXISTS(SELECT 1 FROM DwfPronosticsBundle:User u WHERE u.invitation = i)
 
         return $this->entityManager
         ->createQuery($dql)
