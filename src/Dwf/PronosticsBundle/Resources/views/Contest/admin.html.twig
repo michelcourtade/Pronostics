@@ -21,6 +21,7 @@
             <li><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Rules{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Announcement{% endtrans %}</a></li>
             <li><a href="#">{% trans %}Manage{% endtrans %}</a></li>
         </ul>
         <div class="tabs">
@@ -53,28 +54,43 @@
             </div>
         </div>
     <div class="tabs">
-    <div class="panel">
-    {{ form_start(invitationForm) }}
-    {{ form_errors(invitationForm) }}
-        <div class="input-group">
-        {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation'}}) }}
-            <span class="input-group-btn">
-            {{ form_widget(invitationForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
-            </span>
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Invite by email{% endtrans %}</div>
+            <div class="panel-body">
+            {{ form_start(invitationForm) }}
+            {{ form_errors(invitationForm) }}
+                <div class="input-group">
+                    {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation by email'}}) }}
+                    <span class="input-group-btn">
+                    {{ form_widget(invitationForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                    </span>
+                </div>
+            {{ form_rest(invitationForm) }}
+            {{ form_end(invitationForm) }}
+            {% if invitationsAlreadySent %}
+            <div class="panel">
+            <h4>{% trans %}Invitations already sent{% endtrans %}</h4>
+            <ul class="list-group">
+                {% for invitation in invitationsAlreadySent %}
+                    {% if invitation.email %}<li class="list-group-item">{{ invitation.email }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+            </div>
+            {% endif %}
+            </div>
         </div>
-    {{ form_rest(invitationForm) }}
-    {{ form_end(invitationForm) }}
-    </div>
-    {% if invitationsAlreadySent %}
-    <div class="panel panel-default">
-    <div class="panel-heading">{% trans %}Invitations already sent to{% endtrans %}</div>
-    <ul class="list-group">
-        {% for invitation in invitationsAlreadySent %}
-            {% if invitation.email %}<li class="list-group-item">{{ invitation.email }}</li>{% endif %}
-        {% endfor %}
-    </ul>
-    </div>
-    {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Invite by username{% endtrans %}</div>
+            <div class="panel-body">
+            form username
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Invite Facebook friends{% endtrans %}</div>
+            <div class="panel-body">
+            friends list
+            </div>
+        </div>
     </div>
         <div style="display:none;" class="tabs">
         {% if users %}
@@ -88,6 +104,22 @@
         {% endif %}
         </div>
         <div style="display:none;" class="tabs">
+        </div>
+        <div class="tabs">
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Announcement for your contest{% endtrans %}</div>
+            <div class="panel-body">
+            <p>{% trans %}If you post a message here, it will be instantanately visible by users in your contest, in each top of pages.{% endtrans %}</p>
+            {{ form_start(contestMessageForm) }}
+            {{ form_errors(contestMessageForm) }}
+                <div class="input-group">
+                    {{ form_widget(contestMessageForm.message, {'attr': {'class': 'form-control', 'placeholder': 'Your announcement'}}) }}
+                    {{ form_widget(contestMessageForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                </div>
+            {{ form_rest(contestMessageForm) }}
+            {{ form_end(contestMessageForm) }}
+            </div>
+            </div>
         </div>
         <div style="display:none;" class="tabs">
         <div class="panel panel-default">

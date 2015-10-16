@@ -17,6 +17,8 @@ use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
 use Dwf\PronosticsBundle\Form\Type\InvitationContestOpenFormType;
 use Dwf\PronosticsBundle\Entity\Invitation;
 use Dwf\PronosticsBundle\Form\Type\ContestType;
+use Dwf\PronosticsBundle\Form\Type\ContestMessageFormType;
+use Dwf\PronosticsBundle\Entity\ContestMessage;
 
 /**
  * Contest controller.
@@ -286,6 +288,33 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationFormContest = $formContest->createView();
+            
+            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if(!$contestMessage) {
+                $contestMessage = new ContestMessage();
+                $contestMessage->setContest($contest);
+                $contestMessage->setUser($this->getUser());
+                $contestMessage->setDate(date("YmdHis"));
+            }
+            
+            $contestMessageType = new ContestMessageFormType("Dwf\PronosticsBundle\Entity\ContestMessage");
+            $contestMessageForm = $this->createForm($contestMessageType, $contestMessage, array(
+                    'action' => '',
+                    'method' => 'PUT',
+            ));
+            $contestMessageForm->add('submit', 'submit', array('label' => $this->get('translator')->trans('Post your message')));
+            $contestMessageForm->handleRequest($request);
+            if ($contestMessageForm->isValid()) {
+                $em->persist($contestMessage);
+                $em->flush();
+                $this->addFlash(
+                        'success',
+                        $this->get('translator')->trans('Your message has been added to the contest')
+                );
+                return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
+            }
+            $contestMessageForm = $contestMessageForm->createView();
+            
             return array(
                     'contest'                   => $contest,
                     'user'                      => $this->getUser(),
@@ -297,6 +326,7 @@ class ContestController extends Controller
                     'invitationsAlreadySent'    => $invitationsAlreadySent,
                     'users'                     => $users,
                     'contestForm'               => $contestForm,
+                    'contestMessageForm'        => $contestMessageForm,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
