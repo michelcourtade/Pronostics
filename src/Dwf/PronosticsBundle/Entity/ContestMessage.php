@@ -3,12 +3,14 @@
 namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * ContestMessage
  *
  * @ORM\Table("contests_messages")
  * @ORM\Entity(repositoryClass="Dwf\PronosticsBundle\Entity\ContestMessageRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ContestMessage
 {
@@ -30,8 +32,8 @@ class ContestMessage
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     private $date;
     
@@ -151,5 +153,13 @@ class ContestMessage
     public function getUser()
     {
         return $this->user;
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function onPrePersist() {
+        
+        $this->date = new \DateTime("now");
     }
 }

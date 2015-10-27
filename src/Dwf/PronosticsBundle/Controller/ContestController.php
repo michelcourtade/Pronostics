@@ -79,9 +79,9 @@ class ContestController extends Controller
         }
         $contestForm = $form->createView();
 
-        return array("myContests" => $myContests,
-                     "otherContests" => $otherContests,
-                     "contestForm" => $contestForm);
+        return array("myContests"       => $myContests,
+                     "otherContests"    => $otherContests,
+                     "contestForm"      => $contestForm);
     }
 
     /**
@@ -130,18 +130,24 @@ class ContestController extends Controller
         $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
 
+        $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if($contestMessage) {
+                $messageForContest = $contestMessage[0];
+            }
+        else $messageForContest = null;
         return array(
-                'contest' => $contest,
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'teams'     => $arrayTeams,
-                'players'   => $arrayPlayers,
-                'nbPronostics' => $nb,
-                'nbPerfectScore' => $nbPerfectScore,
-                'nbGoodScore' => $nbGoodScore,
-                'nbBadScore' => $nbBadScore,
-                'total'         => $total,
+                'contest'                   => $contest,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'teams'                     => $arrayTeams,
+                'players'                   => $arrayPlayers,
+                'nbPronostics'              => $nb,
+                'nbPerfectScore'            => $nbPerfectScore,
+                'nbGoodScore'               => $nbGoodScore,
+                'nbBadScore'                => $nbBadScore,
+                'total'                     => $total,
+                'messageForContest'         => $messageForContest,
         );
     }
 
@@ -177,6 +183,11 @@ class ContestController extends Controller
                 }
             }
             else $entities = "";
+            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if($contestMessage) {
+                $messageForContest = $contestMessage[0];
+            }
+            else $messageForContest = null;
             return array(
                     'contest'                   => $contest,
                     'user'                      => $user,
@@ -184,6 +195,7 @@ class ContestController extends Controller
                     'currentChampionshipDay'    => $currentChampionshipDay,
                     'entities'                  => $entities,
                     'group'                     => $groupUser,
+                    'messageForContest'         => $messageForContest,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -295,6 +307,11 @@ class ContestController extends Controller
                 $contestMessage->setContest($contest);
                 $contestMessage->setUser($this->getUser());
                 $contestMessage->setDate(date("YmdHis"));
+                $messageForContest = null;
+            }
+            else {
+                $contestMessage = $contestMessage[0];
+                $messageForContest = $contestMessage;
             }
             
             $contestMessageType = new ContestMessageFormType("Dwf\PronosticsBundle\Entity\ContestMessage");
@@ -327,6 +344,7 @@ class ContestController extends Controller
                     'users'                     => $users,
                     'contestForm'               => $contestForm,
                     'contestMessageForm'        => $contestMessageForm,
+                    'messageForContest'         => $messageForContest,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -443,6 +461,11 @@ class ContestController extends Controller
                 $nbPronostics = $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
                 $nbPointsWonByChampionshipDay = 0;
             }
+            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if($contestMessage) {
+                $messageForContest = $contestMessage[0];
+            }
+            else $messageForContest = null;
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -461,6 +484,7 @@ class ContestController extends Controller
                     'nbBadScore'                    => $nbBadScore,
                     'chart'                         => '',
                     'gameType'                      => '',
+                    'messageForContest'             => $messageForContest,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -572,6 +596,11 @@ class ContestController extends Controller
                 $nbPronostics = 0;
                 $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
             }
+            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if($contestMessage) {
+                $messageForContest = $contestMessage[0];
+            }
+            else $messageForContest = null;
             return array(
                     'contest'                       => $contest,
                     'teams'                         => $arrayTeams,
@@ -589,7 +618,8 @@ class ContestController extends Controller
                     'nbPerfectScore'                => $nbPerfectScore,
                     'nbGoodScore'                   => $nbGoodScore,
                     'nbBadScore'                    => $nbBadScore,
-                    'chart'                         => $ob
+                    'chart'                         => $ob,
+                    'messageForContest'             => $messageForContest,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -699,6 +729,11 @@ class ContestController extends Controller
         }
         else $currentChampionshipDay = '';
 
+        $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        if($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
+        else $messageForContest = null;
         return array(
                 'contest'               => $contest,
                 'event'                 => $event,
@@ -712,6 +747,7 @@ class ContestController extends Controller
                 'scorersTeam1'          => $scorersTeam1,
                 'scorersTeam2'          => $scorersTeam2,
                 'form'                  => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
+                'messageForContest'     => $messageForContest,
         );
     }
 
@@ -777,19 +813,25 @@ class ContestController extends Controller
                 }
             }
             else $forms = "";
+            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            if($contestMessage) {
+                $messageForContest = $contestMessage[0];
+            }
+            else $messageForContest = null;
             return array(
                     'contest'                       => $contest,
-                    'event'     => $event,
-                    'currentChampionshipDay' => $currentChampionshipDay,
-                    'user'		=> $this->getUser(),
-                    'entities'	=> $entities,
-                    'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
-                    'nbPronostics' => $nb,
-                    'nbPerfectScore' => $nbPerfectScore,
-                    'nbGoodScore' => $nbGoodScore,
-                    'nbBadScore' => $nbBadScore,
-                    'total'         => $total,
-                    'forms'	=> $forms,
+                    'event'                         => $event,
+                    'currentChampionshipDay'        => $currentChampionshipDay,
+                    'user'                          => $this->getUser(),
+                    'entities'                      => $entities,
+                    'bestscorer_pronostic'          => $pronostic ? $bestscorer_pronostic : '',
+                    'nbPronostics'                  => $nb,
+                    'nbPerfectScore'                => $nbPerfectScore,
+                    'nbGoodScore'                   => $nbGoodScore,
+                    'nbBadScore'                    => $nbBadScore,
+                    'total'                         => $total,
+                    'forms'                         => $forms,
+                    'messageForContest'             => $messageForContest,
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');
