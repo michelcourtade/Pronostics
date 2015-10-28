@@ -37,7 +37,7 @@
         "beberlei/DoctrineExtensions": "dev-master",
         "egeloen/google-map": "dev-master",
         "ornicar/gravatar-bundle" : "dev-master",
-        "ob/highcharts-bundle": "1.*",
+        "ob/highcharts-bundle": "dev-master",
         "white-october/pagerfanta-bundle": "~1.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
