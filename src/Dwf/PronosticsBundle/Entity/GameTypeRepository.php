@@ -38,4 +38,18 @@ class GameTypeRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
+    
+    public function getFirstByEvent(Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('g')
+        ->join('g.events', 'eg')
+        ->where('eg.id IN (:event)')
+        ->setParameter('event', $event)
+        ->addOrderBy('g.position', 'ASC')
+        ->setMaxResults(1)
+        ;
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
 }

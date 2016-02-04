@@ -409,6 +409,10 @@ class ContestController extends Controller
             $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventOrderedByDate($event);
             if($event->getChampionship()) {
                 $gameTypeId = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getMaxGameTypeIdByEvent($event);
+                if(!$gameTypeId) {
+                    $firstGameType = $em->getRepository('DwfPronosticsBundle:GameType')->getFirstByEvent($event);
+                    $gameTypeId = $firstGameType[0]->getId();
+                }
                 $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($gameTypeId);
                 $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEvent($gameType, $event);
             }

@@ -79,7 +79,7 @@ class GameTypeResultRepository extends EntityRepository
     public function getMaxGameTypeIdByEvent(Dwf\PronosticsBundle\Entity\Event $event)
     {
         $qb = $this->createQueryBuilder('g')
-        ->leftJoin('g.team', 't')
+        //->leftJoin('g.team', 't')
         //->addSelect('p.user')
         ->select('MAX(g.gameType) AS id')
         ->where('g.event = :event')
