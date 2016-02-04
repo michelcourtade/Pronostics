@@ -783,6 +783,7 @@ class ContestController extends Controller
                         else $currentChampionshipDay = '';
                     }
                 }
+                else $currentChampionshipDay = '';
             }
             else $currentChampionshipDay = '';
             $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
