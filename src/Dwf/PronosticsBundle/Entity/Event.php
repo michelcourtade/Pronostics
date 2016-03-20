@@ -152,7 +152,7 @@ class Event
     /**
      * @var boolean
      *
-     * @ORM\Column(name="bestScorer", type="boolean")
+     * @ORM\Column(name="bestScorer", type="boolean", nullable=true)
      */
     private $bestScorer;
     
