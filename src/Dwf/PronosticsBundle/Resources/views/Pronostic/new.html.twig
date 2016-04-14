@@ -1,7 +1,16 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-
+{% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{% trans %}Bet{% endtrans %}</li>
+    </ul>
+    {% endblock %}
+    {% block contest_header %}
+    {{ parent() }}
+    {% endblock %}
 	{% if entity.game %}
 		<h1>Pronostic sur {{ entity.game }}</h1>
 		<input id="dwf_pronosticsbundle_pronostic_game" name="dwf_pronosticsbundle_pronostic[game]" type="hidden" value="{{ entity.game.id }}"/>

@@ -113,44 +113,54 @@ class PronosticController extends Controller
     /**
      * Displays a form to create a new Pronostic entity.
      *
-     * @Route("/new/{id}", name="pronostics_new_forgame")
+     * @Route("/contest/{contestId}/new/{id}", name="pronostics_new_forgame")
      * @Method("GET")
      * @Template()
      * "DwfPronosticsBundle:Pronostic:new.html.twig"
      */
-    public function newForGameAction($id)
+    public function newForGameAction($id, $contestId)
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$game = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
-    	$event = $game->getEvent();
-    	if(!$game->hasBegan()) {
-	    	$pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game));
-	    	if(!$pronostic) {
-		    	$entity = new Pronostic();
-		    	$entity->setGame($game);
-		    	$entity->setUser($this->getUser());
-		    	$entity->setEvent($event);
+        $em = $this->getDoctrine()->getManager();
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $game = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
+        $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($game->getType());
+        $event = $game->getEvent();
+        if(!$game->hasBegan()) {
+           $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game));
+            if(!$pronostic) {
+                $entity = new Pronostic();
+                $entity->setGame($game);
+                $entity->setUser($this->getUser());
+                $entity->setEvent($event);
 
-		    	$form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
-		    			'action' => $this->generateUrl('pronostics_create'),
-		    			'method' => 'POST',
-		    	));
+                $form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
+                        'action' => $this->generateUrl('pronostics_create'),
+                        'method' => 'POST',
+                ));
 
-		    	$form->add('submit', 'submit', array('label' => 'Pronostiquer'));
-		    	//$form   = $this->createCreateForm($entity);
+                $form->add('submit', 'submit', array('label' => 'Pronostiquer'));
 
-		    	return array(
-		    	        'event' => $game->getEvent(),
-		    			'entity' => $entity,
-		    			'form'   => $form->createView(),
-		    	);
-	    	}
-	    	elseif(!$game->getPlayed()) {
-	    		return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $pronostic->getId())));
-	    	}
-	    	else throw $this->createNotFoundException('Vous avez deja pronostiqué ce match');
-    	}
-    	else throw $this->createNotFoundException('Pronostic impossible car match déjà commencé !');
+                $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+                if($contestMessage) {
+                    $messageForContest = $contestMessage[0];
+                }
+                else $messageForContest = null;
+                return array(
+                        'contest'                       => $contest,
+                        'event'                         => $game->getEvent(),
+                        'entity'                        => $entity,
+                        'form'                          => $form->createView(),
+                        'user'                          => $this->getUser(),
+                        'gameType'                      => $gameType,
+                        'messageForContest'             => $messageForContest,
+                );
+            }
+            elseif(!$game->getPlayed()) {
+                return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $pronostic->getId())));
+            }
+            else throw $this->createNotFoundException('Vous avez deja pronostiqué ce match');
+        }
+        else throw $this->createNotFoundException('Pronostic impossible car match déjà commencé !');
     }
 
     /**
