@@ -74,7 +74,7 @@
                     </p>
                 {% endif %}
                 {% if not entity.played and not entity.hasBegan() %}
-                    <a class="btn btn-lg btn-primary" href="{{ path('pronostics_edit', { 'id': pronostic.id }) }}">
+                    <a class="btn btn-lg btn-primary" href="{{ path('pronostics_edit', { 'id': pronostic.id, 'contestId': contest.id }) }}">
                     {% trans %}Modify my bet{% endtrans %}
                     </a>
                 {% endif %}
