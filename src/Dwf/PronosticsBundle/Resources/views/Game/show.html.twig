@@ -1,24 +1,28 @@
-{% extends '::base.html.twig' %}
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
 {% block body -%}
-<ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
-    <li><a href="{{ path('game_by_type', { 'type': entity.type.id, 'event': event.id }) }}">{{ entity.type }}</a></li>
-    <li>{{ entity.name }}</li>
-</ul>
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
-</div>
-{% include "DwfPronosticsBundle:Game:showGame.html.twig" with {'entity': entity, 'showExpert': true } %}
-	
-{% if nextGame and not event.simpleBet %}
-	<div class="page-header">
-   		<h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} Match suivant</h1>
-	</div>
-	{% include "DwfPronosticsBundle:Game:showGame.html.twig" with {'entity': nextGame, 'pronostic': pronosticNextGame,'pronostics': false, 'showExpert': false, 'scorersTeam1': false, 'scorersTeam2':false } %}
-{% endif %}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('events') }}">Accueil</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}Games{% endtrans %}</a></li>
+        <li><a href="{{ path('contest_games_by_type', { 'type': entity.type.id, 'contestId': contest.id }) }}">{{ entity.type }}</a></li>
+        <li>{{ entity.name }}</li>
+    </ul>
+    {% endblock %}
+
+    {% block contest_header %}
+    {{ parent() }}
+    {% endblock %}
+    
+    {% include "DwfPronosticsBundle:Game:showGame.html.twig" with {'entity': entity, 'showExpert': true } %}
+
+    {% if nextGame and not event.simpleBet %}
+        <div class="page-header">
+            <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} Match suivant</h1>
+        </div>
+        {% include "DwfPronosticsBundle:Game:showGame.html.twig" with {'entity': nextGame, 'pronostic': pronosticNextGame,'pronostics': false, 'showExpert': false, 'scorersTeam1': false, 'scorersTeam2':false } %}
+    {% endif %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

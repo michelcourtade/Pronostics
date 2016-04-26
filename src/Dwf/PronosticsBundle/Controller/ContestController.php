@@ -652,13 +652,13 @@ class ContestController extends Controller
         $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
         $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
         $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
-        if(!$pronostic) {
-            $pronostic = new Pronostic();
-            $pronostic->setGame($entity);
-            $pronostic->setUser($this->getUser());
-            $pronostic->setEvent($entity->getEvent());
-        }
         if($entity->getEvent()->getSimpleBet()) {
+            if(!$pronostic) {
+                $pronostic = new Pronostic();
+                $pronostic->setGame($entity);
+                $pronostic->setUser($this->getUser());
+                $pronostic->setEvent($entity->getEvent());
+            }
             $simpleType = new SimplePronosticType();
             $simpleType->setName($entity->getId());
             $form = $this->createForm($simpleType, $pronostic, array(

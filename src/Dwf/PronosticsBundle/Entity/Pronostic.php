@@ -99,7 +99,7 @@ class Pronostic
      *
      * possible values : 1 / N / 2
      * 
-     * @ORM\Column(name="simpleBet", type="string", length=1)
+     * @ORM\Column(name="simpleBet", type="string", length=1, nullable=true)
      */
     private $simpleBet;
     

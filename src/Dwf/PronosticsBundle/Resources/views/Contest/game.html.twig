@@ -87,7 +87,7 @@
                 {% if event.simpleBet %}
                     {% include "DwfPronosticsBundle:Pronostic:createSimple.html.twig" with {'id': entity.id} %}
                 {% else %}
-                    <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id }) }}">
+                    <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}">
                         {% trans %}Bet{% endtrans %}
                    </a>
                {% endif %}

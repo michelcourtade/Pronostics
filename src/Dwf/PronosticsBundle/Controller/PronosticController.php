@@ -64,7 +64,7 @@ class PronosticController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('game_show', array('id' => $entity->getGame()->getId())));
+            return $this->redirect($this->generateUrl('contest_game_show', array('id' => $entity->getGame()->getId())));
         }
 
         return array(
@@ -138,7 +138,7 @@ class PronosticController extends Controller
                         'method' => 'POST',
                 ));
 
-                $form->add('submit', 'submit', array('label' => 'Pronostiquer'));
+                $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Bet')));
 
                 $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
                 if($contestMessage) {
@@ -156,7 +156,7 @@ class PronosticController extends Controller
                 );
             }
             elseif(!$game->getPlayed()) {
-                return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $pronostic->getId())));
+                return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $pronostic->getId(), 'contestId' => $contest->getId())));
             }
             else throw $this->createNotFoundException('Vous avez deja pronostiqué ce match');
         }
@@ -361,30 +361,37 @@ class PronosticController extends Controller
     /**
      * Displays a form to edit an existing Pronostic entity.
      *
-     * @Route("/{id}/edit", name="pronostics_edit")
+     * @Route("/contest/{contestId}/{id}/edit", name="pronostics_edit")
      * @Method("GET")
      * @Template("DwfPronosticsBundle:Pronostic:newForGame.html.twig")
      */
-    public function editAction($id)
+    public function editAction($id, $contestId)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
         $game = $em->getRepository('DwfPronosticsBundle:Game')->find($entity->getGame());
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Pronostic entity.');
         }
-		//var_dump($game->getDate());
+        $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        if($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
+        else $messageForContest = null;
         if(!$game->hasBegan() && !$game->getPlayed()) {
-	        $editForm = $this->createEditForm($entity);
-	        $deleteForm = $this->createDeleteForm($id);
+            $editForm = $this->createEditForm($entity);
+            $deleteForm = $this->createDeleteForm($id);
 
-	        return array(
-	        	'event'			=> $game->getEvent(),
-	            'entity'      => $entity,
-	            'form'   => $editForm->createView(),
-	            //'delete_form' => $deleteForm->createView(),
-	        );
+            return array(
+                'contest'                       => $contest,
+                'event'			=> $game->getEvent(),
+                'entity'      => $entity,
+                'form'   => $editForm->createView(),
+                'user'                          => $this->getUser(),
+                'messageForContest'             => $messageForContest,
+                //'delete_form' => $deleteForm->createView(),
+            );
         }
         else throw $this->createNotFoundException('Pronostic impossible à modifier car match déjà commencé !');
     }
@@ -403,7 +410,7 @@ class PronosticController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Modifier'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Modify')));
 
         return $form;
     }
