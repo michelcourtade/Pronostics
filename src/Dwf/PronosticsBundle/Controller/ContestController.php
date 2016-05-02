@@ -437,9 +437,14 @@ class ContestController extends Controller
                         $pronostic->setGame($entity);
                         $pronostic->setUser($this->getUser());
                         $pronostic->setEvent($entity->getEvent());
+                        $pronostic->setContest($contest);
                     }
-                    
-                    $simpleType = new SimplePronosticType();
+                    if($event->getScoreDiff()) {
+                        $simpleType = new SimplePronosticType();
+                    }
+                    else {
+                        $simpleType = new SimplePronosticType();
+                    }
                     $simpleType->setName($entity->getId());
                     $form = $this->createForm($simpleType, $pronostic, array(
                             'action' => '',

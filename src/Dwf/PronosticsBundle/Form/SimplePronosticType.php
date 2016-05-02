@@ -29,7 +29,16 @@ class SimplePronosticType extends AbstractType
                                         'choices' => array('1' => '1','N' => 'N','2' => '2'),
                                         //'attr' => array('onclick'=>'$("#dwf_pronosticsbundle_pronostic").submit()')
             ))
-            ->add('sliceScore', 'entity',
+            
+            ->add('user', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'))
+            ->add('game', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Game'))
+            ->add('event', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Event'))
+            ->add('contest', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Contest'))
+            
+            //->add('gameId', 'hidden', array('attr' => array('name' => 'gameId'),'data' => $this->gameId, 'mapped' => false))
+        ;
+        if($options['data']->getEvent()->getScoreDiff()) {
+            $builder->add('sliceScore', 'entity',
                     array('expanded' => false,
                             'class' => 'Dwf\PronosticsBundle\Entity\SliceScore',
                             'query_builder' => function (SliceScoreRepository $er) use ($options) {
@@ -41,13 +50,8 @@ class SimplePronosticType extends AbstractType
                             },
                             'multiple' => false,
                             'required' => false,
-                    ))
-            ->add('user', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'))
-            ->add('game', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Game'))
-            ->add('event', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Event'))
-            
-            //->add('gameId', 'hidden', array('attr' => array('name' => 'gameId'),'data' => $this->gameId, 'mapped' => false))
-        ;
+                    ));
+        }
     }
     
     /**
