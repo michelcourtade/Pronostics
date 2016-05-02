@@ -64,7 +64,7 @@ class PronosticController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('contest_game_show', array('id' => $entity->getGame()->getId())));
+            return $this->redirect($this->generateUrl('contest_game_show', array('id' => $entity->getGame()->getId(), 'contestId' => $entity->getContest()->getId())));
         }
 
         return array(
@@ -87,7 +87,7 @@ class PronosticController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Create')));
 
         return $form;
     }
@@ -126,12 +126,13 @@ class PronosticController extends Controller
         $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($game->getType());
         $event = $game->getEvent();
         if(!$game->hasBegan()) {
-           $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game));
+           $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game, 'contest' => $contest));
             if(!$pronostic) {
                 $entity = new Pronostic();
                 $entity->setGame($game);
                 $entity->setUser($this->getUser());
                 $entity->setEvent($event);
+                $entity->setContest($contest);
 
                 $form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
                         'action' => $this->generateUrl('pronostics_create'),
@@ -385,8 +386,8 @@ class PronosticController extends Controller
 
             return array(
                 'contest'                       => $contest,
-                'event'			=> $game->getEvent(),
-                'entity'      => $entity,
+                'event'                         => $game->getEvent(),
+                'entity'                        => $entity,
                 'form'   => $editForm->createView(),
                 'user'                          => $this->getUser(),
                 'messageForContest'             => $messageForContest,
@@ -423,23 +424,28 @@ class PronosticController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-    	$em = $this->getDoctrine()->getManager();
-    	$entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
-    	if (!$entity) {
-    		throw $this->createNotFoundException('Unable to find Pronostic entity.');
-    	}
-    	$deleteForm = $this->createDeleteForm($id);
-    	$editForm = $this->createEditForm($entity);
-    	$editForm->handleRequest($request);
-    	if ($editForm->isValid()) {
-    		$em->flush();
-    		return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id)));
-    	}
-    	return array(
-    			'entity' => $entity,
-    			'edit_form' => $editForm->createView(),
-    			'delete_form' => $deleteForm->createView(),
-    	);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Pronostic entity.');
+        }
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $em->flush();
+            $this->addFlash(
+                    'success',
+                    $this->get('translator')->trans('Your contest has been modified.')
+            );
+            
+            return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id, 'contestId' => $entity->getContest()->getId())));
+        }
+        return array(
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+        );
     }
 
     /**

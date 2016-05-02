@@ -14,6 +14,7 @@ class PronosticAdmin extends Admin
         $formMapper
         ->add('event')
         ->add('user')
+        ->add('contest')
         ->add('game')
         ->add('simpleBet', 'choice',array('expanded' => true,'choices' => array('1' => '1', 'N' => 'N', '2' => '2'), 'required' => false))
         ->add('sliceScore')

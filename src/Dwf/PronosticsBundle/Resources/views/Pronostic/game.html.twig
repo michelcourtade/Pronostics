@@ -6,7 +6,7 @@
 
 <div class="match row">
     <p class="date col-xs-12">
-    <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> - 
+    <span><a href="{{ path('contest_games_by_type', { 'type': entity.game.type.id, 'contestId': contest.id }) }}">{{ entity.game.type }}</a></span> - 
     {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}
     </p>
 {#     <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>#}
@@ -14,7 +14,7 @@
         {% if entity.result %}{{ entity.result }} pts{% endif %}
     </div>
     <div class="team{% if(entity.game.getWhoLose() == 1) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
-        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+        <a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">
             <span class="hidden-xs hidden-sm">{{ entity.game.team1.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.game.team1.iso }}</span>
             <img src='/{{ entity.game.team1.getWebPath }}' />
@@ -47,7 +47,7 @@
 {#         </a>#}
     </div>
     <div class="team ext{% if(entity.game.getWhoLose() == 2) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
-        <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+        <a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">
             <span class="hidden-xs hidden-sm ">{{ entity.game.team2.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.game.team2.iso }}</span>
             <img src='/{{ entity.game.team2.getWebPath }}' />

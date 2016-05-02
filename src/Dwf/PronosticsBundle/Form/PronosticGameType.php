@@ -14,36 +14,32 @@ class PronosticGameType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    	for($i = 0; $i < 11; $i++)
-    		$arrayChoices[$i] = $i;
+        for($i = 0; $i < 11; $i++)
+            $arrayChoices[$i] = $i;
         $builder
             ->add('game', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Game'))
             ->add('event', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Event'))
             ->add('scoreTeam1', 'choice', array('label' => null,
-        											'choices' => $arrayChoices))
+                                                    'choices' => $arrayChoices))
             ->add('scoreTeam2', 'choice', array('label' => null,
-        											'choices' => $arrayChoices))
+                                                    'choices' => $arrayChoices))
             ->add('overtime', 'checkbox', array('label' => 'Ira aux prolongations ?', 'required' => false))
             ->add('scoreTeam1Overtime', 'choice', array('label' => null,
-        											'choices' => $arrayChoices))
+                                                    'choices' => $arrayChoices))
             ->add('scoreTeam2Overtime', 'choice', array('label' => null,
-        											'choices' => $arrayChoices))
+                                                    'choices' => $arrayChoices))
             ->add('winner', 'entity', array('label' => 'Vainqueur si nul', 
-            								'required' => false,
-            								'class' => 'Dwf\PronosticsBundle\Entity\Team',
-						            		'query_builder' => function ($repository) use ($options) { return $options['data']->getGame() ? $repository->createQueryBuilder('t')
-										            			->where('t.id IN (:teams)')
-											            		->setParameter('teams',array($options['data']->getGame()->getTeam1(),$options['data']->getGame()->getTeam2()))
-											            		->orderBy('t.id', 'ASC') : $repository->createQueryBuilder('t')										            			
-											            		->orderBy('t.id', 'ASC'); },
-            							)
-            	)
+                                            'required' => false,
+                                            'class' => 'Dwf\PronosticsBundle\Entity\Team',
+                                            'query_builder' => function ($repository) use ($options) { return $options['data']->getGame() ? $repository->createQueryBuilder('t')
+                                                                ->where('t.id IN (:teams)')
+                                                                ->setParameter('teams',array($options['data']->getGame()->getTeam1(),$options['data']->getGame()->getTeam2()))
+                                                                ->orderBy('t.id', 'ASC') : $repository->createQueryBuilder('t')
+                                                                ->orderBy('t.id', 'ASC'); },
+                                        )
+                )
             ->add('user', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'))
-            //->add('user')
-//             ->add('createdAt')
-//             ->add('updatedAt')
-//             ->add('expiresAt')
-//            ->add('result')
+            ->add('contest', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Contest'))
         ;
     }
     

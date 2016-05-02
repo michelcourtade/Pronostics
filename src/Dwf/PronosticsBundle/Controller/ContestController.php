@@ -650,14 +650,15 @@ class ContestController extends Controller
             $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')->findScorersByGameAndTeam($entity, $entity->getTeam2());
         else $scorersTeam2 = "";
         $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
-        $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame));
-        $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
+        $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame, 'contest' => $contest));
+        $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
         if($entity->getEvent()->getSimpleBet()) {
             if(!$pronostic) {
                 $pronostic = new Pronostic();
                 $pronostic->setGame($entity);
                 $pronostic->setUser($this->getUser());
                 $pronostic->setEvent($entity->getEvent());
+                $pronostic->setContest($contest);
             }
             $simpleType = new SimplePronosticType();
             $simpleType->setName($entity->getId());
@@ -790,12 +791,12 @@ class ContestController extends Controller
             if($pronostic)
                 $bestscorer_pronostic = $pronostic[0];
 
-            $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndEvent($this->getUser(), $event, 0);
-            $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
-            $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
-            $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
-            $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
-            $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
+            $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndContest($this->getUser(), $contest, 0);
+            $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndContest($this->getUser(), $contest);
+            $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 5);
+            $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 3);
+            $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 1);
+            $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByContestAndUser($contest, $this->getUser());
             if($event->getSimpleBet()) {
                 $forms = array();
                 $i = 0;

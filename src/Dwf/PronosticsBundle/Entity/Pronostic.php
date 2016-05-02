@@ -28,6 +28,11 @@ class Pronostic
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+    /**
+     * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Contest")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $contest;
     
     /**
      * @ORM\ManyToOne(targetEntity="Dwf\PronosticsBundle\Entity\Game")
@@ -573,5 +578,29 @@ class Pronostic
     public function getSliceScore()
     {
         return $this->sliceScore;
+    }
+
+    /**
+     * Set contest
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Contest $contest
+     *
+     * @return Pronostic
+     */
+    public function setContest(\Dwf\PronosticsBundle\Entity\Contest $contest)
+    {
+        $this->contest = $contest;
+
+        return $this;
+    }
+
+    /**
+     * Get contest
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Contest
+     */
+    public function getContest()
+    {
+        return $this->contest;
     }
 }
