@@ -120,20 +120,17 @@ class PronosticRepository extends EntityRepository
     }
     
 
-	public function findAllByGameAndResult(Dwf\PronosticsBundle\Entity\Game $game, $result = null)
-	{
-		$qb = $this->createQueryBuilder('p')
-		->where('p.game = :game')
-		//->where('p.result is NULL')
-		->setParameter('game', $game)
-		//->where('p.expires_at > :date')
-		->orderBy('p.expiresAt', 'DESC');
-
-		$query = $qb->getQuery();
-		//var_dump($query->getSql());
-		return $query->getResult();
-	}
-
+    public function findAllByGameAndResult(Dwf\PronosticsBundle\Entity\Game $game, $result = null)
+    {
+        $qb = $this->createQueryBuilder('p')
+        ->where('p.game = :game')
+        ->setParameter('game', $game)
+        ->orderBy('p.expiresAt', 'DESC');
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
 	public function getResults()
 	{
 		$qb = $this->createQueryBuilder('p')
@@ -279,46 +276,83 @@ class PronosticRepository extends EntityRepository
 		return $query->getResult();
 	}
 
-	public function findAllByGame(Dwf\PronosticsBundle\Entity\Game $game, $groups = "")
-	{
-		$list = array();
-	    $qb = $this->createQueryBuilder('p')
-	    //->addSelect('p.*')
-	    ->leftJoin('p.user','u')
-	    ->leftJoin('u.groups', 'g')
-	    ->select('p','g.name AS group_name')
-	    ->where('p.game = :game')
-	    ->setParameter('game', $game);
-	    if($groups) {
-	    	foreach ($groups as $group)
-	    		array_push($list, $group->getID());
-	    	//$test = implode(",", $list);
-	    	$qb->andWhere('g.id IN (:group)')
-				->setParameter('group', $list);
-	    }
-	    $qb->addOrderBy('p.result', 'DESC');
-	    $qb->addOrderBy('g.id', 'ASC');
+    public function findAllByGame(Dwf\PronosticsBundle\Entity\Game $game, $groups = "")
+    {
+        $list = array();
+        $qb = $this->createQueryBuilder('p')
+        //->addSelect('p.*')
+        ->leftJoin('p.user','u')
+        ->leftJoin('u.groups', 'g')
+        ->select('p','g.name AS group_name')
+        ->where('p.game = :game')
+        ->setParameter('game', $game);
+        if($groups) {
+            foreach ($groups as $group)
+                array_push($list, $group->getID());
+            //$test = implode(",", $list);
+            $qb->andWhere('g.id IN (:group)')
+            ->setParameter('group', $list);
+        }
+        $qb->addOrderBy('p.result', 'DESC');
+        $qb->addOrderBy('g.id', 'ASC');
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
+    public function findAllByGameAndContest(Dwf\PronosticsBundle\Entity\Game $game, Dwf\PronosticsBundle\Entity\Contest $contest)
+    {
+        $list = array();
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.user','u')
+            ->leftJoin('u.groups', 'g')
+            ->select('p','g.name AS group_name')
+            ->where('p.game = :game')
+            ->setParameter('game', $game)
+            ->andwhere('p.contest = :contest')
+            ->setParameter('contest', $contest);
 
-	    $query = $qb->getQuery();
-	    return $query->getResult();
-	}
+        $qb->addOrderBy('p.result', 'DESC');
+        $qb->addOrderBy('g.id', 'ASC');
+    
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
 
-	public function getResultsByEventAndType(Dwf\PronosticsBundle\Entity\Event $event, $type)
-	{
-	    $qb = $this->createQueryBuilder('p')
-	    ->leftJoin('p.user','u')
-	    ->leftJoin('p.game', 'g')
-// 	    ->leftJoin('g.type', 't')
-	    ->select('p', 'SUM(p.result) AS total', 'u.username as username', 'COUNT(p.id) AS nb_pronostics')
-	    ->where('p.event = :event')
-	    ->setParameter('event', $event)
-	    ->andWhere('g.type = :type')
-	    ->setParameter('type', $type)
-	    ->groupBy('p.user')
-	    ;
-	    $qb->addOrderBy('u.username', 'ASC');
-	    $query = $qb->getQuery();
-	    return $query->getResult();
-	}
+    public function getResultsByEventAndType(Dwf\PronosticsBundle\Entity\Event $event, $type)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.user','u')
+            ->leftJoin('p.game', 'g')
+            ->select('p', 'SUM(p.result) AS total', 'u.username as username', 'COUNT(p.id) AS nb_pronostics')
+            ->where('p.event = :event')
+            ->setParameter('event', $event)
+            ->andWhere('g.type = :type')
+            ->setParameter('type', $type)
+            ->groupBy('p.user')
+        ;
+        $qb->addOrderBy('u.username', 'ASC');
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+    public function getResultsByContestAndType(Dwf\PronosticsBundle\Entity\Contest $contest, $type)
+    {
+        $qb = $this->createQueryBuilder('p')
+        ->leftJoin('p.user','u')
+        ->leftJoin('p.game', 'g')
+        ->select('p', 'SUM(p.result) AS total', 'u.username as username', 'COUNT(p.id) AS nb_pronostics')
+        ->where('p.contest = :contest')
+        ->setParameter('contest', $contest)
+        ->andWhere('g.type = :type')
+        ->setParameter('type', $type)
+        ->groupBy('p.user')
+        ;
+        $qb->addOrderBy('u.username', 'ASC');
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
 
 }

@@ -26,6 +26,19 @@ class StandingRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+    public function findByUserAndContestAndGame(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Contest $contest, Dwf\PronosticsBundle\Entity\Game $game)
+    {
+        $qb = $this->createQueryBuilder('s')
+        ->where('s.user = :user')
+        ->setParameter('user', $user)
+        ->andWhere('s.contest = :contest')
+        ->setParameter('contest', $contest)
+        ->andWhere('s.game = :game')
+        ->setParameter('game', $game)
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
     
     public function getMaxPointsByUserAndEventBeforeGame(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\Game $game)
     {
@@ -43,6 +56,23 @@ class StandingRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+    public function getMaxPointsByUserAndContestBeforeGame(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Contest $contest, Dwf\PronosticsBundle\Entity\Game $game)
+    {
+        $qb = $this->createQueryBuilder('s')
+        ->where('s.user = :user')
+        ->leftJoin('s.game','g')
+        ->setParameter('user', $user)
+        ->andWhere('s.contest = :contest')
+        ->setParameter('contest', $contest)
+        ->andWhere('g.id < :game')
+        ->setParameter('game', $game->getId())
+        ->orderBy('s.points', 'DESC')
+        ->setMaxResults(1)
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
     
     public function getByEventAndGroup(Dwf\PronosticsBundle\Entity\Event $event, $group)
     {
@@ -60,6 +90,24 @@ class StandingRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+    
+    public function getByContestAndGroup(Dwf\PronosticsBundle\Entity\Contest $contest, $group)
+    {
+        $qb = $this->createQueryBuilder('s')
+        ->leftJoin('s.user','u')
+        ->leftJoin('u.groups', 'g')
+        ->select('s','MAX(s.points) AS total', 'MAX(s.pronostics) AS nb_pronostics')
+        ->where('g.id IN (:group)')
+        ->setParameter('group', $group)
+        ->andWhere('s.contest = :contest')
+        ->setParameter('contest', $contest)
+        ->groupBy('s.user')
+        ->orderBy('total', 'DESC')
+        ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
     
     public function getByEventQuery(Dwf\PronosticsBundle\Entity\Event $event)
     {

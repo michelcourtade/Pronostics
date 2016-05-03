@@ -134,14 +134,14 @@ class Result
             $this->em->persist($pronostic);
             $this->em->flush();
 
-           $standing = $this->em->getRepository('DwfPronosticsBundle:Standing')->findByUserAndEventAndGame($pronostic->getUser(), $pronostic->getEvent(), $game);
+           $standing = $this->em->getRepository('DwfPronosticsBundle:Standing')->findByUserAndContestAndGame($pronostic->getUser(), $pronostic->getContest(), $game);
            if($standing) {
                // on supprime le standing eventuel sur le meme game pour pouvoir le recreer par la suite
                $standing = $standing[0];
                $this->em->remove($standing);
                $this->em->flush();
            }
-           $lastStanding = $this->em->getRepository('DwfPronosticsBundle:Standing')->getMaxPointsByUserAndEventBeforeGame($pronostic->getUser(), $pronostic->getEvent(), $game);
+           $lastStanding = $this->em->getRepository('DwfPronosticsBundle:Standing')->getMaxPointsByUserAndContestBeforeGame($pronostic->getUser(), $pronostic->getContest(), $game);
            if($lastStanding) {
                // recuperation du nombre de points et nombre de pronostics du dernier standing enregistré
                $lastStandingPoints = $lastStanding[0]->getPoints();

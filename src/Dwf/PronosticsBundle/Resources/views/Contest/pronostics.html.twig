@@ -3,9 +3,9 @@
 {% block body -%}
     {% block breadcrumb %}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>Mes pronostics</li>
+    <li>{% trans %}My bets{% endtrans %}</li>
     </ul>
     {% endblock %}
     

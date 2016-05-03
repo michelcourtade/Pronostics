@@ -39,6 +39,14 @@ class Standing
     /**
      * @var integer
      *
+     * @ORM\ManyToOne(targetEntity="Contest")
+     * @ORM\JoinColumn(name="contest", referencedColumnName="id")
+     */
+    private $contest;
+    
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="points", type="integer", nullable=true)
      */
     private $points;
@@ -183,4 +191,28 @@ class Standing
         return $this->game;
     }
 
+
+    /**
+     * Set contest
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Contest $contest
+     *
+     * @return Standing
+     */
+    public function setContest(\Dwf\PronosticsBundle\Entity\Contest $contest = null)
+    {
+        $this->contest = $contest;
+
+        return $this;
+    }
+
+    /**
+     * Get contest
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Contest
+     */
+    public function getContest()
+    {
+        return $this->contest;
+    }
 }

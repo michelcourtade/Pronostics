@@ -3,10 +3,10 @@
 {% block body -%}
     {% block breadcrumb %}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('standings_event', {'event': event.id }) }}">{{ event.name }} - {% trans %}Standings{% endtrans %}</a></li>
-    <li>{%if group %}{{ group.name }}{% endif %}</li>
+    <li><a href="{{ path('contest_standings', {'contestId': contest.id }) }}">{{ event.name }} - {% trans %}Standings{% endtrans %}</a></li>
+    {%if group %}<li>{{ group.name }}</li>{% endif %}
     </ul>
     {% endblock %}
     {% block contest_header %}
