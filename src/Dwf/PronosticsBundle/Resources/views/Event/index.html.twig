@@ -5,24 +5,23 @@
     <h1>{% trans %}Current events{% endtrans %}</h1>
     </div>
     
-    <table class="records_list table table-striped events">
+    <table class="records_list table events">
         <thead>
             <tr>
-                <th>{% trans %}Name{% endtrans %}</th>
-                <th>{% trans %}Start date{% endtrans %}</th>
-                <th>{% trans %}Finish date{% endtrans %}</th>
-                <th>{% trans %}Actions{% endtrans %}</th>
+                <th>{% trans %}Event{% endtrans %}</th>
+                <th>{% trans %}Contests{% endtrans %}</th>
+                <th class="hidden-xs">{% trans %}Actions{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
         {% for event in events %}
             <tr>
-                <td>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' class="contest_logo"/>{% endif %} {{ event.name }}<br />
-                {{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}
+                <td>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' class="contest_logo"/>{% endif %} <p>{{ event.name }}</p>
+                <p class="small">{% if event.startDate %}{{ event.startDate|date('d/m/Y') }}{% endif %}
+                {% if event.finishDate %} - {{ event.finishDate|date('d/m/Y') }}{% endif %}</p>
                 </td>
-                <td>{% if event.startDate %}{{ event.startDate|date('d/m/Y H:i') }}{% endif %}<br /></td>
-                <td>{% if event.finishDate %}{{ event.finishDate|date('d/m/Y H:i') }}{% endif %}<br /></td>
-                <td><a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-default">{% trans %}See event page{% endtrans %}</a></td>
+                <td>{{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}</td>
+                <td class="hidden-xs"><a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-primary">{% trans %}See event page{% endtrans %}</a></td>
             </tr>
         {% endfor %}
         </tbody>

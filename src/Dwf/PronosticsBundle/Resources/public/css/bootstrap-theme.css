@@ -555,6 +555,6 @@ span.info_ajax {
 div.tabs-container > .tabs { padding-top:20px; }
 
 img.contest_logo {
-    max-height: 150px;
-    max-width: 15Opx;
+    max-height: 120px;
+    max-width: 120px;
 }

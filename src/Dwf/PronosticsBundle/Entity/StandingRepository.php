@@ -91,15 +91,11 @@ class StandingRepository extends EntityRepository
         return $query->getResult();
     }
     
-    public function getByContestAndGroup(Dwf\PronosticsBundle\Entity\Contest $contest, $group)
+    public function getByContest(Dwf\PronosticsBundle\Entity\Contest $contest)
     {
         $qb = $this->createQueryBuilder('s')
-        ->leftJoin('s.user','u')
-        ->leftJoin('u.groups', 'g')
         ->select('s','MAX(s.points) AS total', 'MAX(s.pronostics) AS nb_pronostics')
-        ->where('g.id IN (:group)')
-        ->setParameter('group', $group)
-        ->andWhere('s.contest = :contest')
+        ->where('s.contest = :contest')
         ->setParameter('contest', $contest)
         ->groupBy('s.user')
         ->orderBy('total', 'DESC')

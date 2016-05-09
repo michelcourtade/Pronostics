@@ -1,4 +1,5 @@
 {% if myContests %}
+<p class="small">{% trans %}My contests{% endtrans %}</p>
     <ul>
     {% for contest in myContests %}
         <li><a href="{{ path('contest_show', { 'contestId': contest.id }) }}">{{ contest.name }}</a></li>

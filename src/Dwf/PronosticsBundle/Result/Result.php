@@ -154,6 +154,7 @@ class Result
            $standing = new Standing();
            $standing->setUser($pronostic->getUser());
            $standing->setEvent($pronostic->getEvent());
+           $standing->setContest($pronostic->getContest());
            $standing->setPoints($lastStandingPoints + $result);
            $standing->setPronostics($lastStandingPronostics + 1);
            $standing->setGame($game);

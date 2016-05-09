@@ -6,14 +6,13 @@
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     <li><a href="{{ path('contest_standings', {'contestId': contest.id }) }}">{{ event.name }} - {% trans %}Standings{% endtrans %}</a></li>
-    {%if group %}<li>{{ group.name }}</li>{% endif %}
+    <li>{{ contest.name }}</li>
     </ul>
     {% endblock %}
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}
     {% block content %}
-    {% if group %}
         <div class="page-header">
         <h1>{% trans %}Standings{% endtrans %}</h1>
         </div>
@@ -67,8 +66,5 @@
     </div>
     {% endif %}
     </div>
-    {% else %}
-        <p>{% trans %}You have no Contest{% endtrans %}</p>
-    {% endif %}
     {% endblock %}
 {% endblock %}

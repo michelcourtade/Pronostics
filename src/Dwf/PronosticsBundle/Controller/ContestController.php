@@ -170,19 +170,9 @@ class ContestController extends Controller
 
             $groupResults = array();
             $user = $this->getUser();
-            $groups = $user->getGroups();
-            $userGroup = false;
             $entities = array();
             $groupUser = array();
-            if($groups) {
-                foreach ($groups as $key => $groupUser) {
-                    if($groupUser->getId() == $contestId) {
-                        $entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByContestAndGroup($contest, $groupUser);
-                        break;
-                    }
-                }
-            }
-            else $entities = "";
+            $entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
             $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
             if($contestMessage) {
                 $messageForContest = $contestMessage[0];
@@ -194,7 +184,7 @@ class ContestController extends Controller
                     'event'                     => $event,
                     'currentChampionshipDay'    => $currentChampionshipDay,
                     'entities'                  => $entities,
-                    'group'                     => $groupUser,
+                    //'group'                     => $groupUser,
                     'messageForContest'         => $messageForContest,
             );
         }
