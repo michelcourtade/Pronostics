@@ -23,7 +23,6 @@ set('keep_releases', 10);
 
 task('install', function () {
     cd('{{deploy_path}}/current');
-    run('composer update');
     run('make configure');
     run('make update');
 });
