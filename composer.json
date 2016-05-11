@@ -6,6 +6,19 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
+    "repositories": [
+        {
+          "type": "package",
+          "package": {
+            "name": "jquery/jquery",
+            "version": "1.11.1",
+            "dist": {
+              "url": "http://code.jquery.com/jquery-1.11.1.js",
+              "type": "file"
+            }
+          }
+        }
+    ],
     "require": {
         "php": ">=5.3.9",
         "symfony/symfony": "2.7.*",
@@ -22,23 +35,26 @@
         "sonata-project/core-bundle": "2.3.*@dev",
         "sonata-project/intl-bundle": "dev-master",
         "sonata-project/admin-bundle": "2.3.*@dev",
-	"sonata-project/jquery-bundle": "dev-master",
+        "sonata-project/jquery-bundle": "dev-master",
         "sonata-project/block-bundle": "2.2.*@dev",
         "sonata-project/doctrine-orm-admin-bundle": "2.3.*@dev",
         "sonata-project/easy-extends-bundle": "dev-master",
         "sonata-project/doctrine-extensions": "~1.0",
         "sonata-project/datagrid-bundle": "dev-master",
         "sonata-project/translation-bundle": "dev-master",
-	"stof/doctrine-extensions-bundle": "dev-master",
-	"beberlei/DoctrineExtensions": "dev-master",
-	"pixassociates/sortable-behavior-bundle": "dev-master",
-	"avalanche123/imagine-bundle": "dev-master",
-	"ornicar/gravatar-bundle" : "dev-master",
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "beberlei/DoctrineExtensions": "dev-master",
+        "pixassociates/sortable-behavior-bundle": "dev-master",
+        "avalanche123/imagine-bundle": "dev-master",
+        "ornicar/gravatar-bundle" : "dev-master",
         "ob/highcharts-bundle": "dev-master",
         "white-october/pagerfanta-bundle": "~1.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
-        "hwi/oauth-bundle": "0.3.*"
+        "hwi/oauth-bundle": "0.3.*",
+        "braincrafted/bootstrap-bundle": "^2.1",
+        "twbs/bootstrap": "3.0.*",
+        "jquery/jquery":  "1.11.*"
 
     },
     "require-dev": {
@@ -51,6 +67,9 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install"
         ],
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -58,6 +77,9 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "Braincrafted\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::install"
         ]
     },
     "config": {
@@ -69,9 +91,6 @@
 	"symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "2.7-dev"
         }
     }
 }

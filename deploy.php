@@ -5,10 +5,10 @@
 require 'recipe/symfony.php';
 
 // Symfony shared dirs
-set('shared_dirs', ['app/logs']);
+set('shared_dirs', ['app/logs', 'web/uploads/documents']);
 
 // Symfony shared files
-set('shared_files', ['app/config/parameters.yml', 'web/uploads/documents']);
+set('shared_files', ['app/config/parameters.yml']);
 
 // Symfony writable dirs
 set('writable_dirs', ['app/cache', 'app/logs']);
@@ -24,6 +24,8 @@ set('keep_releases', 10);
 task('install', function () {
     cd('{{deploy_path}}/current');
     run('composer update');
+    run('make configure');
+    run('make update');
 });
 
 /**
@@ -37,7 +39,7 @@ task('deploy', [
     'deploy:symlink',
     'cleanup',
     'install',
-])->desc('Deploy Pronostics');
+])->desc('Deploy YouBetSport');
 
 after('deploy', 'success');
 
@@ -57,6 +59,15 @@ server('preprod', 'albator.dwf.fr', 22)
     ->stage('pre-production')
     ->env('deploy_path', '/var/www/clients/client3/web94/web/preprod')
     ->env('branch', 'cleanup')
+;
+
+server('youbetsport', 'albator.dwf.fr', 22)
+    ->user('youbetsport')
+    ->identityFile()
+    ->forwardAgent()
+    ->stage('production')
+    ->env('deploy_path', '/var/www/clients/client3/web97/web/prod')
+    ->env('branch', 'develop')
 ;
 
 set('repository', 'git@github.com:michelcourtade/Pronostics.git');
