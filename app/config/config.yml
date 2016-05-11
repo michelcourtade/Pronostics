@@ -5,6 +5,7 @@ imports:
     - { resource: @DwfPronosticsBundle/Resources/config/admin.yml }
     - { resource: @DwfPageBundle/Resources/config/admin.yml }
     - { resource: "@DwfPronosticsBundle/Resources/config/services.yml" }
+    - { resource: bundles/braincrafted.yml }
 
 framework:
     #esi:             ~

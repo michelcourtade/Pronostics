@@ -1,0 +1,8 @@
+assetic:
+    filters:
+        lessphp:
+             file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
+             apply_to: "\.less$"
+        cssrewrite: ~
+braincrafted_bootstrap:
+    css_preprocessor: lessphp

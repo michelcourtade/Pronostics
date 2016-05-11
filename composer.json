@@ -54,7 +54,8 @@
         "hwi/oauth-bundle": "0.3.*",
         "braincrafted/bootstrap-bundle": "^2.1",
         "twbs/bootstrap": "3.0.*",
-        "jquery/jquery":  "1.11.*"
+        "jquery/jquery":  "1.11.*",
+        "oyejorge/less.php": "~1.5"
 
     },
     "require-dev": {
