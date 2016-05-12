@@ -4,6 +4,7 @@ namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Team
@@ -52,6 +53,8 @@ class Team
      */
     private $file;
     
+    private $temp;
+    
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -78,6 +81,40 @@ class Team
         // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
         // le document/image dans la vue.
         return 'uploads/documents';
+    }
+    
+    public function getFixturesPath()
+    {
+        return $this->getAbsolutePath() . 'web/uploads/documents/fixtures/';
+    }
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+        var_dump($this->file);
+        // check if we have an old image path
+        if (isset($this->path)) {
+            // store the old name to delete after the update
+            $this->temp = $this->path;
+            $this->path = null;
+        } else {
+            $this->path = 'initial';
+        }
+    }
+    
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
@@ -117,19 +154,7 @@ class Team
     {
     	return $this->getName();
     }
-	/**
-     * @return the $img
-     */
-    public function getFile() {
-        return $this->file;
-    }
 
-	/**
-     * @param \Dwf\PronosticsBundle\Entity\file $img
-     */
-    public function setFile($file) {
-        $this->file = $file;
-    }
     
     /**
      * @ORM\PrePersist()
@@ -149,7 +174,7 @@ class Team
      */
     public function upload()
     {
-        if (null === $this->file) {
+        if (null === $this->getFile()) {
             return;
         }
     
@@ -157,9 +182,17 @@ class Team
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
-        $this->file->move($this->getUploadRootDir(), $this->path);
+        $this->getFile()->move($this->getUploadRootDir(), $this->path);
     
-        unset($this->file);
+        // check if we have an old image
+        if (isset($this->temp)) {
+            // delete the old image
+            unlink($this->getUploadRootDir() . '/' . $this->temp);
+            // clear the temp image path
+            $this->temp = null;
+        }
+
+        $this->file = null;
     }
     
     /**
