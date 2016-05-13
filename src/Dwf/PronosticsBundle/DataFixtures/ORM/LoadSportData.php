@@ -5,6 +5,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Dwf\PronosticsBundle\Entity\Sport;
+use Cocur\Slugify\Slugify;
 
 class LoadSportData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -18,6 +19,9 @@ class LoadSportData extends AbstractFixture implements OrderedFixtureInterface
             $sport->setName($sportName);
             $manager->persist($sport);
             $manager->flush();
+            $slugify = new Slugify();
+            $sportSlug = $slugify->slugify($sportName);
+            $this->addReference($sportSlug, $sport);
         }
     }
 

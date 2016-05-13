@@ -12,24 +12,25 @@ class TeamAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
     	$team = $this->getSubject();
-    	
+
     	// use $fileFieldOptions so we can add other options to the field
     	$fileFieldOptions = array('required' => false);
     	if ($team && ($webPath = $team->getWebPath())) {
     		// get the container so the full path to the image can be set
     		$container = $this->getConfigurationPool()->getContainer();
     		$fullPath = $container->get('request')->getBasePath().'/'.$webPath;
-    	
+
     		// add a 'help' option containing the preview's img tag
     		$fileFieldOptions['help'] = '<img src="'.$fullPath.'" class="admin-preview" />';
     	}
     	$fileFieldOptions['data_class'] = null;
-    	
+
         $formMapper
         ->add('name', 'text', array('label' => 'Nom'))
         ->add('national', 'checkbox', array('required' => false))
         ->add('iso', 'text', array('required' => false))
         ->add('file', 'file', $fileFieldOptions)
+        ->add('sport')
         ;
     }
 
@@ -40,17 +41,20 @@ class TeamAdmin extends Admin
         ->add('name')
         ->add('national')
         ->add('iso')
+        ->add('sport')
         ;
     }
 
     // Fields to be shown on lists
     protected function configureListFields(ListMapper $listMapper)
-    {    	
+    {
         $listMapper
+        ->addIdentifier('id')
         ->addIdentifier('flag', 'string', array('label' => 'Drapeau', 'template' => 'DwfPronosticsBundle:Admin:list_flag.html.twig'))
         ->addIdentifier('name')
         ->add('national')
         ->add('iso')
+        ->add('sport')
         //->add('file', 'file',$fileFieldOptions)
         ;
     }

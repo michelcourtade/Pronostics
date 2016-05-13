@@ -10,6 +10,7 @@ configure:
 install:
 	php app/console doctrine:database:create --env=$(ENV)
 	php app/console doctrine:schema:create --env=$(ENV)
+	php app/console fos:user:create michel michel.courtade@gmail.com --super-admin
 	php app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
 
 update-dev:
