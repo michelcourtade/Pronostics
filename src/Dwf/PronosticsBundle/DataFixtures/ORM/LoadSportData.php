@@ -14,7 +14,7 @@ class LoadSportData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        foreach (array('Football', 'Rugby', 'Football Américain', 'Tennis') as $sportName) {
+        foreach (array('Football', 'Rugby', 'Basketball', 'Handball', 'Football Américain', 'Tennis') as $sportName) {
             $sport = new Sport();
             $sport->setName($sportName);
             $manager->persist($sport);
