@@ -54,7 +54,19 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
                 'Ecosse'                => array('iso' => 'SCO', 'national' => '1', 'sport' => 'Football'),
                 'Canada'                => array('iso' => 'CAN', 'national' => '1', 'sport' => 'Football'),
                 'Roumanie'              => array('iso' => 'ROM', 'national' => '1', 'sport' => 'Football'),
-                
+                'Albanie'               => array('iso' => 'ALB', 'national' => '1', 'sport' => 'Football'),
+                'Pays de Galles'        => array('iso' => 'WAL', 'national' => '1', 'sport' => 'Football'),
+                'Slovaquie'             => array('iso' => 'SVK', 'national' => '1', 'sport' => 'Football'),
+                'Turquie'               => array('iso' => 'TUR', 'national' => '1', 'sport' => 'Football'),
+                'Pologne'               => array('iso' => 'POL', 'national' => '1', 'sport' => 'Football'),
+                'Irlande du nord'       => array('iso' => 'NIR', 'national' => '1', 'sport' => 'Football'),
+                'Ukraine'               => array('iso' => 'UKR', 'national' => '1', 'sport' => 'Football'),
+                'République Tchèque'    => array('iso' => 'CZE', 'national' => '1', 'sport' => 'Football'),
+                'Irlande'               => array('iso' => 'IRL', 'national' => '1', 'sport' => 'Football'),
+                'Suède'                 => array('iso' => 'SWE', 'national' => '1', 'sport' => 'Football'),
+                'Autriche'              => array('iso' => 'AUT', 'national' => '1', 'sport' => 'Football'),
+                'Hongrie'               => array('iso' => 'HUN', 'national' => '1', 'sport' => 'Football'),
+                'Islande'               => array('iso' => 'ISL', 'national' => '1', 'sport' => 'Football'),
 
         );
         foreach ($teams as $name => $infos) {
