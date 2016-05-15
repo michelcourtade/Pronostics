@@ -1,27 +1,26 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% render url('fos_user_registration_register') %}
 {% block fos_user_content %}
         {% if error %}
-            <div>{{ error|trans }}</div>
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
         <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
-            <h2 class="form-signin-heading">Identifiez-vous</h2>
+            <h2 class="form-signin-heading">{% trans %}Login{% endtrans %}</h2>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
-{#             <label for="username">{{ 'security.login.username'|trans }}</label>#}
-            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control first" placeholder="Nom d'utilisateur" required="required" />
+            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control first" placeholder="{% trans %}Username{% endtrans %}" required="required" />
 
-{#             <label for="password">{{ 'security.login.password'|trans }}</label>#}
-            <input type="password" id="password" name="_password" class="form-control last" placeholder="Mot de passe" required="required" />
+            <input type="password" id="password" name="_password" class="form-control last" placeholder="{% trans %}Password{% endtrans %}" required="required" />
 
             <label for="remember_me">
                 <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                Rester connecté
+                {% trans %}Stay logged{% endtrans %}
             </label>
 
-            <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'identifier" />
-            <p class="change">Je n'ai pas de compte, <a href="{{ path("fos_user_registration_register") }}">créer mon compte</a></p>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{% trans %}Login{% endtrans %}" />
         </form>
         {{ render(url('hwi_oauth_connect')) }}
 {% endblock fos_user_content %}
+

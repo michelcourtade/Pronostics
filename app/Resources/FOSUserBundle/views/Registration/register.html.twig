@@ -1,55 +1,41 @@
-{% extends '::base.html.twig' %}
-
-{% block title %}Identification - Pronostics{% endblock %}
-{% block bodyclass %} class="login"{% endblock %}
-{% block body %}
 {{ form_start(form, {'attr': { 'class': 'form-signin' }}) }}
     <div data-rel="errors" class="errors">{{ form_errors(form) }}</div>
-{#     <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">#}
-    <h2 class="form-signin-heading">Inscrivez-vous</h2>
-{#         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
-	{% if form_errors(form.username) %}
-	<div class='alert alert-danger'>
-	{{ form_errors(form.username) }}
-	</div>
-	{% endif %}
+    <h2 class="form-signin-heading">{% trans %}Register{% endtrans %}</h2>
+
+    {% if form.username.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.username) }}
+        </div>
+    {% endif %}
     {{ form_widget(form.username, {'attr': { 'class': 'form-control first', 'placeholder': 'Nom d\'utilisateur' }}) }}
-    {% if form_errors(form.email) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.email) }}
-    </div>
+    {% if form.email.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.email) }}
+        </div>
     {% endif %}
     {{ form_widget(form.email, {'attr': { 'class': 'form-control last', 'placeholder': 'Email' }}) }}
     
-    {% if form_errors(form.plainPassword.first) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.plainPassword.first) }}
-    </div>
+    {% if form.plainPassword.first.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.plainPassword.first) }}
+        </div>
     {% endif %}
     {{ form_widget(form.plainPassword.first, {'attr': { 'class': 'form-control first', 'placeholder': 'Mot de passe' }}) }}
-    {% if form_errors(form.plainPassword.second) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.plainPassword.second) }}
-    </div>
+    {% if form.plainPassword.second.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.plainPassword.second) }}
+        </div>
     {% endif %}
     {{ form_widget(form.plainPassword.second, {'attr': { 'class': 'form-control last', 'placeholder': 'Vérification' }}) }}
-    {% if form_errors(form.invitation) %} 
-    <div class='alert alert-danger'>
-    {{ form_errors(form.invitation) }}
-    </div>
+    {% if form.invitation.vars.errors|length %} 
+        <div class='alert alert-danger'>
+        {{ form_errors(form.invitation) }}
+        </div>
     {% endif %}
     {{ form_widget(form.invitation, {'attr': { 'class': 'form-control last', 'placeholder': 'Code d\'invitation' }}) }}
-        
-{#         {{ form_widget(form.invitation, {'attr': { 'class': 'form-control first', 'placeholder': 'Invitation' }}) }}#}
-    
-{#             <label for="username">{{ 'security.login.username'|trans }}</label>#}
-{#         <input type="text" id="username" name="_username" value="" class="form-control" placeholder="Nom d'utilisateur" required="required" />#}
-    
-{#             <label for="password">{{ 'security.login.password'|trans }}</label>#}
-{#         <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required="required" />#}
-    <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'inscrire" />
-    <p class="change">J'ai déjà un compte, <a href="{{ path("fos_user_security_login") }}">me logguer</a></p>
-{#     </form>#}
+    <button type="submit" class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{% trans %}Register{% endtrans %}" />
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    {% trans %}Register{% endtrans %}
+    </button>
     {{ form_rest(form) }}
 {{ form_end(form) }}
-{% endblock body %}
