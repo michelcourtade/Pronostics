@@ -225,7 +225,7 @@ hwi_oauth:
 dwf_pronostics:
     from_email:
         address:        contact@dwf.fr
-        sender_name:    Application Pronostics Rugby
+        sender_name:    YouBetSports
     invitation:
         template: email/invitation.email.html.twig
         

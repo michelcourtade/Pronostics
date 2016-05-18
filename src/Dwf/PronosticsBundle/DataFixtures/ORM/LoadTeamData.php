@@ -136,6 +136,9 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
             $team->setPath($sport.'-'.($team->getNational() ? 'NAT-' : 'CLU-').$team->getIso().'.png');
             $manager->persist($team);
             $manager->flush();
+            $slugify = new Slugify();
+            $slugTeam = $slugify->slugify($team->getName());
+            $this->addReference($team->getName(), $team);
         }
     }
 

@@ -53,6 +53,8 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
         
         $manager->persist($event);
         $manager->flush();
+        
+        $this->addReference("UEFA Euro 2016", $event);
     }
 
     /**

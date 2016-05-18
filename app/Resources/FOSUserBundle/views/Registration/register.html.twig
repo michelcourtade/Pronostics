@@ -1,4 +1,4 @@
-{{ form_start(form, {'attr': { 'class': 'form-signin' }}) }}
+{{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': { 'class': 'form-signin' }}) }}
     <div data-rel="errors" class="errors">{{ form_errors(form) }}</div>
     <h2 class="form-signin-heading">{% trans %}Register{% endtrans %}</h2>
 
