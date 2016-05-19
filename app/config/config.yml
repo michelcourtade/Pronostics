@@ -36,6 +36,8 @@ twig:
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+    globals:
+        facebookId: %oauth.facebook.id%
 
 # Assetic Configuration
 assetic:
