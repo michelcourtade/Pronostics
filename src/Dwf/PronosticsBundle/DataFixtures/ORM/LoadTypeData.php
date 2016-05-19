@@ -14,7 +14,19 @@ class LoadTypeData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        foreach (array('Groupe A', 'Groupe B', 'Groupe C', 'Groupe D', 'Groupe E', 'Groupe F') as $typeName) {
+        $types = array(
+                'Groupe A',
+                'Groupe B',
+                'Groupe C',
+                'Groupe D',
+                'Groupe E',
+                'Groupe F',
+                'Huitième de Finale',
+                'Quart de Finale',
+                'Demi Finale',
+                'Finale',
+        );
+        foreach ($types as $typeName) {
             
             $gameType = new GameType();
             

@@ -16,28 +16,19 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
     {
         $event = new Event();
         $event->setName("UEFA Euro 2016");
-        
-        $slugify = new Slugify();
-        $sportSlug = $slugify->slugify("Football");
-        $event->setSport($this->getReference($sportSlug));
-        
+        $event->setSport($this->getReference("Football"));
         $slugify = new Slugify();
         $nameSlug = $slugify->slugify("UEFA Euro 2016");
         $event->setPath($nameSlug.'.png');
-        
         $event->setNationalTeams(true);
         $event->setChampionship(false);
-        
-        $startDate = new \DateTime("now");
+        $startDate = new \DateTime("10/05/2016 20:00");
         $event->setStartDate($startDate);
-        
-        $finishDate = $startDate->modify("+1 month");
+        $finishDate = $startDate->modify("11/07/2016 23:00");
         $event->setFinishDate($finishDate);
-
         $event->setNbPointsForLoss(0);
         $event->setNbPointsForDraw(1);
         $event->setNbPointsForWin(3);
-        
         $event->setActive(true);
         
         $event->setSimpleBet(true);
@@ -45,7 +36,6 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
         $event->setNbPointsForRightSimpleBet(3);
         $event->setNbPointsForWrongSimpleBet(1);
         $event->setNbPointsForRightSliceScore(2);
-        
         $event->setNbPointsForRightBet(3);
         $event->setNbPointsForRightBetWithScore(5);
         $event->setNbPointsForWrongBet(1);
@@ -55,6 +45,39 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
         
         $this->addReference("UEFA Euro 2016", $event);
+        
+        $event = new Event();
+        $event->setName("Rolland Garros 2016");
+        $event->setSport($this->getReference("Tennis"));
+        $slugify = new Slugify();
+        $nameSlug = $slugify->slugify("Rolland Garros 2016");
+        $event->setPath($nameSlug.'.png');
+        $event->setNationalTeams(false);
+        $event->setChampionship(false);
+        $startDate = new \DateTime("now");
+        $event->setStartDate($startDate);
+        $finishDate = $startDate->modify("+1 month");
+        $event->setFinishDate($finishDate);
+        $event->setNbPointsForLoss(0);
+        $event->setNbPointsForDraw(1);
+        $event->setNbPointsForWin(3);
+        $event->setActive(true);
+        
+        $event->setSimpleBet(false);
+        $event->setScoreDiff(false);
+        $event->setNbPointsForRightSimpleBet(3);
+        $event->setNbPointsForWrongSimpleBet(1);
+        $event->setNbPointsForRightSliceScore(2);
+        $event->setNbPointsForRightBet(3);
+        $event->setNbPointsForRightBetWithScore(5);
+        $event->setNbPointsForWrongBet(1);
+        $event->setNbPointsForAlmostRightBet(1);
+        
+        $manager->persist($event);
+        $manager->flush();
+        
+        $this->addReference("Rolland Garros 2016", $event);
+        
     }
 
     /**

@@ -19,9 +19,7 @@ class LoadSportData extends AbstractFixture implements OrderedFixtureInterface
             $sport->setName($sportName);
             $manager->persist($sport);
             $manager->flush();
-            $slugify = new Slugify();
-            $sportSlug = $slugify->slugify($sportName);
-            $this->addReference($sportSlug, $sport);
+            $this->addReference($sport->__toString(), $sport);
         }
     }
 
