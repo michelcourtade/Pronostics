@@ -38,6 +38,7 @@ twig:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
     globals:
         facebookId: %oauth.facebook.id%
+        app_name: %app_name%
 
 # Assetic Configuration
 assetic:
@@ -117,7 +118,7 @@ fos_user:
     #user_class:     Application\Sonata\UserBundle\Entity\User
     from_email:
         address:        contact@dwf.fr
-        sender_name:    Application Pronostics Rugby
+        sender_name:    YouBetSport
     resetting:
         email:
             template: email/resetting.email.html.twig

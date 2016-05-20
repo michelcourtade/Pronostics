@@ -27,7 +27,7 @@
         {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
         {% set lastDate = entity.game.date|date('Ymd') %}
     {% else %}
-        <p>{% trans %}No bet yet. Go see {% endtrans %}<a href="{{ path('games_event', {'event': event.id }) }}">{% trans %}game listing{% endtrans %}</a>{% trans %} to bet.{% endtrans %}</p>
+        <p>{% trans %}No bet yet. Go see {% endtrans %} <a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}game listing{% endtrans %}</a> {% trans %} to bet.{% endtrans %}</p>
     {% endfor %}
     </div>
     {% if event.bestScorer %}
