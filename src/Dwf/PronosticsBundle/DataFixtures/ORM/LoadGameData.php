@@ -92,6 +92,95 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
         $this->addReference($game->__toString(), $game);
         
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Espagne"));
+        $game->setTeam2($this->getReference("République Tchèque"));
+        $date = new \DateTime("13/06/2016 15:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe D"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Irlande"));
+        $game->setTeam2($this->getReference("Suède"));
+        $date = new \DateTime("13/06/2016 18:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe E"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Belgique"));
+        $game->setTeam2($this->getReference("Italie"));
+        $date = new \DateTime("13/06/2016 21:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe B"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Autriche"));
+        $game->setTeam2($this->getReference("Hongrie"));
+        $date = new \DateTime("14/06/2016 18:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe F"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Portugal"));
+        $game->setTeam2($this->getReference("Islande"));
+        $date = new \DateTime("14/06/2016 21:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe F"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Russie"));
+        $game->setTeam2($this->getReference("Slovaquie"));
+        $date = new \DateTime("15/06/2016 15:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe B"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("Roumanie"));
+        $game->setTeam2($this->getReference("Suisse"));
+        $date = new \DateTime("15/06/2016 18:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe A"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("UEFA Euro 2016"));
+        $game->setTeam1($this->getReference("France"));
+        $game->setTeam2($this->getReference("Albanie"));
+        $date = new \DateTime("15/06/2016 21:00");
+        $game->setDate($date);
+        $game->setType($this->getReference("Groupe A"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
+        
+        
     }
 
     /**
