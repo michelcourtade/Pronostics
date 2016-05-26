@@ -71,4 +71,67 @@ invitation:
             <p>L'équipe %app_name%.</p>
             </body>
             </html>
-            
+Current events: Evènements en cours
+Event: Evènement
+Contests: Compétitions
+Actions: Actions
+Create a new contest: Créer une compétition
+Create: Créer
+See event page: Voir l'évènement
+My contests: Mes compétitions
+Home: Accueil
+Standings: Classement
+Games: Matchs
+Bets: Pronostics
+Manage: Configurer
+Login: Connectez-vous
+Username: Pseudo
+Password: Mot de passe
+Stay logged: Rester connecté
+Log in: Se connecter
+Register: S'enregistrer
+Points won: Points gagnés
+Av Pts / Bet: Moy. Pts / Pronostic
+Good scores: Bon scores
+points: points
+Place: Place
+Name: Nom
+Points: Points
+Nb Bets: Nb Pronos
+All games: Tous les matchs
+Team: Equipe
+Points: Points
+Goals diff.: Diff buts
+Game: Match
+My bet: Mon pronostic
+My bets: Mes pronostics
+Bets on this game: Pronostics sur ce match
+User: Pseudo
+Bet: Pronostic
+Pts won: Pts gagnés
+Difference: Différence
+Change name: Changer le nom
+Generate new access code: Générer un nouveau code d'accès
+Post your message: Poster votre message
+Admin: Administration
+Access: Accès
+Invitations: Invitations
+Users: Joueurs
+Rules: Règles
+Announcement: Annonce
+Contest access: Accès compétition
+Generating access code will allow you to open your contest to multiple users very easily.: Générer un code d'accès vous permettra d'ouvrir votre compétition à plusieurs joueurs très facilement.
+Invite by email: Inviter par mail
+Send Invitation by email: Envoyer une invitation par mail
+Send: Envoyer
+Invitations already sent: Invitations déjà envoyées
+Invite by username: Inviter par pseudo
+Invite Facebook friends: Inviter vos amis Facebook
+No users in your contest.: Pas de joueurs dans votre compétition
+Announcement for your contest: Annonce pour votre compétition
+If you post a message here, it will be instantanately visible by users in your contest, in each top of pages.: Si vous postez votre message ici, il sera instantanément visible par tous les utilisateurs de votre compétition, en haut de chaque page.
+Your announcement: Votre message
+Contest properties: Propriétés de votre compétition
+Danger zone: Zone de danger
+Be careful with this button ! Deleting a contest can't be undone ! Your bets will still be availables but your friends in this contest won't see your results anymore.: Soyez prudent avec ce bouton ! Supprimer une compétition est définitif !
+Delete contest: Supprimer la compétition

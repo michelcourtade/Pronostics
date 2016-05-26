@@ -53,7 +53,7 @@
                 {% if not entity.played and not entity.hasBegan() %}
                     {% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id} %}
                 {% else %}
-                    {% trans %}My bet :{% endtrans %}
+                    {% trans %}My bet{% endtrans %}:
                     <div class="simple_bet">
                         <span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
                         <span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>

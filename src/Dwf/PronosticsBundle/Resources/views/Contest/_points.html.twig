@@ -1,7 +1,7 @@
 <div class="page-header">
-    <h2>{% trans %}Points won:{% endtrans %} <span class="label label-default">{{ totalPoints }}</span></h2>
+    <h2>{% trans %}Points won{% endtrans %}: <span class="label label-default">{{ totalPoints }}</span></h2>
     {% if nbPronostics %}
-        <h2>{% trans %}Av Pts / Bet:{% endtrans %} <span class="label label-default">{{ (totalPoints / nbPronostics)|round(1, 'floor') }}</span></h2>
+        <h2>{% trans %}Av Pts / Bet{% endtrans %}: <span class="label label-default">{{ (totalPoints / nbPronostics)|round(1, 'floor') }}</span></h2>
     {% endif %}
     {% if nbPerfectScore and not event.simpleBet %}
         <h2>{% trans %}Perfect scores{% endtrans %}(5 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
