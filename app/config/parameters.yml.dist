@@ -15,4 +15,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
     oauth.facebook.id: ~
     oauth.facebook.secret: ~
-    app_name: YouBetSports
+    app_name: YouBetSport

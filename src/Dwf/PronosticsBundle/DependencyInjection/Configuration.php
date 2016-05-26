@@ -26,6 +26,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('app_name')
+                ->end()
                 ->arrayNode('from_email')
                     ->children()
                         ->scalarNode('address')->end()

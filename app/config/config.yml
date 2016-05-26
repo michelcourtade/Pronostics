@@ -226,6 +226,7 @@ hwi_oauth:
     # use_referer: true
     
 dwf_pronostics:
+    app_name: %app_name%
     from_email:
         address:        contact@dwf.fr
         sender_name:    YouBetSports
