@@ -436,7 +436,7 @@ class PronosticController extends Controller
             $em->flush();
             $this->addFlash(
                     'success',
-                    $this->get('translator')->trans('Your contest has been modified.')
+                    $this->get('translator')->trans('Your bet has been modified.')
             );
             
             return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id, 'contestId' => $entity->getContest()->getId())));

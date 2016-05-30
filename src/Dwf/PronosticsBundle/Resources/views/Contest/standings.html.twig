@@ -40,8 +40,10 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
-                {% if gravatar_exists(standing.user.email) %}
-                <img src="{{ gravatar('%this%'|replace({'%this%': standing.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
+                {% if app.user.profilePicture %}
+                    <img src="{{ app.user.profilePicture }}" class="avatar" />
+                {% elseif gravatar_exists(standing.user.email) %}
+                    <img src="{{ gravatar('%this%'|replace({'%this%': standing.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
                 {% endif %}
                 {{ standing.user }}
                 </td>

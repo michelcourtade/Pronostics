@@ -20,7 +20,7 @@
     <div class="head-date row">
         <p class="date col-xs-12">
             <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> - 
-            {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i') }}
+            {{ entity.game.date|date('d/m/Y') }}  {% trans %}at{% endtrans %} {{ entity.game.date|date('H:i') }}
         </p>
     </div>
     <div class="show-match row">
@@ -33,13 +33,13 @@
             <strong>{{ form_widget(form.scoreTeam1) }} - {{ form_widget(form.scoreTeam2) }}</strong>
             <div class="overtime"{% if not entity.game.type.canHaveOvertime %} style="display:none;"{% endif %}>
                 <p>
-                    {{ form_label(form.overtime, 'Ira aux prolongations') }}
+                    {{ form_label(form.overtime, 'Will go overtime'|trans) }}
                     {{ form_widget(form.overtime) }}
                 </p>
                 <div class="overtime_content" style="display: none;">
                     <span>{{ form_widget(form.scoreTeam1Overtime) }} - {{ form_widget(form.scoreTeam2Overtime) }}</span>
                     <p class="final_winner">
-                        {{ form_label(form.overtime, 'Vainqueur si nul') }}
+                        {{ form_label(form.overtime, 'Winner if draw'|trans) }}
                         {{ form_widget(form.winner) }}
                     </p>
                 </div>

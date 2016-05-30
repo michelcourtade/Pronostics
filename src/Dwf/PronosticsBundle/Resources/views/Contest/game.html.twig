@@ -64,7 +64,7 @@
                     {% endif %}
                 {% endif %}
             {% else %}
-                {% trans %}My bet :{% endtrans %} <span class="prono">{{ pronostic.score }}</span>
+                {% trans %}My bet{% endtrans %} : <span class="prono">{{ pronostic.score }}</span>
                 {% if pronostic.overtime %}
                     <p>
                     {% trans %}With extra time, final score{% endtrans %} : {{ pronostic.scoreAfterOvertime }}
