@@ -36,6 +36,8 @@ twig:
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+    form_themes:
+        - 'Form/fields.html.twig'
     globals:
         facebookId: %oauth.facebook.id%
         app_name: %app_name%

@@ -526,11 +526,12 @@ ul.nav-profile li { list-style:none; margin-bottom:10px; }
 
 
 div.simple_bet {}
-div.simple_bet > input { display:none; }
-div.simple_bet > label, div.simple_bet > span { display:inline-block!important; font-weight:normal; border:solid 1px #ccc; color:#ccc; line-height:30px; width:25px; margin-right:7px; cursor:pointer; }
-div.simple_bet > span { cursor:default; }
-div.simple_bet > label:last-of-type, div.simple_bet > span:last-of-type { margin-right:0; }
-div.simple_bet > input:checked + label, div.simple_bet > label:hover, div.simple_bet > span.active { border-color:#428bca; background:#428bca; color:#FFF; }
+div.simple_bet div.radio { display: inline-block; }
+div.simple_bet div.radio input { display:none; }
+div.simple_bet div.radio label, div.simple_bet span { display:inline-block!important; font-weight:normal; border:solid 1px #ccc; color:#ccc; line-height:30px; width:25px; margin-right:7px; cursor:pointer; }
+div.simple_bet div.radio span { cursor:default; }
+div.simple_bet div.radio label:last-of-type, div.simple_bet div.radio span:last-of-type { margin-right:0; }
+div.simple_bet div.radio input:checked + label, div.simple_bet div.radio label:hover, div.simple_bet span.active { border-color:#428bca; background:#428bca; color:#FFF; }
 
 span.info_ajax { 
     position: absolute;
