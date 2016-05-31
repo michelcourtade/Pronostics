@@ -8,13 +8,13 @@
         <title>{% block title %}{{ app_name }}{% endblock %}</title>
 
         <!-- Bootstrap -->
-{#         <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">#}
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
         <link href="{{ asset('bundles/dwfpronostics/css/bootstrap.min.css') }}" rel="stylesheet" >
         <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}" rel="stylesheet" >
 
         <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
         {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
-        
+
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
@@ -24,7 +24,7 @@
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">{% trans %}Toggle navigation{% endtrans %}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -42,8 +42,8 @@
 {#                 <li><a href='{{ path('games_event', {'event': event.id}) }}'>Matchs</a></li>#}
 {#                 {% endif %}#}
 {#                 <li><a href='{{ path('pronostics_event', {'event': event.id}) }}'>Mes pronostics</a></li>#}
-                <li><a href='{{ path('events_old') }}'>Historique</a></li>
-                <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>Règlement</a></li>
+                <li><a href='{{ path('events_old') }}'>{% trans %}Old events{% endtrans %}</a></li>
+                <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}Rules{% endtrans %}</a></li>
               </ul>
               {% endif %}
               {% endif %}
@@ -69,21 +69,21 @@
             </div><!--/.nav-collapse -->
           </div>
         </div>
-        	{% else %}
-        	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            {% else %}
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">{% trans %}Toggle navigation{% endtrans %}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="{{ path('home') }}">Participer</a>
+              <a class="navbar-brand" href="{{ path('home') }}">{% trans %}Play{% endtrans %}</a>
             </div>
             <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-            	<li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>Voir le règlement</a></li>
+            	<li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}See rules{% endtrans %}</a></li>
               </ul>
             </div>
           </div>
@@ -117,12 +117,12 @@
                 <p>&copy; <a href="http://www.dwf.fr" target="_blank">DWF</a></p>
             </div>
         </div>
-        
+
         <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
         <script src="{{ asset('js/jquery.js') }}"></script>
         <!-- Include all JavaScripts, compiled by Assetic -->
         <script src="{{ asset('js/bootstrap.js') }}"></script>
-        <script src="//code.highcharts.com/4.0.1/highcharts.js"></script>
+        <script src="htp://code.highcharts.com/4.0.1/highcharts.js"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/bootstrap.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
