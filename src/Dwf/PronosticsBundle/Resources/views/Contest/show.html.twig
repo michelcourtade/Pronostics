@@ -5,12 +5,12 @@
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>{{ contest.name }}
+    <li>{{ contest.contestName }}
     </ul>
     {% endblock %}
     {% block contest_header %}
     <div class="page-header center">
-        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}{{ contest.name }} - <small>{{ event.name }}</small></h1>
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}{{ contest.contestName }} - <small>{{ event.name }}</small></h1>
     </div>
     {% if messageForContest %}
         <div class="alert alert-info alert-dismissible" role="alert">

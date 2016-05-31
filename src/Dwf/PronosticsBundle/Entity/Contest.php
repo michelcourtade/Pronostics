@@ -53,6 +53,13 @@ class Contest extends BaseGroup
      */
     private $updatedAt;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contestName", type="string", length=255)
+     */
+    private $contestName;
+    
 
     /**
      * Get id
@@ -180,4 +187,27 @@ class Contest extends BaseGroup
         return $this->name;
     }
 
+
+    /**
+     * Set contestName
+     *
+     * @param string $contestName
+     * @return Contest
+     */
+    public function setContestName($contestName)
+    {
+        $this->contestName = $contestName;
+
+        return $this;
+    }
+
+    /**
+     * Get contestName
+     *
+     * @return string 
+     */
+    public function getContestName()
+    {
+        return $this->contestName;
+    }
 }

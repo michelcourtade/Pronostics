@@ -11,7 +11,7 @@ class ContestFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->add('name');
+        $builder->add('contestName');
         $builder->add('event', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Event'));
         $builder->add('owner', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'));
     }

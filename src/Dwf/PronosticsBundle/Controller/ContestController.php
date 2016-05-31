@@ -66,9 +66,10 @@ class ContestController extends Controller
                 'action' => $this->generateUrl('contests', array('event' => $event->getId())),
                 'method' => 'PUT',
         ));
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Create')));
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
             $em->persist($contest);
             $em->flush();
             $this->addFlash(
@@ -218,7 +219,7 @@ class ContestController extends Controller
                     'action' => '',
                     'method' => 'PUT',
             ));
-            $form->add('submit', 'submit', array('label' => 'Send'));
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Send')));
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $existingInvitation = $em->getRepository('DwfPronosticsBundle:Invitation')->findAllByEmailAndContest($invitation->getEmail(), $contest);
@@ -256,7 +257,7 @@ class ContestController extends Controller
                 $em->flush();
                 $this->addFlash(
                         'success',
-                        $this->get('translator')->trans('Your contest name has changed to ').$contest->getName().' !'
+                        $this->get('translator')->trans('Your contest name has changed to ').$contest->getContestName().' !'
                 );
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }

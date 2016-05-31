@@ -60,7 +60,7 @@
             {{ form_start(invitationForm) }}
             {{ form_errors(invitationForm) }}
                 <div class="input-group">
-                    {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation by email'}}) }}
+                    {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation by email'|trans}}) }}
                     <span class="input-group-btn">
                     {{ form_widget(invitationForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
                     </span>
@@ -113,7 +113,7 @@
             {{ form_start(contestMessageForm) }}
             {{ form_errors(contestMessageForm) }}
                 <div class="input-group">
-                    {{ form_widget(contestMessageForm.message, {'attr': {'class': 'form-control', 'placeholder': 'Your announcement'}}) }}
+                    {{ form_widget(contestMessageForm.message, {'attr': {'class': 'form-control', 'placeholder': 'Your announcement'|trans}}) }}
                     {{ form_widget(contestMessageForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
                 </div>
             {{ form_rest(contestMessageForm) }}
@@ -130,7 +130,7 @@
             {{ form_start(contestForm, {'attr': {'class':'navbar-form'}}) }}
             {{ form_errors(contestForm) }}
             <div class="input-group">
-            {{ form_widget(contestForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Change name'}}) }}
+            {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Change name'|trans}}) }}
             <span class="input-group-btn">
             {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
             </span>
