@@ -25,7 +25,7 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
                 'Pays-Bas'              => array('iso' => 'NED', 'national' => '1', 'sport' => 'Football'),
                 'Italie'                => array('iso' => 'ITA', 'national' => '1', 'sport' => 'Football'),
                 'Suisse'                => array('iso' => 'SUI', 'national' => '1', 'sport' => 'Football'),
-                'Portugal'              => array('iso' => 'PRO', 'national' => '1', 'sport' => 'Football'),
+                'Portugal'              => array('iso' => 'POR', 'national' => '1', 'sport' => 'Football'),
                 'Argentine'             => array('iso' => 'ARG', 'national' => '1', 'sport' => 'Football'),
                 'Norvège'               => array('iso' => 'NOR', 'national' => '1', 'sport' => 'Football'),
                 'Paraguay'              => array('iso' => 'PAR', 'national' => '1', 'sport' => 'Football'),
