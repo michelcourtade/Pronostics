@@ -430,7 +430,7 @@ div.list-match div.match + div.head-date { margin-top:30px; }
 div.list-match div.match + div.match { margin-top:15px; padding-top:15px; border-top:1px solid #DCDCDC; }
 div.list-match a:hover { text-decoration:none; }
 div.list-match .date { color:#666; font-size:12px; }
-div.list-match .date span { display:inline-block; font-weight:bold; text-transform:uppercase; }
+div.list-match .date span { display:block; font-weight:bold; text-transform:uppercase; }
 div.list-match .team.looser { opacity: 0.5; }
 div.list-match .team.ext { text-align:right; }
 div.list-match .team a { text-transform:uppercase; color:#474747; font-size:22px; }
@@ -470,8 +470,8 @@ div.list-match .points.pts-8 { color:#1c8c02; }
 
 
 
-div.head-date .date { color:#666; font-size:12px; text-align:center; /*text-align:right;*/ }
-div.head-date .date span { display:inline-block; /*display:block; */font-weight:bold; text-transform:uppercase; }
+div.head-date .date { color:#666; font-size:12px; text-align:center;  }
+div.head-date .date span { display:inline-block; font-weight:bold; text-transform:uppercase; }
 div.show-match .team.looser { opacity: 0.5; }
 div.show-match .team.ext { text-align:right; }
 div.show-match .team { text-transform:uppercase; color:#474747; font-size:22px; }
@@ -482,6 +482,7 @@ div.show-match .team img { float:left; margin-right:10px; }
 div.show-match .team.ext img { float:right; margin-right:0; margin-left:10px; }
 div.show-match .score { text-align:center; color:#666; }
 div.show-match .score strong { color:#0087E6; font-size:22px; font-weight:400; display:block; }
+div.show-match .score strong select.form-control { display: inline-block; width: auto; }
 div.show-match .score span { display:block; }
 
 div.show-match + div.row { margin-top:20px; }

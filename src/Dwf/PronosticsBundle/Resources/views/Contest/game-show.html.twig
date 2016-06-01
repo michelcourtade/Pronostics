@@ -22,7 +22,7 @@
     {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': entity, 'showExpert': true } %}
     {% if nextGame and not event.simpleBet %}
         <div class="page-header">
-            <h2>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {% trans %}Next game{% endtrans %}</h2>
+            <h2>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {% trans %}Next game{% endtrans %}</h2>
         </div>
         {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': nextGame, 'pronostic': pronosticNextGame,'pronostics': false, 'showExpert': false, 'scorersTeam1': false, 'scorersTeam2':false } %}
     {% endif %}
