@@ -560,3 +560,18 @@ img.contest_logo {
     max-height: 120px;
     max-width: 120px;
 }
+img.youbetsport_logo {
+    max-height:30px;
+    max-width:30px;
+}
+div.home_youbetsport {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 5px;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 15px;
+}
+div.home_youbetsport h1 {
+    text-align:center;
+    margin:auto;
+}
