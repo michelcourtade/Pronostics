@@ -1,3 +1,41 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId={{ facebookId }}";
+        fjs.parentNode.insertBefore(js, fjs);
+    }
+    (document, 'script', 'facebook-jssdk'));
+
+
+        function fb_login() {
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    // connected
+                    //alert('Already connected, redirect to login page to create token.');
+                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                } else {
+                    // not_authorized
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                        } else {
+                            alert('Cancelled.');
+                        }
+                    }, {scope: 'email'});
+                }
+            });
+        }
+    </script>
+    <h1><img class="img-responsive home_logo" src="{{ asset('bundles/dwfpronostics/images/Youbetsport.png') }}" alt="{{ app_name }}" /></h1>
+    <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false" onlogin="fb_login()"></div>
 {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': { 'class': 'form-signin' }}) }}
     <div data-rel="errors" class="errors">{{ form_errors(form) }}</div>
     <h2 class="form-signin-heading">{% trans %}Register{% endtrans %}</h2>
@@ -38,4 +76,10 @@
     {% trans %}Register{% endtrans %}
     </button>
     {{ form_rest(form) }}
-{{ form_end(form) }}
+    {{ form_end(form) }}
+    <p>{% trans %}Already have an account ? {% endtrans %}<a href="{{ path('fos_user_security_login') }}">{% trans %}Log in{% endtrans %}</a></p>
+    </div>
+    </div>
+</header>
+    
+{% endblock fos_user_content %}
