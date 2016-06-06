@@ -35,10 +35,10 @@
         }
     </script>
 
-        <h1><img class="img-responsive" src="{{ asset('bundles/dwfpronostics/images/Youbetsport.png') }}" alt="{{ app_name }}" /></h1>
-        
+        <h1><img class="img-responsive home_logo" src="{{ asset('bundles/dwfpronostics/images/Youbetsport.png') }}" alt="{{ app_name }}" /></h1>
+
         <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false" onlogin="fb_login()"></div>
-        
+
         {% if error %}
             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -73,7 +73,7 @@
                     <hr class="light">
                     <p class="text-faded">
                     {% trans %}You bet sport ! Your new website to bet with your friends !
-  Create your contests for each sport event you want, and bet on it with your friends ! 
+  Create your contests for each sport event you want, and bet on it with your friends !
   Invite your family, friends or collegues and play with them very easily!{% endtrans %}
                     </p>
                     <ul>

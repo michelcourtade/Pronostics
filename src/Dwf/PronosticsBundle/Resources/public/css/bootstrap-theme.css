@@ -575,3 +575,6 @@ div.home_youbetsport h1 {
     text-align:center;
     margin:auto;
 }
+img.home_logo {
+    display:inline-block;
+}
