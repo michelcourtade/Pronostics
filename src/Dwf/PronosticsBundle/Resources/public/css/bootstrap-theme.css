@@ -376,6 +376,10 @@ body.login { background:#EEE; }
 .form-signin .form-signin-heading, .form-signin .checkbox {
     margin-bottom: 10px;
 }
+.form-signin .form-signin-heading {
+    color:#5fc8dc; 
+    font-weight:400;
+}
 .form-signin .checkbox {
     font-weight: normal;
 }
@@ -392,6 +396,7 @@ body.login { background:#EEE; }
 .form-signin input,
 .form-signin select {
     margin-bottom: -1px;
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
 }
 .form-signin input.first,
 .form-signin select.first {
@@ -403,6 +408,12 @@ body.login { background:#EEE; }
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     margin-bottom: 10px;
+}
+.form-signin label, div.div_logo span.login {
+    color:#5fc8dc; 
+    font-size:14px; 
+    font-weight:400;
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
 }
 #sonata_user_registration_form_groups { height:150px!important; }
 #sonata_user_registration_form_plainPassword_second + p { margin:20px 0 10px; }
@@ -577,4 +588,85 @@ div.home_youbetsport h1 {
 }
 img.home_logo {
     display:inline-block;
+}
+div.div_logo {
+    max-width:350px;
+    background: #fff;
+    margin: 0 auto;
+    border-radius:10px;
+    padding:10px;
+}
+.btn-facebook::before {
+    border-color: #344f87;
+}
+.btn-facebook::before, .btn-googleplus::before, .btn-twitter::before {
+    border-style: solid;
+    border-width: 0 1px 0 0;
+    bottom: 0;
+    content: "";
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition-duration: 0.15s;
+    transition-property: border-color;
+    width: 32px;
+}
+.btn-facebook::after {
+    background-position: -78px -48px;
+    height: 32px;
+    width: 32px;
+}
+.btn-facebook::after, .btn-googleplus::after, .btn-twitter::after {
+    background-image: url("/images/compass/sprites/bootstrap-sf4747a9b34.png");
+    content: " ";
+    left: 0;
+    margin-top: -16px;
+    position: absolute;
+    top: 50%;
+}
+#div_logo .index-social-col > .btn {
+    padding-bottom: 9px;
+    padding-top: 9px;
+}
+.btn-facebook {
+    background-color: #3b5998;
+    border-color: #3b5998;
+    border: 1px solid transparent;
+    border-radius: 4px!important;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 18px;
+    margin: 0;
+    padding: 7px 12px;
+    position: relative;
+    text-align: center;
+    transition-duration: 0.15s;
+    transition-property: background-color, border-color, color, opacity;
+    vertical-align: middle;
+    text-transform:none!important;
+    
+}
+.btn-facebook, .btn-googleplus, .btn-twitter {
+    padding-left: 44px;
+}
+.btn-block {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+}
+
+div.div_logo .index-social-col {
+    box-sizing: border-box;
+    padding-left: 15px;
+    width: 65%;
+    margin:auto;
+    margin-bottom: 15px;
+}
+div.div_logo span.tiret, div.div_logo strong {
+    color:#5fc8dc; 
+    font-weight:400;
+    font-size:30px;
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+    text-transform:uppercase;
 }
