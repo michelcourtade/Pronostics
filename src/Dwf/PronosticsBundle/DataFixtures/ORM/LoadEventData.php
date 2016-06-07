@@ -46,37 +46,37 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference("UEFA Euro 2016", $event);
 
-        $event = new Event();
-        $event->setName("Rolland Garros 2016");
-        $event->setSport($this->getReference("Tennis"));
-        $slugify = new Slugify();
-        $nameSlug = $slugify->slugify("Rolland Garros 2016");
-        $event->setPath($nameSlug.'.png');
-        $event->setNationalTeams(false);
-        $event->setChampionship(false);
-        $startDate = new \DateTime("now");
-        $event->setStartDate($startDate);
-        $finishDate = $startDate->modify("+1 month");
-        $event->setFinishDate($finishDate);
-        $event->setNbPointsForLoss(0);
-        $event->setNbPointsForDraw(1);
-        $event->setNbPointsForWin(3);
-        $event->setActive(true);
+//         $event = new Event();
+//         $event->setName("Rolland Garros 2016");
+//         $event->setSport($this->getReference("Tennis"));
+//         $slugify = new Slugify();
+//         $nameSlug = $slugify->slugify("Rolland Garros 2016");
+//         $event->setPath($nameSlug.'.png');
+//         $event->setNationalTeams(false);
+//         $event->setChampionship(false);
+//         $startDate = new \DateTime("now");
+//         $event->setStartDate($startDate);
+//         $finishDate = $startDate->modify("+1 month");
+//         $event->setFinishDate($finishDate);
+//         $event->setNbPointsForLoss(0);
+//         $event->setNbPointsForDraw(1);
+//         $event->setNbPointsForWin(3);
+//         $event->setActive(true);
 
-        $event->setSimpleBet(true);
-        $event->setScoreDiff(false);
-        $event->setNbPointsForRightSimpleBet(3);
-        $event->setNbPointsForWrongSimpleBet(1);
-        $event->setNbPointsForRightSliceScore(2);
-        $event->setNbPointsForRightBet(3);
-        $event->setNbPointsForRightBetWithScore(5);
-        $event->setNbPointsForWrongBet(1);
-        $event->setNbPointsForAlmostRightBet(1);
+//         $event->setSimpleBet(true);
+//         $event->setScoreDiff(false);
+//         $event->setNbPointsForRightSimpleBet(3);
+//         $event->setNbPointsForWrongSimpleBet(1);
+//         $event->setNbPointsForRightSliceScore(2);
+//         $event->setNbPointsForRightBet(3);
+//         $event->setNbPointsForRightBetWithScore(5);
+//         $event->setNbPointsForWrongBet(1);
+//         $event->setNbPointsForAlmostRightBet(1);
 
-        $manager->persist($event);
-        $manager->flush();
+//         $manager->persist($event);
+//         $manager->flush();
 
-        $this->addReference("Rolland Garros 2016", $event);
+//         $this->addReference("Rolland Garros 2016", $event);
 
     }
 
