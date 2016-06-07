@@ -7,7 +7,7 @@
     <li>Résumé</li>
     </ul>
 <div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
+    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
 </div>
 <div class="col-sm-3">
     {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
@@ -30,6 +30,7 @@
     {% endif %}
     </div>
 {% endif %}
+    {{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}
 </div>
 {% endblock %}
 {% block javascripts %}

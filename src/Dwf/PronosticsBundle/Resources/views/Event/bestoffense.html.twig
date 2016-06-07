@@ -7,7 +7,7 @@
     <li>Meilleures attaques</li>
     </ul>
 <div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleures attaques</h1>
+    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleures attaques</h1>
 </div>
 <div class="col-sm-3">
     {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
