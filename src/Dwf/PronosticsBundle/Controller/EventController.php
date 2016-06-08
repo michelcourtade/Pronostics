@@ -409,13 +409,14 @@ class EventController extends Controller
         }
 
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'nextGames' => $nextGames,
-                'teams'     => $arrayTeams,
-                'forms_nextgames' => $forms_nextgames,
-                'pronostics_nextgames' => $pronostics_nextgames,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'nextGames'                 => $nextGames,
+                'teams'                     => $arrayTeams,
+                'forms_nextgames'           => $forms_nextgames,
+                'pronostics_nextgames'      => $pronostics_nextgames,
+                'contest'                   => '',
         );
     }
     /**

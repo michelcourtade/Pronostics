@@ -5,7 +5,7 @@
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>{{ contest.contestName }}
+    <li>{{ contest.contestName }}</li>
     </ul>
     {% endblock %}
     {% block contest_header %}

@@ -6,14 +6,22 @@
 <div class="match row">
     <div class="date col-xs-12 col-sm-12 col-md-3">{% if entity.date %}{{ entity.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.type }}</span></div>
     <div class="team{% if(entity.getWhoLose() == 1) %} looser{% endif %} col-xs-3 col-sm-3 col-md-3">
-        <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% if contest %}
+            <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% else %}
+            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+        {% endif %}
             <span class="hidden-xs hidden-sm">{{ entity.team1.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.team1.iso }}</span>
             <img src='/{{ entity.team1.getWebPath }}' />
         </a>
     </div>
     <div class="score col-xs-4 col-sm-4 col-md-2">
-        <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% if contest %}
+            <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% else %}
+            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+        {% endif %}
         {% if entity.played %}
             <strong>{{ entity.score }}</strong>
             {% if entity.overtime %}
@@ -24,15 +32,21 @@
         </a>
     </div>
     <div class="team ext{% if(entity.getWhoLose() == 2) %} looser{% endif %} col-xs-3 col-sm-3 col-md-3">
-        <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% if contest %}
+            <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+        {% else %}
+            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+        {% endif %}
             <span class="hidden-xs hidden-sm ">{{ entity.team2.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.team2.iso }}</span> 
             <img src='/{{ entity.team2.getWebPath }}' />
         </a>
     </div>
+    {% if contest %}
     <div class="actions col-xs-2 col-sm-2 col-md-1">
     {% if not entity.played and not entity.hasBegan() %}
         <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}" title="Pronostiquer"><span class="glyphicon glyphicon-screenshot"></span></a>
     {% endif %}
     </div>
+    {% endif %}
 </div>

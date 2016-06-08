@@ -86,6 +86,66 @@ class ContestController extends Controller
     }
 
     /**
+     * Display a form to create a contest
+     *
+     * @Route("/contest/create", name="contest_create")
+     * @Method({"GET","POST", "PUT"})
+     * @Template("DwfPronosticsBundle:Contest:create.html.twig")
+     */
+    public function createAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        
+        $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
+        $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
+        $contest = new Contest('');
+        $contest->setOwner($this->getUser());
+        //$contest->setEvent($event);
+        $form = $this->createForm($contestType, $contest, array(
+                'action' => '',
+                'method' => 'PUT',
+        ));
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Create')));
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
+            $em->persist($contest);
+            $em->flush();
+            $this->addFlash(
+                    'success',
+                    $this->get('translator')->trans('Your contest has been created.')
+            );
+            return $this->redirect($this->generateUrl('events'));
+        }
+        $contestForm = $form->createView();
+    
+        return array(
+                "events"            => $events,
+                "contestForm"       => $contestForm
+        );
+    
+    }
+    
+    /**
+     * Display a form to join a contest
+     *
+     * @Route("/contest/join", name="contest_join")
+     * @Method({"GET","POST", "PUT"})
+     * @Template("DwfPronosticsBundle:Contest:join.html.twig")
+     */
+    public function joinAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+    
+    
+        return array(
+        );
+    
+    }
+    
+    /**
      * Show a Contest entity
      *
      * @Route("/contest/{contestId}", name="contest_show")
@@ -854,4 +914,5 @@ class ContestController extends Controller
             'email'     => $email,
         );
     }
+    
 }

@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li>{% trans %}Join a contest{% endtrans %}
+    </ul>
+    {% endblock %}
+
+    <div class="page-header">
+        <h1>{% trans %}Join a contest{% endtrans %}</h1>
+        <p>{% trans %}Join a contest to bet with your friends !{% endtrans %}</p>
+    </div>
+
+{% endblock %}

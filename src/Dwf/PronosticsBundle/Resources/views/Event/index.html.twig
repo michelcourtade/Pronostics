@@ -1,6 +1,16 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+<div class="jumbotron">
+    <h1>{% trans %}Welcome on YouBetSport !{% endtrans %}</h1>
+    <p>
+    {% trans %}What about creating a new contest to play with your friends ?{% endtrans %}
+    {% trans %}Just click on "Create a contest" above and enjoy !{% endtrans %}
+    {% trans %}It's private and you can invite who you want.{% endtrans %}
+    </p>
+    
+    <p><a class="btn btn-primary btn-lg" href="{{ path('contest_create') }}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans %}Create a contest{% endtrans %}</a></p>
+</div>
     <div class="page-header">
     <h1>{% trans %}Current events{% endtrans %}</h1>
     </div>

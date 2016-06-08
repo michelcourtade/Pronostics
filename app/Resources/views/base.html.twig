@@ -32,9 +32,11 @@
               <a class="navbar-brand" href="{{ path('home') }}"><img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" /></a>
             </div>
             <div class="navbar-collapse collapse">
-            {% if event is defined %}
-                {% if event %}
-              <ul class="nav navbar-nav">
+{#             {% if event is defined %}#}
+{#                 {% if event %}#}
+                <ul class="nav navbar-nav">
+                    <li><a href='{{ path('contest_create') }}'>{% trans %}Create new contest{% endtrans %}</a></li>
+                    <li><a href='{{ path('contest_join') }}'>{% trans %}Join a contest{% endtrans %}</a></li>
 {#                 <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>#}
 {#                 {% if currentChampionshipDay is defined and currentChampionshipDay %}#}
 {#                 <li><a href='{{ path('game_by_type', { 'type': currentChampionshipDay.id, 'event': event.id }) }}'>Matchs {{ currentChampionshipDay.name }}</a></li>#}
@@ -45,8 +47,8 @@
 {#                 <li><a href='{{ path('events_old') }}'>{% trans %}Old events{% endtrans %}</a></li>#}
                 <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}Rules{% endtrans %}</a></li>
               </ul>
-              {% endif %}
-              {% endif %}
+{#               {% endif %}#}
+{#               {% endif %}#}
               <p class="navbar-text navbar-right">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {% if app.user.profilePicture %}
