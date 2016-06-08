@@ -7,7 +7,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
 
 body {
-    padding-top:70px;
+    padding-top:50px;
     font-family:'Open Sans', Arial, sans-serif;
 }
 
@@ -615,9 +615,11 @@ div.div_logo {
     background-position: -78px -48px;
     height: 32px;
     width: 32px;
+    content:"\f09a";
 }
 .btn-facebook::after, .btn-googleplus::after, .btn-twitter::after {
-    background-image: url("/images/compass/sprites/bootstrap-sf4747a9b34.png");
+    font-family:FontAwesome;
+    margin-top:-14px;
     content: " ";
     left: 0;
     margin-top: -16px;

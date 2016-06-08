@@ -17,23 +17,22 @@
     <link rel="stylesheet" href="{{ asset('bundles/dwfpronostics/css/font-awesome/css/font-awesome.min.css') }}" type="text/css">
 
     <!-- Bootstrap -->
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-         <link href="{{ asset('bundles/dwfpronostics/css/bootstrap.min.css') }}" rel="stylesheet" >
-        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}" rel="stylesheet" >
+    <link href="{{ asset('bundles/dwfpronostics/css/bootstrap.min.css') }}" rel="stylesheet" >
+    <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}" rel="stylesheet" >
 
-        <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
-        {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
 
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
     <!-- Plugin CSS -->
     <link rel="stylesheet" href="{{ asset('bundles/dwfpronostics/css/magnific-popup.css') }}" type="text/css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('bundles/dwfpronostics/css/creative.css') }}" type="text/css">
-    
-    
+
+
 
 </head>
 
@@ -84,7 +83,7 @@
             {% endfor %}
         {% endif %}
     {% block body %}{% endblock %}
-    
+
 
         <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
         <script src="{{ asset('js/jquery.js') }}"></script>
@@ -96,7 +95,7 @@
         <script src="{{ asset('bundles/dwfpronostics/js/jquery.easing.min.js') }}"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/jquery.fittext.js') }}"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/jquery.magnific-popup.min.js') }}"></script>
-        
+
         <!-- Custom Theme JavaScript -->
         <script src="{{ asset('bundles/dwfpronostics/js/creative.js') }}"></script>
         {% block javascripts %}{% endblock %}
