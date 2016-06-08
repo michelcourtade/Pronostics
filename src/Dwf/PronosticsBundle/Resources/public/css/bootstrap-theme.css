@@ -612,15 +612,16 @@ div.div_logo {
     width: 32px;
 }
 .btn-facebook::after {
-    background-position: -78px -48px;
-    height: 32px;
-    width: 32px;
+/*     background-position: -78px -48px; */
+/*     height: 32px; */
+/*     width: 32px; */
     content:"\f09a";
 }
 .btn-facebook::after, .btn-googleplus::after, .btn-twitter::after {
     font-family:FontAwesome;
-    margin-top:-14px;
-    content: " ";
+    margin-top:-13px;
+    margin-left: 8px;
+/*     content: " "; */
     left: 0;
     margin-top: -16px;
     position: absolute;
@@ -672,3 +673,7 @@ div.div_logo span.tiret, div.div_logo strong {
     font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
     text-transform:uppercase;
 }
+.popup-gallery { display:flex; }
+.popup-gallery > div { position:relative; }
+.popup-gallery > a { position:static; }
+.popup-gallery > a img { magin:0 auto; }
