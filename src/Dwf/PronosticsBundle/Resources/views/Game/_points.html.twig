@@ -1,0 +1,15 @@
+<div class="page-header">
+    <h2>{% trans %}Points won{% endtrans %}: <span class="label label-default">{{ totalPoints }}</span></h2>
+    {% if nbPronostics %}
+        <h2>{% trans %}Av Pts / Bet{% endtrans %}: <span class="label label-default">{{ (totalPoints / nbPronostics)|round(1, 'floor') }}</span></h2>
+    {% endif %}
+    {% if nbPerfectScore and not event.simpleBet %}
+        <h2>{% trans %}Perfect scores{% endtrans %}(5 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
+    {% endif %}
+    {% if nbGoodScore %}
+        <h2>{% trans %}Good scores{% endtrans %} (3 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbGoodScore }}</span></h2>
+    {% endif %}
+    {% if nbBadScore %}
+        <h2>{% trans %}Bad scores{% endtrans %} (1 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbBadScore }}</span></h2>
+    {% endif %}
+</div>
