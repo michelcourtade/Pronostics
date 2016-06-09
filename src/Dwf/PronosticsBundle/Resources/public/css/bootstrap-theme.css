@@ -670,6 +670,22 @@ div.div_logo span.tiret, div.div_logo strong {
 #page-top {
     padding-top:0px!important;
 }
-.radio-img input[type="radio"] { display:none; }
-.radio-img input[type="radio"] + label { cursor: pointer; border:solid 5px #ECECEC; }
-.radio-img input[type="radio"] + label:checked { border-color:#82CEE6; }
+.radio-img input[type="radio"] { display:none; }
+.radio-img input[type="radio"] + label { cursor: pointer; border:solid 5px #ECECEC; float: left;}
+.radio-img input[type="radio"]:checked + label { border-color:#82CEE6; }
+.radio-img label img.contest_logo {
+    float:left;
+    margin: 5px 10px;
+}
+#dwf_pronosticsbundle_create_contest_form_type_event .radio {
+    display:inline-block;
+    padding:0;
+    vertical-align: top;
+    margin: 0;
+}
+#dwf_pronosticsbundle_create_contest_form_type_event .radio .radio-img {
+    padding: 0 10px;
+}
+a.btn span.glyphicon {
+    margin-right: 2px;
+}

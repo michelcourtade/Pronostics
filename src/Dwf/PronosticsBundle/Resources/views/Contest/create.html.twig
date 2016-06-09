@@ -4,7 +4,7 @@
 
 {% block radio_widget %}
 {% spaceless %}
-<div class="radio-inline radio-img">
+<div class="radio-inline radio-img clearfix">
     <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
     <label class="cr-styled" for="{{ id }}">
         <img src="/uploads/documents/event-{{ value }}.png" class="img-responsive contest_logo" alt="{{ label|trans }}" title="{{ label|trans }}" />

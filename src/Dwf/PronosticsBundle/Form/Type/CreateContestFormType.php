@@ -12,14 +12,15 @@ class CreateContestFormType extends AbstractType
         parent::buildForm($builder, $options);
         $builder->add('contestName');
         $builder->add('event', 'entity', array(
-                'choice_label' => 'name',
-                'class' => 'Dwf\PronosticsBundle\Entity\Event',
+                'label'         => false,
+                'choice_label'  => false,
+                'class'         => 'Dwf\PronosticsBundle\Entity\Event',
                 'query_builder' => function ($repository) use ($options) {
                     return $repository->createQueryBuilder('e')
                                       ->orderBy('e.name', 'ASC');
                 },
-                'expanded' => true,
-                'multiple' => false
+                'expanded'      => true,
+                'multiple'      => false
         ));
         $builder->add('owner', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'));
     }
