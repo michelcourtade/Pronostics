@@ -3,7 +3,7 @@
 {% block gameTypes %}
 <div class="col-sm-3">
     <ul class="list-group">
-    	<li class="list-group-item{% if not gameType %} active{% endif %}"><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+        <li class="list-group-item{% if not gameType %} active{% endif %}"><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
     {% for type in types %}
         <li class="list-group-item{% if gameType and gameType.id == type.id %} active{% endif %}"><a href="{{ path('contest_games_by_type', { 'type': type.id, 'contestId': contest.id }) }}">{{ type }}</a></li>
     {% endfor %}

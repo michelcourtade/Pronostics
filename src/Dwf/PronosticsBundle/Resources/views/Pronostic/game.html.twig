@@ -41,7 +41,7 @@
                 {% endif %}
             {% endif %}
             {% if entity.game.played %}
-            	<br />Résultat : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
+                <br />Résultat : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
             {% endif %}
 
 {#         </a>#}
@@ -55,9 +55,12 @@
     </div>
 
     <div class="actions col-xs-2 col-sm-2 col-md-2">
-    <a class="btn btn-default" href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+    <a class="btn btn-primary" href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}" title="{% trans %}See game{% endtrans %}">
+    <span class="glyphicon glyphicon-eye-open"></span></a>
     {% if not entity.game.played and not entity.game.hasBegan() and not event.simpleBet %}
-    <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id, 'contestId': contest.id }) }}" title="Modifier"><span class="glyphicon glyphicon-screenshot"></span></a>
+        <a class="btn btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id, 'contestId': contest.id }) }}" title="{% trans %}Modify{% endtrans %}">
+        <span class="glyphicon glyphicon-plus"></span>
+        </a>
     {% endif %}
     </div>
 </div>

@@ -45,7 +45,10 @@
     {% if contest %}
     <div class="actions col-xs-2 col-sm-2 col-md-1">
     {% if not entity.played and not entity.hasBegan() %}
-        <a class="btn btn-default" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}" title="Pronostiquer"><span class="glyphicon glyphicon-screenshot"></span></a>
+        <a class="btn btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}" title="{% trans %}Bet{% endtrans %}">
+        <span class="hidden-xs hidden-sm"><span class="glyphicon glyphicon-plus"></span>{% trans %}Bet{% endtrans %}</span>
+        <span class="glyphicon glyphicon-plus hidden-md hidden-lg"></span>
+        </a>
     {% endif %}
     </div>
     {% endif %}
