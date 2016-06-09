@@ -35,6 +35,8 @@
 {#             {% if event is defined %}#}
 {#                 {% if event %}#}
                 <ul class="nav navbar-nav">
+                    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+{#                     <li><button type="button" class="btn btn-default navbar-btn">{% trans %}Create new contest{% endtrans %}</button></li>#}
                     <li><a href='{{ path('contest_create') }}'>{% trans %}Create new contest{% endtrans %}</a></li>
                     <li><a href='{{ path('contest_join') }}'>{% trans %}Join a contest{% endtrans %}</a></li>
 {#                 <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>#}
@@ -127,5 +129,15 @@
         <script src="htp://code.highcharts.com/4.0.1/highcharts.js"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/bootstrap.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-8257833-23', 'auto');
+  ga('send', 'pageview');
+
+</script>
     </body>
 </html>
