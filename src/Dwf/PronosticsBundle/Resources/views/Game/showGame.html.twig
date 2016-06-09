@@ -79,7 +79,7 @@
     </div>
     <div class="row">
     <div class="well center-block col-xs-12 col-sm-6 col-md-4">
-        {% if pronostic %}
+        {% if pronostic and false %}
             {% if event.simpleBet %}
                 {% if not entity.played and not entity.hasBegan() %}
                     {% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id} %}
