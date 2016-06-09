@@ -17,8 +17,6 @@ class RegistrationController extends BaseController
         if ($process) {
             $user = $form->getData();
 
-            var_dump($user);
-            exit();
             $this->container->get('logger')->info(
                 sprintf('New user registration: %s', $user)
             );
