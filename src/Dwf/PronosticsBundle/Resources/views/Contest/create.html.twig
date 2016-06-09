@@ -1,5 +1,18 @@
 {% extends '::base.html.twig' %}
 
+{% form_theme contestForm _self %}
+
+{% block radio_widget %}
+{% spaceless %}
+<div class="radio-inline radio-img">
+    <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    <label class="cr-styled" for="{{ id }}">
+        <img src="/uploads/documents/event-{{ value }}.png" class="img-responsive contest_logo" alt="{{ label|trans }}" title="{{ label|trans }}" />
+    </label>
+</div>
+{% endspaceless %}
+{% endblock radio_widget %}
+
 {% block body -%}
     {% block breadcrumb %}
     <ul class="breadcrumb">
@@ -9,27 +22,35 @@
     {% endblock %}
 
     <div class="page-header">
-        <h1>{% trans %}Create an event{% endtrans %}</h1>
+        <h1>{% trans %}Create a contest{% endtrans %}</h1>
         <p>{% trans %}Create a private contest and bet with your friends !{% endtrans %}</p>
     </div>
     <div class="page-header">
         <h2>{% trans %}Select an event{% endtrans %}</h2>
     </div>
-    {{ form_start(contestForm) }}
-    {{ form_errors(contestForm) }}
-    {% for event in events %}
-        {% if event.getWebPath %}<img src='/{{ event.getWebPath }}' class="contest_logo"/>{% endif %} 
-        <p><input id="dwf_pronosticsbundle_contest_form_type_event" class="form-control form-control" type="radio"  required="required" name="dwf_pronosticsbundle_contest_form_type[contestevent]"><label for="dwf_pronosticsbundle_contest_form_type_event">{{ event.name }}</label></p>
-    {% endfor %}
+    <div class="panel panel-default">
+    <div class="panel-heading">{% trans %}Events{% endtrans %}</div>
+        <div class="panel-body">
+        {{ form_start(contestForm) }}
+        {{ form_errors(contestForm) }}
+{#     {% for event in events %}#}
+{#         {% if event.getWebPath %}<img src='/{{ event.getWebPath }}' class="contest_logo"/>{% endif %}#}
+{#         <p><input id="dwf_pronosticsbundle_contest_form_type_event" class="form-control form-control" type="radio"  required="required" name="dwf_pronosticsbundle_contest_form_type[contestevent]"><label for="dwf_pronosticsbundle_contest_form_type_event">{{ event.name }}</label></p>#}
+{#     {% endfor %}#}
+        <div class="input-group">
+            {{ form_widget(contestForm.event, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <div class="input-group">
         {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Choose name for your contest'|trans}}) }}
             <span class="input-group-btn">
             {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
             </span>
         </div>
-    {{ form_rest(contestForm) }}
-    {{ form_end(contestForm) }}
-{% include "DwfPronosticsBundle:Contest:_createForm.html.twig" with {'contestForm': contestForm } %}
+        {{ form_rest(contestForm) }}
+        {{ form_end(contestForm) }}
+        </div>
+    </div>
+{# {% include "DwfPronosticsBundle:Contest:_createForm.html.twig" with {'contestForm': contestForm } %}#}
 
 {% endblock %}
 {% block javascripts %}

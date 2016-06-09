@@ -670,3 +670,6 @@ div.div_logo span.tiret, div.div_logo strong {
 #page-top {
     padding-top:0px!important;
 }
+.radio-img input[type="radio"] { display:none; }
+.radio-img input[type="radio"] + label { cursor: pointer; border:solid 5px #ECECEC; }
+.radio-img input[type="radio"] + label:checked { border-color:#82CEE6; }

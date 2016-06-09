@@ -18,6 +18,7 @@ use Dwf\PronosticsBundle\Form\Type\InvitationContestOpenFormType;
 use Dwf\PronosticsBundle\Entity\Invitation;
 use Dwf\PronosticsBundle\Form\Type\ContestType;
 use Dwf\PronosticsBundle\Form\Type\ContestMessageFormType;
+use Dwf\PronosticsBundle\Form\Type\CreateContestFormType;
 use Dwf\PronosticsBundle\Entity\ContestMessage;
 
 /**
@@ -96,9 +97,9 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        
+
         $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
-        $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
+        $contestType = new CreateContestFormType("Dwf\PronosticsBundle\Entity\User");
         $contest = new Contest('');
         $contest->setOwner($this->getUser());
         //$contest->setEvent($event);
@@ -119,14 +120,14 @@ class ContestController extends Controller
             return $this->redirect($this->generateUrl('events'));
         }
         $contestForm = $form->createView();
-    
+
         return array(
                 "events"            => $events,
                 "contestForm"       => $contestForm
         );
-    
+
     }
-    
+
     /**
      * Display a form to join a contest
      *
@@ -138,13 +139,41 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-    
-    
+        $user = $this->getUser();
+
+        $invitationContestOpenType = new InvitationContestOpenFormType("Dwf\PronosticsBundle\Entity\Invitation");
+        $invitationContest = new Invitation();
+        $formContest = $this->createForm($invitationContestOpenType, $invitationContest, array(
+                'action' => '',
+                'method' => 'POST',
+        ));
+        $formContest->add('code', 'text', array('label' => $this->get('translator')->trans('Your invitation code')));
+        $formContest->add('submit', 'submit', array('label' => $this->get('translator')->trans('Join with code')));
+        $formContest->handleRequest($request);
+        if ($formContest->isValid()) {
+            $code = $formContest->getData()->getCode();
+            $invitationFromContest = $em->getRepository('DwfPronosticsBundle:Invitation')->findOneByCode($code);
+            if ($invitationFromContest->getCode() == $code) {
+                $contest = $invitationFromContest->getContest();
+                $user->addGroup($contest);
+                $em->persist($user);
+                $em->flush();
+            }
+            $this->addFlash(
+                    'success',
+                    $this->get('translator')->trans('You can now play in this contest : ').$contest->getContestName().' !'
+            );
+
+
+            return $this->redirect($this->generateUrl('contest_show', array('contestId' => $contest->getId())));
+        }
+        $invitationFormContest = $formContest->createView();
         return array(
+                'form' => $invitationFormContest,
         );
-    
+
     }
-    
+
     /**
      * Show a Contest entity
      *
@@ -299,7 +328,7 @@ class ContestController extends Controller
                             $this->get('translator')->trans('Your invitation has been sent to ').$invitation->getEmail().' !'
                     );
                 }
-                
+
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationForm = $form->createView();
@@ -322,7 +351,7 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $contestForm = $contestForm->createView();
-            
+
             // invitation without an email => open contest with invitation code
             $invitationContestOpenType = new InvitationContestOpenFormType("Dwf\PronosticsBundle\Entity\Invitation");
             $invitationContest = $em->getRepository('DwfPronosticsBundle:Invitation')->findAllByUserAndContestAndEmail($this->getUser(), $contest, null);
@@ -346,12 +375,12 @@ class ContestController extends Controller
                         'success',
                         $this->get('translator')->trans('Your contest is now open to others with one unique code : ').$invitationContest->getCode().' !'
                 );
-                
-            
+
+
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $invitationFormContest = $formContest->createView();
-            
+
             $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
             if(!$contestMessage) {
                 $contestMessage = new ContestMessage();
@@ -364,7 +393,7 @@ class ContestController extends Controller
                 $contestMessage = $contestMessage[0];
                 $messageForContest = $contestMessage;
             }
-            
+
             $contestMessageType = new ContestMessageFormType("Dwf\PronosticsBundle\Entity\ContestMessage");
             $contestMessageForm = $this->createForm($contestMessageType, $contestMessage, array(
                     'action' => '',
@@ -382,7 +411,7 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $contestMessageForm = $contestMessageForm->createView();
-            
+
             return array(
                     'contest'                   => $contest,
                     'user'                      => $this->getUser(),
@@ -400,7 +429,7 @@ class ContestController extends Controller
         }
         else return $this->redirect($this->generateUrl('events'));
     }
-    
+
     /**
      * Delete a contest created by current user
      *
@@ -429,7 +458,7 @@ class ContestController extends Controller
                     $this->get('translator')->trans('You can\'t delete contest from another user.')
             );
             return $this->redirect($this->generateUrl('events'));
-            
+
         }
         else return $this->redirect($this->generateUrl('events'));
     }
@@ -899,7 +928,7 @@ class ContestController extends Controller
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');
     }
-    
+
     /**
      * Register form filled with invitation and email
      *
@@ -914,5 +943,5 @@ class ContestController extends Controller
             'email'     => $email,
         );
     }
-    
+
 }

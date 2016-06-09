@@ -12,5 +12,8 @@
         <h1>{% trans %}Join a contest{% endtrans %}</h1>
         <p>{% trans %}Join a contest to bet with your friends !{% endtrans %}</p>
     </div>
-
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
 {% endblock %}
