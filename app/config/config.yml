@@ -126,7 +126,7 @@ fos_user:
             template: email/resetting.email.html.twig
     registration:
         confirmation:
-            enabled: true
+            enabled: false
             template: email/confirmation.email.html.twig
         form:
             type: dwf_pronosticsbundle_user_registration
