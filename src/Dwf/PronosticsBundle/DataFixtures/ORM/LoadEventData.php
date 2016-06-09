@@ -22,9 +22,9 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
         $event->setPath($nameSlug.'.png');
         $event->setNationalTeams(true);
         $event->setChampionship(false);
-        $startDate = new \DateTime("2016-05-10 20:00");
+        $startDate = new \DateTime("2016-6-10 20:00");
         $event->setStartDate($startDate);
-        $finishDate = $startDate->modify("2016-07-11 23:00");
+        $finishDate = new \DateTime("2016-07-11 23:00");
         $event->setFinishDate($finishDate);
         $event->setNbPointsForLoss(0);
         $event->setNbPointsForDraw(1);
