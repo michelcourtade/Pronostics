@@ -15,5 +15,9 @@
     <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_admin') %}class="active"{% endif %}>
     <a href="{{ path('contest_admin', {'contestId': contest.id }) }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {% trans %}Manage{% endtrans %}</a>
     </li>
+    {% else %}
+    <li role="presentation" {% if(app.request.attributes.get("_route") == 'contest_infos') %}class="active"{% endif %}>
+    <a href="{{ path('contest_infos', {'contestId': contest.id }) }}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {% trans %}Informations{% endtrans %}</a>
+    </li>
     {% endif %}
 </ul>

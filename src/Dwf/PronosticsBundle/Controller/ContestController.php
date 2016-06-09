@@ -175,6 +175,44 @@ class ContestController extends Controller
     }
 
     /**
+     * Display infos on a contest when you're in
+     *
+     * @Route("/contest/{contestId}/infos", name="contest_infos")
+     * @Method("GET")
+     * @Template("DwfPronosticsBundle:Contest:infos.html.twig")
+     */
+    public function infosAction($contestId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $event = $contest->getEvent();
+        
+        $users = $em->getRepository('DwfPronosticsBundle:User')->getOtherUsersByContest($this->getUser(), $contest);
+        
+        $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        if(!$contestMessage) {
+            $contestMessage = new ContestMessage();
+            $contestMessage->setContest($contest);
+            $contestMessage->setUser($this->getUser());
+            $contestMessage->setDate(date("YmdHis"));
+            $messageForContest = null;
+        }
+        else {
+            $contestMessage = $contestMessage[0];
+            $messageForContest = $contestMessage;
+        }
+        
+        return array(
+                'contest'                   => $contest,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'users'                     => $users,
+                'messageForContest'         => $messageForContest,
+        );
+    }
+    
+    /**
      * Show a Contest entity
      *
      * @Route("/contest/{contestId}", name="contest_show")
