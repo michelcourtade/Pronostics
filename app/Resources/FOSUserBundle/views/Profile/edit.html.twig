@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{% trans %}Edit your profile{% endtrans %}{% endblock %}
+
+{% block body %}
+<ul class="breadcrumb">
+    <li><a href="{{ path('fos_user_profile_show') }}">{% trans %}Your profile{% endtrans %}</a></li>
+    <li>{% trans %}Edit your profile{% endtrans %}</li>
+</ul>
+<div class="page-header">
+    <h1>{% trans %}Edit your profile{% endtrans %}</h1>
+</div>
+{{ form_rest(form) }}
+{% endblock %}

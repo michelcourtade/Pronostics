@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{% trans %}Your profile{% endtrans %}{% endblock %}
+{% block bodyclass %} class="login"{% endblock %}
+
+{% block body %}
+<ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li>{% trans %}Your profile{% endtrans %}</li>
+</ul>
+
+<div class="page-header">
+    <h1>{% trans %}Your profile{% endtrans %}</h1>
+</div>
+    {% if app.user.profilePicture %}
+        <img src="{{ app.user.profilePicture }}" class="avatar" />
+    {% elseif gravatar_exists(app.user.email) %}
+        <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
+    {% endif %}
+    {% trans %}Username{% endtrans %} : {{ app.user.username }}<br />
+    {% trans %}Email{% endtrans %} : {{ app.user.email }}<br />
+    <a href="{{ path('fos_user_profile_edit') }}">{% trans %}Edit{% endtrans %}</a>
+{% endblock %}
