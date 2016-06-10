@@ -57,7 +57,7 @@
         {{ form_errors(form.email) }}
         </div>
     {% endif %}
-    {{ form_widget(form.email, {'attr': { 'class': 'form-control last', 'placeholder': 'Email'|trans }}) }}
+    {{ form_widget(form.email, {'value': app.request.get('email'), 'attr': { 'class': 'form-control last', 'placeholder': 'Email'|trans }}) }}
 
     {% if form.plainPassword.first.vars.errors|length %}
         <div class='alert alert-danger'>
@@ -76,7 +76,7 @@
         {{ form_errors(form.invitation) }}
         </div>
     {% endif %}
-    {{ form_widget(form.invitation, {'attr': { 'class': 'form-control last', 'placeholder': 'Invitation code (optional)'|trans }}) }}
+    {{ form_widget(form.invitation, {'value': app.request.get('invitation'), 'attr': { 'class': 'form-control last', 'placeholder': 'Invitation code (optional)'|trans }}) }}
     <button type="submit" class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{% trans %}Register{% endtrans %}" />
     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
     {% trans %}Register{% endtrans %}
