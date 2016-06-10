@@ -30,7 +30,7 @@
             {% if event.simpleBet %}
                 {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
             {% else %}
-                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics[loop.index - 1] } %}
             {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
         {% else %}

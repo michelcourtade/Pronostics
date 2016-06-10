@@ -187,9 +187,9 @@ class ContestController extends Controller
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
-        
+
         $users = $em->getRepository('DwfPronosticsBundle:User')->getOtherUsersByContest($this->getUser(), $contest);
-        
+
         $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
         if(!$contestMessage) {
             $contestMessage = new ContestMessage();
@@ -202,7 +202,7 @@ class ContestController extends Controller
             $contestMessage = $contestMessage[0];
             $messageForContest = $contestMessage;
         }
-        
+
         return array(
                 'contest'                   => $contest,
                 'user'                      => $this->getUser(),
@@ -211,7 +211,7 @@ class ContestController extends Controller
                 'messageForContest'         => $messageForContest,
         );
     }
-    
+
     /**
      * Show a Contest entity
      *
@@ -584,9 +584,14 @@ class ContestController extends Controller
             }
             else {
                 $forms = "";
-                $pronostics = "";
+                $pronostics = array();
                 $nbPronostics = $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
                 $nbPointsWonByChampionshipDay = 0;
+                foreach($games as $entity)
+                {
+                    $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+                    array_push($pronostics, $pronostic);
+                }
             }
             $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
             if($contestMessage) {
