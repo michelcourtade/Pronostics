@@ -26,7 +26,7 @@ class ContestMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="text")
+     * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;
 
@@ -36,14 +36,14 @@ class ContestMessage
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     private $date;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="Dwf\PronosticsBundle\Entity\Contest")
      * @ORM\JoinColumn(nullable=false)
      */
     private $contest;
-    
-    /** @ORM\ManyToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"}) 
+
+    /** @ORM\ManyToOne(targetEntity="User", inversedBy="invitation", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=false)
      * @var unknown*/
     private $user;
@@ -154,12 +154,12 @@ class ContestMessage
     {
         return $this->user;
     }
-    
+
     /**
      * @ORM\PrePersist
      */
     public function onPrePersist() {
-        
+
         $this->date = new \DateTime("now");
     }
 }

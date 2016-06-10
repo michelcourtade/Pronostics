@@ -12,7 +12,7 @@
     <div class="page-header center">
         <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}{{ contest.contestName }} - <small>{{ event.name }}</small></h1>
     </div>
-    {% if messageForContest %}
+    {% if messageForContest and messageForContest.message %}
         <div class="alert alert-info alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="{% trans %}Close{% endtrans %}"><span aria-hidden="true">&times;</span></button>
             <strong>{% trans %}Announcement{% endtrans %}</strong>
