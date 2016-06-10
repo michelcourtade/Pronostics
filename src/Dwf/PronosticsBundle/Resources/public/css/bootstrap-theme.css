@@ -428,14 +428,19 @@ div.list-match div.head-date { border-bottom:1px solid #474747; padding-bottom:5
 div.list-match div.head-date h2 { margin:0; }
 div.list-match p.date { text-align:center; }
 div.list-match div.match + div.head-date { margin-top:30px; }
-div.list-match div.match + div.match { margin-top:15px; padding-top:15px; border-top:1px solid #DCDCDC; }
+div.list-match div.match {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+div.list-match div.match.already-bet { background-color: rgb(207, 242, 249); }
+div.list-match div.match + div.match { border-top:1px solid #DCDCDC; }
 div.list-match a:hover { text-decoration:none; }
 div.list-match .date { color:#666; font-size:12px; }
 div.list-match .date span { display:block; font-weight:bold; text-transform:uppercase; }
 div.list-match .team.looser { opacity: 0.5; }
 div.list-match .team.ext { text-align:right; }
 div.list-match .team a { text-transform:uppercase; color:#474747; font-size:22px; }
-div.list-match .team img { max-width:40px; vertical-align:middle; }
+div.list-match .team img { max-width:40px; vertical-align:middle; border: 1px solid #999;}
 
 div.list-match .score { text-align:center; }
 div.list-match .score a { color:#666; }
@@ -688,4 +693,10 @@ div.div_logo span.tiret, div.div_logo strong {
 }
 a.btn span.glyphicon {
     margin-right: 2px;
+}
+div.list-match .actions a {
+    font-size: 0.8em;
+}
+div.list-match .actions a .popover-button + .popover {
+    color: black;
 }

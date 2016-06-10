@@ -22,5 +22,10 @@
         e.preventDefault();
         window.location.href = $(this).data("href");
     });
+
+    $('.match').each(function() {
+        $(this).find('.actions').find('.popover-button').popover({ trigger: "hover focus" });
+    });
+
     });
 </script>
