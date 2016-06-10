@@ -441,6 +441,7 @@ div.list-match .team.looser { opacity: 0.5; }
 div.list-match .team.ext { text-align:right; }
 div.list-match .team a { text-transform:uppercase; color:#474747; font-size:22px; }
 div.list-match .team img { max-width:40px; vertical-align:middle; border: 1px solid #999;}
+div.list-match .team a span.hidden-xs { 16px; line-height:33px; }
 
 div.list-match .score { text-align:center; }
 div.list-match .score a { color:#666; }
