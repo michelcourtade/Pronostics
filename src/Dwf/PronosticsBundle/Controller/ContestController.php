@@ -772,11 +772,15 @@ class ContestController extends Controller
         $event = $contest->getEvent();
         $request = $this->getRequest();
         $entity = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
-        if($entity->getScoreTeam1() > 0 || $entity->getScoreTeam1Overtime() > 0)
-            $scorersTeam1 = $em->getRepository('DwfPronosticsBundle:Scorer')->findScorersByGameAndTeam($entity, $entity->getTeam1());
-        else $scorersTeam1 = "";
+        if($entity->getScoreTeam1() > 0 || $entity->getScoreTeam1Overtime() > 0) {
+            $scorersTeam1 = $em->getRepository('DwfPronosticsBundle:Scorer')
+                                ->findScorersByGameAndTeam($entity, $entity->getTeam1(), $event->getNationalTeams());
+        } else {
+            $scorersTeam1 = "";
+        }
         if($entity->getScoreTeam2() > 0 || $entity->getScoreTeam2Overtime() > 0)
-            $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')->findScorersByGameAndTeam($entity, $entity->getTeam2());
+            $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')
+                                ->findScorersByGameAndTeam($entity, $entity->getTeam2(), $event->getNationalTeams());
         else $scorersTeam2 = "";
         $nextGame = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
         $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame, 'contest' => $contest));

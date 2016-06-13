@@ -13,7 +13,7 @@
             {% if scorersTeam1 %}
                 <div class="scorers">
                     {% for scorer in scorersTeam1 %}
-                        <span>{{ scorer.player.firstname }} {{ scorer.player.name }} : {{ scorer.score }} but{% if scorer.score > 1 %}s{% endif %}{% if scorer.owngoal %} ({% trans %}og{% endtrans %}){% endif %}</span>
+                        <span>{{ scorer.player.firstname }} {{ scorer.player.name }} : {{ scorer.score }} {% trans %}goal{% endtrans %}{% if scorer.score > 1 %}s{% endif %}{% if scorer.owngoal %} ({% trans %}og{% endtrans %}){% endif %}</span>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -39,7 +39,7 @@
             {% if scorersTeam2 %}
                 <div class="scorers">
                     {% for scorer in scorersTeam2 %}
-                        <span>{{ scorer.player.firstname }} {{ scorer.player.name }} : {{ scorer.score }} but{% if scorer.score > 1 %}s{% endif %}{% if scorer.owngoal %} (csc){% endif %}</span>
+                        <span>{{ scorer.player.firstname }} {{ scorer.player.name }} : {{ scorer.score }} {% trans %}goal{% endtrans %}{% if scorer.score > 1 %}s{% endif %}{% if scorer.owngoal %} (csc){% endif %}</span>
                     {% endfor %}
                 </div>
             {% endif %}

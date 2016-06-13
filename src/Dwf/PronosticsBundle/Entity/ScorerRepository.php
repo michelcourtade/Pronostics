@@ -54,7 +54,7 @@ class ScorerRepository extends EntityRepository
         return $query->getResult();
     }
     
-    public function findScorersByGameAndTeam(Dwf\PronosticsBundle\Entity\Game $game, Dwf\PronosticsBundle\Entity\Team $team)
+    public function findScorersByGameAndTeam(Dwf\PronosticsBundle\Entity\Game $game, Dwf\PronosticsBundle\Entity\Team $team, $national = FALSE)
     {
         $qb = $this->createQueryBuilder('s')
         ->leftJoin('s.game','g')
@@ -62,9 +62,13 @@ class ScorerRepository extends EntityRepository
         //->select('p.id as player_id','p.name as name','SUM(s.score) AS total')
         ->select('s')
         ->where('s.game = :game')
-        ->setParameter('game', $game)
-        ->andWhere('p.team = :team')
-        ->setParameter('team', $team)
+        ->setParameter('game', $game);
+        if($national) {
+            $qb->andWhere('p.nationalTeam = :team');
+        } else {
+            $qb->andWhere('p.team = :team');
+        }
+        $qb->setParameter('team', $team)
         ->andWhere('s.owngoal = 0')
         ->orWhere('p.team != :team AND s.game = :game AND s.owngoal = 1')
         ->setParameters(new ArrayCollection(array(new Parameter('team', $team),new Parameter('game', $game))))
