@@ -183,6 +183,17 @@ services:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.admin_message:
+        class: Dwf\PronosticsBundle\Admin\AdminMessageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Annonce" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\AdminMessage
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
     dwf_pronosticsbundle.form.type.dwf_pronosticsbundle_admin_password:
         class: Dwf\PronosticsBundle\Form\Type\DwfPronosticsBundleAdminPasswordType
         tags:
