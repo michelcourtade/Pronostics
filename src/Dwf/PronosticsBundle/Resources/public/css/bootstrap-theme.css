@@ -479,6 +479,7 @@ div.list-match .points.pts-8 { color:#1c8c02; }
 
 div.head-date .date { color:#666; font-size:12px; text-align:center;  }
 div.head-date .date span { display:inline-block; font-weight:bold; text-transform:uppercase; }
+div.head-date .date strong { display:block; font-weight:bold;  }
 div.show-match .team.looser { opacity: 0.5; }
 div.show-match .team.ext { text-align:right; }
 div.show-match .team { text-transform:uppercase; color:#474747; font-size:22px; }

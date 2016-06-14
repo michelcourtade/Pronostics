@@ -1,8 +1,9 @@
 <div class="page-header">
     <div class="head-date row">
         <p class="date col-xs-12">
+            {% if entity.location %}<strong>{{ entity.location }} - {{ entity.location.city }}</strong>{% endif %}
             <span><a href="{{ path('contest_games_by_type', { 'type': entity.type.id, 'contestId': contest.id }) }}">{{ entity.type }}</a></span> - 
-            {{ entity.date|date('d/m/Y') }} - {{ entity.date|date('H:i:s') }}
+            {{ entity.date|date('d/m/Y') }} - {{ entity.date|date('H:i') }}
         </p>
     </div>
     <div class="show-match row">

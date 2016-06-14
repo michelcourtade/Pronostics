@@ -135,6 +135,14 @@ class Game
     private $city;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Location")
+     * @ORM\JoinColumn(name="location", referencedColumnName="id", nullable=true)
+     */
+    private $location;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -583,5 +591,28 @@ class Game
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set location
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Location $location
+     * @return Game
+     */
+    public function setLocation(\Dwf\PronosticsBundle\Entity\Location $location = null)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Location 
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

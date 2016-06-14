@@ -728,6 +728,13 @@ class ContestController extends Controller
                 $nbPointsWonByChampionshipDay = 0;
                 $nbPronostics = 0;
                 $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
+                foreach($games as $entity)
+                {
+                    $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+                    if($pronostic[0]) {
+                        array_push($pronostics, $pronostic);
+                    }
+                }
             }
             $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
             if($contestMessage) {

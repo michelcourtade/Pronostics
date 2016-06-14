@@ -19,6 +19,8 @@ class GameAdmin extends Admin
     {
         $formMapper
         ->add('event')
+        ->add('location')
+        ->add('city')
         ->add('team1')
         ->add('team2')
         ->add('date')
