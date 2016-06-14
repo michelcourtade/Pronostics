@@ -39,6 +39,11 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('template')->end()
                     ->end()
                 ->end() // invitation
+                ->arrayNode('admin_creation')
+                    ->children()
+                        ->scalarNode('template')->end()
+                    ->end()
+                ->end() // admin_creation
             ->end()
         ;
         return $treeBuilder;

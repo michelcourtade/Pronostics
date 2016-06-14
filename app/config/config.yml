@@ -232,9 +232,11 @@ dwf_pronostics:
     app_name: %app_name%
     from_email:
         address:        contact@dwf.fr
-        sender_name:    YouBetSports
+        sender_name:    YouBetSport
     invitation:
         template: email/invitation.email.html.twig
+    admin_creation:
+        template: email/admin_creation.email.html.twig
         
 parameters:
     #sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin

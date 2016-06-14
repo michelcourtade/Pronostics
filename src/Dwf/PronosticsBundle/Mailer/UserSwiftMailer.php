@@ -28,6 +28,20 @@ class UserSwiftMailer extends TwigSwiftMailer implements MailerInterface
         $this->sendMessage($template, $context, $this->parameters['from_email']['invitation'], $invitation->getEmail());
     }
 
+    public function sendAdminCreationEmailMessage(UserInterface $user)
+    {
+        $app = $this->twig->getGlobals();
+        $template = $this->parameters['template']['admin_creation'];
+        $url = $this->router->generate('fos_user_security_login');
+        $context = array(
+                'user'              => $user,
+                'password'          => $user->getPlainPassword(),
+                'loginUrl'          => $url,
+                'app_name'          => $app["app_name"]
+        );
+        $this->sendMessage($template, $context, $this->parameters['from_email']['admin_creation'], $user->getEmail());
+    }
+    
     public function getName() {
         return 'user_swift_mailer';
     }

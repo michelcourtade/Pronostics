@@ -47,7 +47,7 @@ class UserMailer implements MailerInterface
         ));
         $this->sendEmailMessage($rendered, $this->getSenderEmail('resetting_password'), $user->getEmail());
     }
-
+    
     protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail)
     {
         // Render the email, use the first line as the subject, and the rest as the body

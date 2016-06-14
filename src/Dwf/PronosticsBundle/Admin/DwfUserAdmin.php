@@ -126,25 +126,8 @@ class DwfUserAdmin extends Admin
     public function sendMail($user)
     {
         if($user->getSendMail()) {
+            $this->getConfigurationPool()->getContainer()->get('dwf_pronosticbundle.user_swift_mailer')->sendAdminCreationEmailMessage($user);
 
-            $globalHeader = $this->getConfigurationPool()->getContainer()->getParameter('email_headers');
-            $headers = $globalHeader['admin_account_creation'];
-
-            $message = \Swift_Message::newInstance()
-            ->setSubject($headers['subject'])
-            ->setFrom($headers['from'])
-            ->setTo($user->getEmail())
-            ->setBcc($headers['bcc'])
-            ->setBody($this->getConfigurationPool()->getContainer()->get('templating')
-                    ->render('email/admin_creation.email.html.twig', array('user' => $user,
-                                                                    'username' => $user->getUsername(),
-                            'password' => $user->getPlainPassword(),
-
-                    )))
-            ->setContentType("text/html")
-            ;
-
-            $this->getConfigurationPool()->getContainer()->get('mailer')->send($message);
         }
     }
     public function setUserManager(UserManagerInterface $userManager)

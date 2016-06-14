@@ -8,12 +8,12 @@
 
 {% block body_text %}
 {% autoescape false %}
-{{ 'admin_creation.email.message'|trans({'%username%': user.username, '%password%': password}) }}
+{{ 'admin_creation.email.message'|trans({'%username%': user.username, '%password%': password, '%loginUrl%': loginUrl}) }}
 {% endautoescape %}
 {% endblock %}
 
 {% block body_html %}
 {% autoescape false %}
-{{ 'admin_creation.email.message_html'|trans({'%username%': user.username, '%password%': password}) }}
+{{ 'admin_creation.email.message_html'|trans({'%username%': user.username, '%password%': password, '%loginUrl%': loginUrl}) }}
 {% endautoescape %}
 {% endblock %}

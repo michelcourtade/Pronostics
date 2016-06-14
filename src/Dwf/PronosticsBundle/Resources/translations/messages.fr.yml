@@ -1,6 +1,6 @@
 registration:
     email:
-        subject: Bienvenue sur YouBetSport %username% !
+        subject: YouBetSport - Bienvenue sur YouBetSport %username% !
         message: |
             Bonjour %username% !
 
@@ -11,6 +11,7 @@ registration:
         message_html: |
             <html>
             <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
             <p>Bonjour %username% !
 
             <p>Pour valider votre compte utilisateur sur YouBetSport, merci de vous rendre sur %confirmationUrl%</p>
@@ -21,7 +22,7 @@ registration:
             </html>
 resetting:
     email:
-        subject: Réinitialiser votre mot de passe
+        subject: YouBetSport - Réinitialiser votre mot de passe
         message: |
             Bonjour %username% !
 
@@ -32,6 +33,7 @@ resetting:
         message_html: |
             <html>
             <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
             <p>Bonjour %username% !
 
             <p>Vous pouvez reinitialiser votre mot de passe sur YouBetSport en cliquant sur <a href='%confirmationUrl%'>%confirmationUrl%</a></p>
@@ -42,7 +44,7 @@ resetting:
             </html>
 invitation:
     email:
-        subject: YouBetSport : vous venez d'etre invité par %username% !
+        subject: YouBetSport - Vous venez d'etre invité par %username% !
         message: |
             Bonjour,
 
@@ -58,6 +60,7 @@ invitation:
         message_html: |
             <html>
             <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
             <p>Bonjour,</p>
 
             <p>L'utilisateur %username% vient de vous inviter à participer à une compétition sur le site YouBetSport.</p>
@@ -73,24 +76,33 @@ invitation:
             </html>
 admin_creation:
     email:
-        subject: Bienvenue sur YouBetSport %username% !
+        subject: YouBetSport - Votre mot de passe YouBetSport !
         message: |
             Bonjour %username% !
 
+            Vous avez demandé à recevoir un nouveau mot de passe. 
             Voici votre mot nouveau mot de passe:
             
             %password%
             
+            Nous vous conseillons de le changer dès que vous aurez réussi à vous connecter à nouveau sur votre compte.
+            
+            Se connecter: %loginUrl%
             Cordialement,
             L'équipe YouBetSport.
         message_html: |
             <html>
             <body>
-            <p>Bonjour %username% !
-
-            <p>Voici votre nouveau mot de passe : </p>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
+            <p>Bonjour %username% !</p>
+            
+            <p>Vous avez demandé à recevoir un nouveau mot de passe. Voici votre nouveau mot de passe : </p>
             <p><strong>%password%</strong></p>
-
+            
+            <p>Nous vous conseillons de le changer dès que vous aurez réussi à vous connecter à nouveau sur votre compte.</p>
+            
+            <p><a href="%loginUrl%">Se connecter</a></p>
+            
             <p>Cordialement,</p>
             <p>L'équipe YouBetSport.</p>
             </body>
