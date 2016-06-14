@@ -4,7 +4,8 @@ imports:
     - { resource: doctrine_extensions.yml }
     - { resource: @DwfPronosticsBundle/Resources/config/admin.yml }
     - { resource: @DwfPageBundle/Resources/config/admin.yml }
-    - { resource: "@DwfPronosticsBundle/Resources/config/services.yml" }
+    - { resource: @DwfPronosticsBundle/Resources/config/services.yml }
+    - { resource: @DwfPronosticsBundle/Resources/config/parameters.yml }
     - { resource: bundles/braincrafted.yml }
 
 framework:

@@ -18,6 +18,8 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class DwfUserAdmin extends Admin
 {
+    protected $userManager;
+
     /**
      * {@inheritdoc}
      */
@@ -43,7 +45,11 @@ class DwfUserAdmin extends Admin
         ->with('General')
         ->add('username')
         ->add('email')
-        ->add('plainPassword', 'text', array('required' => false))
+        //->add('plainPassword', 'text', array('required' => false))
+        ->add('plainPassword', 'dwf_pronosticsbundle_admin_password', array(
+                'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+        ))
+        ->add('sendMail', 'checkbox', array('required' => false))
         ->end()
         // .. more info
         ;
@@ -97,5 +103,60 @@ class DwfUserAdmin extends Admin
             ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
             ;
         }
+    }
+
+    public function prePersist($user)
+    {
+        $user->refreshUpdated();
+    }
+
+    public function preUpdate($user)
+    {
+        $user->refreshUpdated();
+        $this->sendMail($user);
+
+        $this->getUserManager()->updateCanonicalFields($user);
+        $this->getUserManager()->updatePassword($user);
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function sendMail($user)
+    {
+        if($user->getSendMail()) {
+
+            $globalHeader = $this->getConfigurationPool()->getContainer()->getParameter('email_headers');
+            $headers = $globalHeader['admin_account_creation'];
+
+            $message = \Swift_Message::newInstance()
+            ->setSubject($headers['subject'])
+            ->setFrom($headers['from'])
+            ->setTo($user->getEmail())
+            ->setBcc($headers['bcc'])
+            ->setBody($this->getConfigurationPool()->getContainer()->get('templating')
+                    ->render('email/admin_creation.email.html.twig', array('user' => $user,
+                                                                    'username' => $user->getUsername(),
+                            'password' => $user->getPlainPassword(),
+
+                    )))
+            ->setContentType("text/html")
+            ;
+
+            $this->getConfigurationPool()->getContainer()->get('mailer')->send($message);
+        }
+    }
+    public function setUserManager(UserManagerInterface $userManager)
+    {
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * @return UserManagerInterface
+     */
+    public function getUserManager()
+    {
+        return $this->userManager;
     }
 }

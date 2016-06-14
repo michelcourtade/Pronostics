@@ -71,6 +71,30 @@ invitation:
             <p>L'équipe YouBetSport.</p>
             </body>
             </html>
+admin_creation:
+    email:
+        subject: Bienvenue sur YouBetSport %username% !
+        message: |
+            Bonjour %username% !
+
+            Voici votre mot nouveau mot de passe:
+            
+            %password%
+            
+            Cordialement,
+            L'équipe YouBetSport.
+        message_html: |
+            <html>
+            <body>
+            <p>Bonjour %username% !
+
+            <p>Voici votre nouveau mot de passe : </p>
+            <p><strong>%password%</strong></p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe YouBetSport.</p>
+            </body>
+            </html>
 Current events: Evènements en cours
 Event: Evènement
 Contests: Compétitions

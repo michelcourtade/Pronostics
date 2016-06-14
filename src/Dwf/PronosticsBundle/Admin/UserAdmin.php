@@ -46,22 +46,6 @@ class UserAdmin extends SonataUserAdmin
         // .. more info
         ;
 
-//         if (!$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
-//             $formMapper
-//             ->with('Management')
-//             ->add('roles', 'sonata_security_roles', array(
-//                     'expanded' => true,
-//                     'multiple' => true,
-//                     'required' => false
-//             ))
-//             ->add('locked', null, array('required' => false))
-//             ->add('expired', null, array('required' => false))
-//             ->add('enabled', null, array('required' => false))
-//             ->add('credentialsExpired', null, array('required' => false))
-//             ->add('groups')
-//             ->end()
-//             ;
-//         }
     }
 
     /**
@@ -95,5 +79,24 @@ class UserAdmin extends SonataUserAdmin
             ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
             ;
         }
+    }
+
+    public function preUpdate($user)
+    {
+        $this->getUserManager()->updateCanonicalFields($user);
+        $this->getUserManager()->updatePassword($user);
+    }
+
+    public function setUserManager(UserManagerInterface $userManager)
+    {
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * @return UserManagerInterface
+     */
+    public function getUserManager()
+    {
+        return $this->userManager;
     }
 }

@@ -29,7 +29,7 @@ class Game
      * @ORM\JoinColumn(name="event", referencedColumnName="id")
      */
     private $event;
-    
+
     /**
      * @var integer
      *
@@ -80,7 +80,7 @@ class Game
      * @ORM\Column(name="scoreTeam1Overtime", type="integer", nullable=true)
      */
     private $scoreTeam1Overtime = 0;
-    
+
     /**
      * @var integer
      *
@@ -94,7 +94,7 @@ class Game
      * @ORM\Column(name="overtime", type="boolean", nullable=true)
      */
     private $overtime = false;
-    
+
     /**
      * @var integer
      *
@@ -102,21 +102,21 @@ class Game
      * @ORM\JoinColumn(name="winner", referencedColumnName="id", nullable=true)
      */
     private $winner;
-    
+
     /**
      * @var bool
      *
      * @ORM\Column(name="played", type="boolean", nullable=true)
      */
     private $played = false;
-    
+
     /**
      * @var text
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
-    
+
     /**
      * @var ArrayCollection
      *
@@ -127,17 +127,25 @@ class Game
     protected $scorers;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city", referencedColumnName="id", nullable=true)
+     */
+    private $city;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
     	$this->scorers = new ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -160,7 +168,7 @@ class Game
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -183,7 +191,7 @@ class Game
     /**
      * Get scoreTeam1
      *
-     * @return integer 
+     * @return integer
      */
     public function getScoreTeam1()
     {
@@ -206,7 +214,7 @@ class Game
     /**
      * Get scoreTeam2
      *
-     * @return integer 
+     * @return integer
      */
     public function getScoreTeam2()
     {
@@ -229,7 +237,7 @@ class Game
     /**
      * Get team1
      *
-     * @return \Dwf\PronosticsBundle\Entity\Team 
+     * @return \Dwf\PronosticsBundle\Entity\Team
      */
     public function getTeam1()
     {
@@ -252,18 +260,18 @@ class Game
     /**
      * Get team2
      *
-     * @return \Dwf\PronosticsBundle\Entity\Team 
+     * @return \Dwf\PronosticsBundle\Entity\Team
      */
     public function getTeam2()
     {
         return $this->team2;
     }
-    
+
     public function __toString()
     {
     	return $this->getName().($this->getEvent() ? " (".$this->getEvent()->getName().")":"");
     }
-    
+
     public function getName()
     {
     	return ($this->getTeam1() ? $this->getTeam1()->getName()." - ".$this->getTeam2()->getName():"");
@@ -285,13 +293,13 @@ class Game
     /**
      * Get played
      *
-     * @return integer 
+     * @return integer
      */
     public function getPlayed()
     {
         return $this->played;
     }
-    
+
     public function getScore()
     {
     	return $this->getScoreTeam1()." - ".$this->getScoreTeam2();
@@ -301,7 +309,7 @@ class Game
     {
         return $this->getScoreTeam1Overtime()." - ".$this->getScoreTeam2Overtime();
     }
-    
+
     /**
      * Set type
      *
@@ -318,13 +326,13 @@ class Game
     /**
      * Get type
      *
-     * @return \Dwf\PronosticsBundle\Entity\GameType 
+     * @return \Dwf\PronosticsBundle\Entity\GameType
      */
     public function getType()
     {
         return $this->type;
     }
-    
+
     public function getWhoWin()
     {
     	if($this->getScoreTeam1() > $this->getScoreTeam2())
@@ -333,7 +341,7 @@ class Game
     		return 2;
     	else return 0;
     }
-    
+
     public function getWhoWinAfterOvertime()
     {
     	if($this->getScoreTeam1Overtime() > $this->getScoreTeam2Overtime())
@@ -342,7 +350,7 @@ class Game
     		return 2;
     	else return 0;
     }
-    
+
     public function getWhoLose()
     {
         if($this->getWhoWin() == 1)
@@ -358,19 +366,19 @@ class Game
                 if($winner->getId() == $this->getTeam1()->getId())
                     return 2;
                 elseif($winner->getId() == $this->getTeam2()->getId())
-                    return 1;            
+                    return 1;
                 return 0;
             }
             return 0;
         }
         return 0;
     }
-    
-    public function hasBegan() 
+
+    public function hasBegan()
     {
         return (intval($this->getDate()->format('U')) < time());
     }
-    
+
     public function hasOvertime()
     {
     	return $this->overtime;
@@ -392,7 +400,7 @@ class Game
     /**
      * Get scoreTeam1Overtime
      *
-     * @return integer 
+     * @return integer
      */
     public function getScoreTeam1Overtime()
     {
@@ -415,7 +423,7 @@ class Game
     /**
      * Get scoreTeam2Overtime
      *
-     * @return integer 
+     * @return integer
      */
     public function getScoreTeam2Overtime()
     {
@@ -438,7 +446,7 @@ class Game
     /**
      * Get overtime
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getOvertime()
     {
@@ -461,7 +469,7 @@ class Game
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -484,7 +492,7 @@ class Game
     /**
      * Get winner
      *
-     * @return \Dwf\PronosticsBundle\Entity\Team 
+     * @return \Dwf\PronosticsBundle\Entity\Team
      */
     public function getWinner()
     {
@@ -507,7 +515,7 @@ class Game
     /**
      * Get event
      *
-     * @return \Dwf\PronosticsBundle\Entity\Event 
+     * @return \Dwf\PronosticsBundle\Entity\Event
      */
     public function getEvent()
     {
@@ -542,15 +550,38 @@ class Game
     /**
      * Get scorers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getScorers()
     {
         return $this->scorers;
     }
-    
+
     public function getScoreDifference()
     {
         return abs($this->getScoreTeam1() - $this->getScoreTeam2());
+    }
+
+    /**
+     * Set city
+     *
+     * @param \Dwf\PronosticsBundle\Entity\City $city
+     * @return Game
+     */
+    public function setCity(\Dwf\PronosticsBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Dwf\PronosticsBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

@@ -1,0 +1,19 @@
+{# app/Resources/views/email/resetting.email.html.twig #}
+
+{% block subject %}
+{% autoescape false %}
+{{ 'admin_creation.email.subject'|trans({'%username%': user.username, '%password%': password}) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'admin_creation.email.message'|trans({'%username%': user.username, '%password%': password}) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% autoescape false %}
+{{ 'admin_creation.email.message_html'|trans({'%username%': user.username, '%password%': password}) }}
+{% endautoescape %}
+{% endblock %}

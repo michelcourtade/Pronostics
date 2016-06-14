@@ -149,3 +149,30 @@ services:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
+            - [ setUserManager, ['@fos_user.user_manager']]
+    sonata.admin.country:
+        class: Dwf\PronosticsBundle\Admin\CountryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Pays" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Country
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.city:
+        class: Dwf\PronosticsBundle\Admin\CityAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Villes" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\City
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    dwf_pronosticsbundle.form.type.dwf_pronosticsbundle_admin_password:
+        class: Dwf\PronosticsBundle\Form\Type\DwfPronosticsBundleAdminPasswordType
+        tags:
+        - { name: form.type, alias: dwf_pronosticsbundle_admin_password }
