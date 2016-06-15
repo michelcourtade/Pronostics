@@ -2,9 +2,9 @@
 
 {% block body -%}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>Meilleurs buteurs</li>
+    <li>{% trans %}Best scorers{% endtrans %}</li>
     </ul>
 <div class="page-header">
     <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleurs buteurs</h1>
@@ -17,15 +17,15 @@
 <div class="col-sm-9">
     <div class="panel panel-default row">
   <!-- Default panel contents -->
-  <div class="panel-heading">Classement meilleurs buteurs</div>
+  <div class="panel-heading">{% trans %}Best scorers rankings{% endtrans %}</div>
   <!-- Table -->
     <table class="table">
     <thead>
     <tr>
     <th>#</th>
-    <th>Joueur</th>
-    <th>Equipe</th>
-    <th>Nb buts</th>
+    <th>{% trans %}Player{% endtrans %}</th>
+    <th>{% trans %}Team{% endtrans %}</th>
+    <th>{% trans %}Nb goals{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
@@ -35,10 +35,15 @@
         <td>{{ loop.index }}</td>
         <td>{{ players[scorer.player_id].firstname }} {{ players[scorer.player_id].name }}</td>
         <td>
-{#         {% if teams[result.team_id].getWebPath %}#}
-             <img src='/{{ players[scorer.player_id].team.getWebPath }}' width="20" />
-{#         {% endif %}#}
-        {{ players[scorer.player_id].team }}
+            {% if event.nationalTeams %}
+                {% set imgTeam = players[scorer.player_id].nationalTeam.getWebPath %}
+                {% set team = players[scorer.player_id].nationalTeam %}
+            {% else %}
+                {% set imgTeam = players[scorer.player_id].team.getWebPath %}
+                {% set team = players[scorer.player_id].team %}
+            {% endif %}
+                <img src='/{{ imgTeam }}' width="20" />
+            {{ team }}
         </td>
         <td>{{ scorer.total }}</td>
         {% set total = total + scorer.total %}
@@ -46,7 +51,7 @@
     {% endfor %}
     <tr>
     <td colspan="2"></td>
-    <td>Total</td>
+    <td>{% trans %}Total{% endtrans %}</td>
     <td>{{ total }}</td>
     </tr>
     </tbody>

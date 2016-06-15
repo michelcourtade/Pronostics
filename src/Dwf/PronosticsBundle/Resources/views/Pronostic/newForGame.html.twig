@@ -4,7 +4,8 @@
     {% block breadcrumb %}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
     <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
     <li><a href="{{ path('contest_games_by_type', { 'type': entity.game.type.id, 'contestId': contest.id }) }}">{{ entity.game.type }}</a></li>
     <li><a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">{{ entity.game }}</a></li>
