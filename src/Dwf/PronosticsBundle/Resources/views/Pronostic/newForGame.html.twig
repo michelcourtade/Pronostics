@@ -19,15 +19,15 @@
     <div class="page-header">
     <div class="head-date row">
         <p class="date col-xs-12">
-            <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> - 
+            <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> -
             {{ entity.game.date|date('d/m/Y') }}  {% trans %}at{% endtrans %} {{ entity.game.date|date('H:i') }}
         </p>
     </div>
     <div class="show-match row">
         <div class="team col-xs-4 col-sm-4 col-md-4">
+            <img src='/{{ entity.game.team1.getWebPath }}' class="img-rounded"/>
             <span class="hidden-xs">{{ entity.game.team1.name }}</span>
             <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team1.iso }}</span>
-            <img src='/{{ entity.game.team1.getWebPath }}' />
         </div>
         <div class="score col-xs-4 col-sm-4 col-md-4">
             <strong>{{ form_widget(form.scoreTeam1) }} - {{ form_widget(form.scoreTeam2) }}</strong>
@@ -46,9 +46,9 @@
             </div>
         </div>
         <div class="team ext col-xs-4 col-sm-4 col-md-4">
+            <img src='/{{ entity.game.team2.getWebPath }}' class="img-rounded" />
             <span class="hidden-xs">{{ entity.game.team2.name }}</span>
-            <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team2.iso }}</span> 
-            <img src='/{{ entity.game.team2.getWebPath }}' />
+            <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team2.iso }}</span>
         </div>
     </div>
 </div>
@@ -88,7 +88,7 @@
             $('#dwf_pronosticsbundle_pronostic_winner').val('');
         }
     }
-    
+
     $(document).ready(function() {
         toggleOvertime( $('#dwf_pronosticsbundle_pronostic_overtime'));
         $('#dwf_pronosticsbundle_pronostic_overtime').change(function(){
@@ -98,5 +98,5 @@
             toggleFinalWinner();
         });
     });
-    </script> 
+    </script>
 {% endblock %}

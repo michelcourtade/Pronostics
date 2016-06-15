@@ -440,7 +440,7 @@ div.list-match .date span { display:block; font-weight:bold; text-transform:uppe
 div.list-match .team.looser { opacity: 0.5; }
 div.list-match .team.ext { text-align:right; }
 div.list-match .team a { text-transform:uppercase; color:#474747; font-size:22px; }
-div.list-match .team img { max-width:40px; vertical-align:middle; border: 1px solid #999;}
+div .team img { max-width:40px; vertical-align:middle; border: 1px solid #999;}
 div.list-match .team a span.hidden-xs { font-size: 16px; line-height:33px; }
 
 div.list-match .score { text-align:center; }
@@ -702,3 +702,4 @@ div.list-match .actions a {
 div.list-match .actions a .popover-button + .popover {
     color: black;
 }
+.score select.form-control { background: transparent; background: #fff url(../images/arrow-select.jpg) no-repeat 100% 60%; appearance: none;-moz-appearance: none;-webkit-appearance: none; padding-right: 15px;}
