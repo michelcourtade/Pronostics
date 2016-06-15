@@ -25,7 +25,8 @@
             {% endif %}
         </ul>
     <div class="tabs">
-    {% set lastDate = '' %}
+        <span>{% trans %}Explanation{% endtrans %} :</span><span class="already-bet">{% trans %}Already bet{% endtrans %}</span>
+        {% set lastDate = '' %}
         {% for entity in games %}
             {% if event.simpleBet %}
                 {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}

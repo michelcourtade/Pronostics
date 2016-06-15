@@ -11,13 +11,13 @@
     </p>
 {#     <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>#}
     <div class="points pts-{{ entity.result }} col-xs-3 col-sm-2 col-md-2">
-        {% if entity.result %}{{ entity.result }} pts{% endif %}
+        {% if entity.result %}{{ entity.result }} {% trans %}pts{% endtrans %}{% endif %}
     </div>
     <div class="team{% if(entity.game.getWhoLose() == 1) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
         <a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">
+            <img src='/{{ entity.game.team1.getWebPath }}' class="img-rounded"/>
             <span class="hidden-xs hidden-sm">{{ entity.game.team1.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.game.team1.iso }}</span>
-            <img src='/{{ entity.game.team1.getWebPath }}' />
         </a>
     </div>
     <div class="score col-xs-3 col-sm-2 col-md-2">
@@ -41,16 +41,23 @@
                 {% endif %}
             {% endif %}
             {% if entity.game.played %}
-                <br />Résultat : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
+                <br />{% trans %}Result{% endtrans %} : <strong>{{ entity.game.score }}</strong> {% if not event.simpleBet %}(90 min){% endif %}
+                {% if entity.game.overtime %}
+                    <br />
+                    {% trans %}Overtime, final score{% endtrans %} : {{ entity.game.scoreAfterOvertime }}
+                    {% if pronostic.winner %}
+                        <strong>{% trans %}Winner{% endtrans %} : {{ entity.game.winner }}</strong>
+                    {% endif %}
+               {% endif %}
             {% endif %}
 
 {#         </a>#}
     </div>
     <div class="team ext{% if(entity.game.getWhoLose() == 2) %} looser{% endif %} col-xs-2 col-sm-3 col-md-3">
         <a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">
+            <img src='/{{ entity.game.team2.getWebPath }}' class="img-rounded"/>
             <span class="hidden-xs hidden-sm ">{{ entity.game.team2.name }}</span>
             <span class="hidden-md hidden-lg">{{ entity.game.team2.iso }}</span>
-            <img src='/{{ entity.game.team2.getWebPath }}' />
         </a>
     </div>
 
