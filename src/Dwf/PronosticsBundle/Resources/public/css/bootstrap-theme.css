@@ -579,6 +579,8 @@ img.contest_logo {
 img.youbetsport_logo {
     max-height:30px;
     max-width:30px;
+    display:inline-block;
+    margin-top: -6px;
 }
 div.home_youbetsport {
     background: #fff none repeat scroll 0 0;
@@ -711,3 +713,10 @@ div.list-match .actions a .popover-button + .popover {
     color: black;
 }
 .score select.form-control { background: transparent; background: #fff url(../images/arrow-select.jpg) no-repeat 100% 60%; appearance: none;-moz-appearance: none;-webkit-appearance: none; padding-right: 15px;}
+.navbar-default .navbar-header .navbar-brand span.logo{
+    color: #5fc8dc;
+    font-family: "Open Sans","Helvetica Neue",Arial,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+}

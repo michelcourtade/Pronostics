@@ -29,7 +29,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="{{ path('home') }}"><img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" /></a>
+              <a class="navbar-brand" href="{{ path('home') }}">
+              <img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" />
+              <span class="logo">{{ app_name }}</span>
+              </a>
             </div>
             <div class="navbar-collapse collapse">
 {#             {% if event is defined %}#}
