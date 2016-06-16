@@ -20,6 +20,7 @@
     <div class="page-header">
     <div class="head-date row">
         <p class="date col-xs-12">
+            {% if entity.game.location %}<strong>{{ entity.game.location }} - {{ entity.game.location.city }}</strong>{% endif %}
             <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> -
             {{ entity.game.date|date('d/m/Y') }}  {% trans %}at{% endtrans %} {{ entity.game.date|date('H:i') }}
         </p>
@@ -51,9 +52,9 @@
             <span class="hidden-xs">{{ entity.game.team2.name }}</span>
             <span class="hidden-sm hidden-md hidden-lg">{{ entity.game.team2.iso }}</span>
         </div>
+    <div class="center col-xs-12">{{ form_widget(form.submit, {'attr': { 'class': 'btn btn-lg btn-primary', 'style': 'margin-top:10px;' }}) }}</div>
     </div>
-</div>
-    <div class="center col-xs-12">{{ form_widget(form.submit, {'attr': { 'class': 'btn btn-lg btn-primary' }}) }}</div>
+    </div>
     {{ form_rest(form) }}
     {{ form_end(form) }}
 
