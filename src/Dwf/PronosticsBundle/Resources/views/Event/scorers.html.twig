@@ -6,6 +6,7 @@
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     <li>{% trans %}Best scorers{% endtrans %}</li>
     </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
 <div class="page-header">
     <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleurs buteurs</h1>
 </div>

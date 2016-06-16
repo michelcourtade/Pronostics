@@ -236,6 +236,7 @@ class GameController extends Controller
                     'nbBadScore'                    => $nbBadScore,
                     'chart'                         => '',
                     'contest'                       => '',
+                    'gameType'                      => '',
             );
             }
             else return $this->redirect($this->generateUrl('events'));

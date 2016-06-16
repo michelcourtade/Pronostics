@@ -1,9 +1,8 @@
 <ul class="list-group">
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_home') %} active{% endif %}"><a href="{{ path('event_home', {'event': event.id }) }}">Résumé</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_gameday') %} active{% endif %}"><a href="{{ path('event_gameday', {'event': event.id }) }}">Matchs du jour</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_nextgames') %} active{% endif %}"><a href="{{ path('event_nextgames', {'event': event.id }) }}">Prochains matchs</a></li>
-    <li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_scorers') %} active{% endif %}"><a href="{{ path('event_scorers', {'event': event.id }) }}">Meilleurs buteurs</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_bestoffense') %} active{% endif %}"><a href="{{ path('event_bestoffense', {'event': event.id }) }}">Meilleures attaques</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_bestdefense') %} active{% endif %}"><a href="{{ path('event_bestdefense', {'event': event.id }) }}">Meilleures défenses</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_home') %} active{% endif %}"><a href="{{ path('event_home', {'event': event.id }) }}">{% trans %}Summary{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_gameday') %} active{% endif %}"><a href="{{ path('event_gameday', {'event': event.id }) }}">{% trans %}Games of the day{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_nextgames') %} active{% endif %}"><a href="{{ path('event_nextgames', {'event': event.id }) }}">{% trans %}Next games{% endtrans %}</a></li>
+    <li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_scorers') %} active{% endif %}"><a href="{{ path('event_scorers', {'event': event.id }) }}">{% trans %}Best scorers{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_bestoffense') %} active{% endif %}"><a href="{{ path('event_bestoffense', {'event': event.id }) }}">{% trans %}Best offenses{% endtrans %}</a></li>
 </ul>

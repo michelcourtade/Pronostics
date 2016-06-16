@@ -12,6 +12,7 @@
     <li>{% trans %}Bet on{% endtrans %} {{ entity.game }}</li>
     </ul>
     {% endblock %}
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}

@@ -9,7 +9,7 @@
     <li>{% trans %}My bets{% endtrans %}</li>
     </ul>
     {% endblock %}
-    
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}

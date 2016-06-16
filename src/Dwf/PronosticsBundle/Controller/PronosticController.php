@@ -116,7 +116,6 @@ class PronosticController extends Controller
      * @Route("/contest/{contestId}/new/{id}", name="pronostics_new_forgame")
      * @Method("GET")
      * @Template()
-     * "DwfPronosticsBundle:Pronostic:new.html.twig"
      */
     public function newForGameAction($id, $contestId)
     {
@@ -146,6 +145,7 @@ class PronosticController extends Controller
                     $messageForContest = $contestMessage[0];
                 }
                 else $messageForContest = null;
+                $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
                 return array(
                         'contest'                       => $contest,
                         'event'                         => $game->getEvent(),
@@ -154,6 +154,7 @@ class PronosticController extends Controller
                         'user'                          => $this->getUser(),
                         'gameType'                      => $gameType,
                         'messageForContest'             => $messageForContest,
+                        'adminMessage'                  => $adminMessage,
                 );
             }
             elseif(!$game->getPlayed()) {
@@ -235,18 +236,20 @@ class PronosticController extends Controller
             $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $user);
     //     	$deleteForm = $this->createDeleteForm($id);
 
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
                 return array(
-                    'user'      => $user,
-                    'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
-                    'entities'	=> $entities,
-                    'event'        => $event,
-                	'currentChampionshipDay' => $currentChampionshipDay,
-                    'nbPronostics' => $nb,
-                    'nbPerfectScore' => $nbPerfectScore,
-                    'nbGoodScore' => $nbGoodScore,
-                    'nbBadScore' => $nbBadScore,
-                    'total'         => $total,
-    //     			'delete_form' => $deleteForm->createView(),
+                    'user'                      => $user,
+                    'bestscorer_pronostic'      => $pronostic ? $bestscorer_pronostic : '',
+                    'entities'	                => $entities,
+                    'event'                     => $event,
+                    'currentChampionshipDay'    => $currentChampionshipDay,
+                    'nbPronostics'              => $nb,
+                    'nbPerfectScore'            => $nbPerfectScore,
+                    'nbGoodScore'               => $nbGoodScore,
+                    'nbBadScore'                => $nbBadScore,
+                    'total'                     => $total,
+                    'contest'                   => '',
+                    'adminMessage'              => $adminMessage,
         	);
     	}
     	else throw $this->createNotFoundException('Unable to find Event entity.');

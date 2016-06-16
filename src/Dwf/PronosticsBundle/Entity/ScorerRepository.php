@@ -37,15 +37,20 @@ class ScorerRepository extends EntityRepository
     
     public function findBestOffensesByEvent(Dwf\PronosticsBundle\Entity\Event $event, $limit = false)
     {
+        if ($event->getNationalTeams()) {
+            $team = 'nationalTeam';
+        } else {
+            $team = 'team';
+        }
         $qb = $this->createQueryBuilder('s')
         ->leftJoin('s.game','g')
         ->leftJoin('s.player','p')
-        ->leftJoin('p.team','t')
+        ->leftJoin('p.'.$team,'t')
         ->select('t.id AS team_id', 't.name AS name','SUM(s.score) AS total')
         ->where('s.event = :event')
         ->setParameter('event', $event)
         ->andWhere('s.owngoal IS NULL OR s.owngoal = 0')
-        ->groupBy('p.team')
+        ->groupBy('p.'.$team)
         ->addOrderBy('total', 'DESC')
         ;
         $qb->setMaxResults(10);

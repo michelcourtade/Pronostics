@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdminMessageRepository extends EntityRepository
 {
+    public function findLast()
+    {
+        $qb = $this->createQueryBuilder('a')
+                    ->orderBy('a.date', 'DESC')
+                    ->setMaxResults(1)
+        ;
+        $query = $qb->getQuery();
+        return $query->getOneOrNullResult();
+    }
 }

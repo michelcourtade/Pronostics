@@ -11,6 +11,7 @@
     
     <p><a class="btn btn-primary btn-lg" href="{{ path('contest_create') }}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans %}Create a contest{% endtrans %}</a></p>
 </div>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     <div class="page-header">
     <h1>{% trans %}Current events{% endtrans %}</h1>
     </div>

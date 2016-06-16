@@ -2,29 +2,30 @@
 
 {% block body -%}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>Meilleures attaques</li>
+    <li>{% trans %}Best offenses{% endtrans %}</li>
     </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
 <div class="page-header">
-    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleures attaques</h1>
+    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}Best offenses{% endtrans %}</h1>
 </div>
 <div class="col-sm-3">
     {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
 </div>
 {% if bestOffenses %}
 <div class="row">
-<div class="col-sm-9">
+<div class="col-sm-8">
     <div class="panel panel-default row">
   <!-- Default panel contents -->
-  <div class="panel-heading">Classement meilleures attaques (sans les buts csc)</div>
+  <div class="panel-heading">{% trans %}Best offenses ranking (without owngoals){% endtrans %}</div>
   <!-- Table -->
     <table class="table">
     <thead>
     <tr>
     <th>#</th>
-    <th>Equipe</th>
-    <th>Nb buts</th>
+    <th>{% trans %}Team{% endtrans %}</th>
+    <th>{% trans %}Nb goals{% endtrans %}</th>
 {#     <th>Nb matchs</th>#}
     </tr>
     </thead>

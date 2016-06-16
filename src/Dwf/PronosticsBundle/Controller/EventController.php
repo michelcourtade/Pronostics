@@ -32,11 +32,13 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
         return array(
-            'event' => "",
-            'user' => $this->getUser(),
-            'events' => $entities,
+            'event'         => "",
+            'user'          => $this->getUser(),
+            'events'        => $entities,
+            'adminMessage'  => $adminMessage,
         );
     }
 
@@ -49,18 +51,20 @@ class EventController extends Controller
      */
     public function oldAction()
     {
-    	$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-    	$entities = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
-    	if(count($entities) == 1) {
-    		$event = $entities[0];
-    		return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
-    	}
-
-    	return array(
-    			'event' => "",
-    			'user' => $this->getUser(),
-    			'events' => $entities,
+        $entities = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
+        if(count($entities) == 1) {
+            $event = $entities[0];
+            return $this->redirect($this->generateUrl('event_home', array('event' => $event->getId())));
+        }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
+        return array(
+                'event'             => "",
+                'user'              => $this->getUser(),
+                'events'            => $entities,
+                'adminMessage'      => $adminMessage,
     	);
     }
 
@@ -105,12 +109,14 @@ class EventController extends Controller
             $bestscorer_pronostic = $pronostic[0];
 
         $pronostics = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndEvent($this->getUser(), $event);
-
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
-                'pronostics' => $pronostics,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'bestscorer_pronostic'      => $pronostic ? $bestscorer_pronostic : '',
+                'pronostics'                => $pronostics,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -150,18 +156,20 @@ class EventController extends Controller
         $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
         $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
-
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'teams'     => $arrayTeams,
-                'players'   => $arrayPlayers,
-                'nbPronostics' => $nb,
-                'nbPerfectScore' => $nbPerfectScore,
-                'nbGoodScore' => $nbGoodScore,
-                'nbBadScore' => $nbBadScore,
-                'total'         => $total,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'teams'                     => $arrayTeams,
+                'players'                   => $arrayPlayers,
+                'nbPronostics'              => $nb,
+                'nbPerfectScore'            => $nbPerfectScore,
+                'nbGoodScore'               => $nbGoodScore,
+                'nbBadScore'                => $nbBadScore,
+                'total'                     => $total,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -196,14 +204,16 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'teams'     => $arrayTeams,
-                'players'   => $arrayPlayers,
-                'bestOffenses' => $bestOffenses,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'teams'                     => $arrayTeams,
+                'players'                   => $arrayPlayers,
+                'bestOffenses'              => $bestOffenses,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -239,13 +249,15 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'teams'     => $arrayTeams,
-                'bestDefenses' => $bestDefenses,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'teams'                     => $arrayTeams,
+                'bestDefenses'              => $bestDefenses,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -322,15 +334,18 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+        
         return array(
-                'user' => $this->getUser(),
-                'event' => $event,
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'games' => $games,
-                'teams'     => $arrayTeams,
-                'forms_games' => $forms_games,
-                'pronostics_games' => $pronostics_games,
+                'user'                      => $this->getUser(),
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'games'                     => $games,
+                'teams'                     => $arrayTeams,
+                'forms_games'               => $forms_games,
+                'pronostics_games'          => $pronostics_games,
+                'adminMessage'              => $adminMessage,
+                'contest'                   => '',
         );
     }
 
@@ -407,6 +422,7 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
         return array(
                 'user'                      => $this->getUser(),
@@ -417,6 +433,7 @@ class EventController extends Controller
                 'forms_nextgames'           => $forms_nextgames,
                 'pronostics_nextgames'      => $pronostics_nextgames,
                 'contest'                   => '',
+                'adminMessage'              => $adminMessage,
         );
     }
     /**
@@ -437,11 +454,13 @@ class EventController extends Controller
         {
             $arrayPlayers[$player->getId()] = $player;
         }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
         return array(
-                'event' => $event,
-                'user' => $this->getUser(),
-                'scorers'   => $scorers,
-                'players'   => $arrayPlayers,
+                'event'         => $event,
+                'user'          => $this->getUser(),
+                'scorers'       => $scorers,
+                'players'       => $arrayPlayers,
+                'adminMessage'  => $adminMessage,
         );
     }
 

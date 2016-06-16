@@ -1,0 +1,9 @@
+{% if adminMessage and adminMessage.message %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="{% trans %}Close{% endtrans %}"><span aria-hidden="true">&times;</span></button>
+        <strong>{% trans %}Announcement{% endtrans %}</strong>
+            {% autoescape false %}
+            <p>{{ adminMessage.message }}</p>
+            {% endautoescape %}
+    </div>
+{% endif %}

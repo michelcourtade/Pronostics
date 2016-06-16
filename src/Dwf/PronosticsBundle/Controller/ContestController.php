@@ -202,6 +202,7 @@ class ContestController extends Controller
             $contestMessage = $contestMessage[0];
             $messageForContest = $contestMessage;
         }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
         return array(
                 'contest'                   => $contest,
@@ -209,6 +210,7 @@ class ContestController extends Controller
                 'event'                     => $event,
                 'users'                     => $users,
                 'messageForContest'         => $messageForContest,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -263,6 +265,7 @@ class ContestController extends Controller
                 $messageForContest = $contestMessage[0];
             }
         else $messageForContest = null;
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
         return array(
                 'contest'                   => $contest,
                 'user'                      => $this->getUser(),
@@ -276,6 +279,7 @@ class ContestController extends Controller
                 'nbBadScore'                => $nbBadScore,
                 'total'                     => $total,
                 'messageForContest'         => $messageForContest,
+                'adminMessage'              => $adminMessage,
         );
     }
 
@@ -306,6 +310,7 @@ class ContestController extends Controller
                 $messageForContest = $contestMessage[0];
             }
             else $messageForContest = null;
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
             return array(
                     'contest'                   => $contest,
                     'user'                      => $user,
@@ -314,6 +319,7 @@ class ContestController extends Controller
                     'entities'                  => $entities,
                     //'group'                     => $groupUser,
                     'messageForContest'         => $messageForContest,
+                    'adminMessage'              => $adminMessage,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -449,6 +455,7 @@ class ContestController extends Controller
                 return $this->redirect($this->generateUrl('contest_admin', array('contestId' => $contest->getId())));
             }
             $contestMessageForm = $contestMessageForm->createView();
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
             return array(
                     'contest'                   => $contest,
@@ -463,6 +470,7 @@ class ContestController extends Controller
                     'contestForm'               => $contestForm,
                     'contestMessageForm'        => $contestMessageForm,
                     'messageForContest'         => $messageForContest,
+                    'adminMessage'              => $adminMessage,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -598,6 +606,7 @@ class ContestController extends Controller
                 $messageForContest = $contestMessage[0];
             }
             else $messageForContest = null;
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -617,6 +626,7 @@ class ContestController extends Controller
                     'chart'                         => '',
                     'gameType'                      => '',
                     'messageForContest'             => $messageForContest,
+                    'adminMessage'                  => $adminMessage,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -741,6 +751,7 @@ class ContestController extends Controller
                 $messageForContest = $contestMessage[0];
             }
             else $messageForContest = null;
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
             return array(
                     'contest'                       => $contest,
                     'teams'                         => $arrayTeams,
@@ -760,6 +771,7 @@ class ContestController extends Controller
                     'nbBadScore'                    => $nbBadScore,
                     'chart'                         => $ob,
                     'messageForContest'             => $messageForContest,
+                    'adminMessage'                  => $adminMessage,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -879,6 +891,7 @@ class ContestController extends Controller
             $messageForContest = $contestMessage[0];
         }
         else $messageForContest = null;
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
         return array(
                 'contest'               => $contest,
                 'event'                 => $event,
@@ -893,6 +906,7 @@ class ContestController extends Controller
                 'scorersTeam2'          => $scorersTeam2,
                 'form'                  => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
                 'messageForContest'     => $messageForContest,
+                'adminMessage'          => $adminMessage,
         );
     }
 
@@ -964,6 +978,7 @@ class ContestController extends Controller
                 $messageForContest = $contestMessage[0];
             }
             else $messageForContest = null;
+            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -978,6 +993,7 @@ class ContestController extends Controller
                     'total'                         => $total,
                     'forms'                         => $forms,
                     'messageForContest'             => $messageForContest,
+                    'adminMessage'                  => $adminMessage,
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');

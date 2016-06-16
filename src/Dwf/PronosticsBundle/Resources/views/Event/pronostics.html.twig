@@ -5,6 +5,7 @@
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_pronostics', {'event': event.id }) }}">{{ event.name }}</a></li>
     </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
 <div class="page-header">
 <h1>Mon meilleur marqueur</h1>
 </div>
