@@ -383,6 +383,7 @@ class PronosticController extends Controller
             $messageForContest = $contestMessage[0];
         }
         else $messageForContest = null;
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
         if(!$game->hasBegan() && !$game->getPlayed()) {
             $editForm = $this->createEditForm($entity);
             $deleteForm = $this->createDeleteForm($id);
@@ -391,9 +392,10 @@ class PronosticController extends Controller
                 'contest'                       => $contest,
                 'event'                         => $game->getEvent(),
                 'entity'                        => $entity,
-                'form'   => $editForm->createView(),
+                'form'                          => $editForm->createView(),
                 'user'                          => $this->getUser(),
                 'messageForContest'             => $messageForContest,
+                'adminMessage'                  => $adminMessage,
                 //'delete_form' => $deleteForm->createView(),
             );
         }
@@ -441,7 +443,7 @@ class PronosticController extends Controller
                     'success',
                     $this->get('translator')->trans('Your bet has been modified.')
             );
-            
+
             return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $id, 'contestId' => $entity->getContest()->getId())));
         }
         return array(
