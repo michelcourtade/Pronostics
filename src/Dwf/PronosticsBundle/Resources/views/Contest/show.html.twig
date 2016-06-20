@@ -24,11 +24,19 @@
         {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
     </div>
     {% endblock %}
-    <div class="col-sm-12">
+    <div class="page-header">
+        <h1>{% trans %}Summary{% endtrans %}</h1>
+    </div>
+    <div class="row col-sm-12">
     {% block content %}
+    <div class="col-sm-3">
+        {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
+    </div>
+    <div class="col-sm-9">
     {% if total %}
         {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total } %}
     {% endif %}
+    </div>
     {% endblock %}
     </div>
 {% endblock %}
