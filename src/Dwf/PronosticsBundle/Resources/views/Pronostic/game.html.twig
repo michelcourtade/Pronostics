@@ -6,7 +6,7 @@
 
 <div class="match row">
     <p class="date col-xs-12">
-    <span>{{ entity.game.type }}</span> - 
+    <span>{{ entity.game.type }}</span> -
     {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}
     </p>
 {#     <div class="date col-xs-12 col-sm-12 col-md-2">{% if entity.game.date %}{{ entity.game.date|date('d/m/Y H:i') }}{% endif %}<span>{{ entity.game.type }}</span></div>#}
@@ -71,14 +71,14 @@
 
     <div class="actions col-xs-2 col-sm-2 col-md-2">
         {% if contest %}
-        {% if not entity.played and not entity.hasBegan() and not event.simpleBet %}
-            <a class="btn btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}" title="{% trans %}Bet{% endtrans %}">
+        {% if not entity.game.played and not entity.game.hasBegan() and not event.simpleBet %}
+            <a class="btn btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.game.id, 'contestId': contest.id }) }}" title="{% trans %}Bet{% endtrans %}">
             <span class="hidden-xs hidden-sm hidden-md"><span class="glyphicon glyphicon-plus"></span>{% trans %}Bet{% endtrans %}</span>
             <span class="glyphicon glyphicon-plus hidden-lg popover-button" data-toggle="popover" data-trigger="hover" data-content="{% trans %}Bet{% endtrans %}" data-placement="top"></span>
             </a>
         {% endif %}
     {% else %}
-        <a class="btn btn-primary" href="{{ path('game_show', { 'id': entity.id }) }}" title="{% trans %}See game{% endtrans %}">
+        <a class="btn btn-primary" href="{{ path('game_show', { 'id': entity.game.id }) }}" title="{% trans %}See game{% endtrans %}">
         <span class="glyphicon glyphicon-eye-open"></span>
         </a>
     {% endif %}
