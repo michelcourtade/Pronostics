@@ -4,30 +4,60 @@
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    {% if contest %}
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+    {% endif %}
+    
     <li>{% trans %}Next games{% endtrans %}</li>
     </ul>
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}Next games{% endtrans %}</h1>
-</div>
-<div class="col-sm-3">
-    {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
-</div>
-<div class="row">
-    <div class="list-match col-sm-8">
+    <div class="page-header center">
+    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}
+    {% if contest %}
+        {{ contest.contestName }} - <small>{{ event.name }}</small>
+        {% else %}
+        {{ event.name }} 
+        {% endif %}
+     - {% trans %}Next games{% endtrans %}
+     </h1>
+    </div>
+    {% if messageForContest and messageForContest.message %}
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="{% trans %}Close{% endtrans %}"><span aria-hidden="true">&times;</span></button>
+            <strong>{% trans %}Announcement{% endtrans %}</strong>
+                <p>{{ messageForContest.message }}</p>
+        </div>
+    {% endif %}
+    {% if contest %}
+        <div class="col-sm-12">
+            {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
+        </div>
+    {% endif %}
+    <div class="page-header">
+        <h1>{% trans %}Next games{% endtrans %}</h1>
+    </div>
+    <div class="col-sm-3">
+        {% if contest %}
+            {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
+        {% else %}
+            {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="list-match col-sm-8">
         {% set lastDate = '' %}
         {% for entity in nextGames %}
             {% if event.simpleBet %}
                 {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'forms': forms_nextgames, 'pronostic': pronostics_nextgames[loop.index - 1]} %}
             {% else %}
-                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics_nextgames[loop.index - 1] } %}
             {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
         {% else %}
             <p>{% trans %}No more game to play{% endtrans %}</p>
         {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
