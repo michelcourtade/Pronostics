@@ -49,7 +49,7 @@
                 {% if entity.game.overtime %}
                     <br />
                     {% trans %}Overtime, final score{% endtrans %} : {{ entity.game.scoreAfterOvertime }}
-                    {% if pronostic.winner %}
+                    {% if entity.game.winner %}
                         <strong>{% trans %}Winner{% endtrans %} : {{ entity.game.winner }}</strong>
                     {% endif %}
                {% endif %}

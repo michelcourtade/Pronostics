@@ -498,7 +498,7 @@ div.show-match .team img { float:left; margin-right:10px; }
 div.show-match .team.ext img { float:right; margin-right:0; margin-left:10px; }
 div.show-match .score { text-align:center; color:#666; }
 div.show-match .score strong { color:#0087E6; font-size:22px; font-weight:400; display:block; }
-div.show-match .score strong select.form-control { display: inline-block; width: auto; }
+div.show-match .score strong select.form-control, div.show-match .score span select.form-control, div.show-match .score p select.form-control { display: inline-block; width: auto; }
 div.show-match .score span { display:block; }
 
 div.show-match + div.row { margin-top:20px; }
