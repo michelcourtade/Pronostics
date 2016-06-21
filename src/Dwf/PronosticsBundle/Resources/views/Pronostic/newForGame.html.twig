@@ -22,7 +22,7 @@
     <div class="head-date row">
         <p class="date col-xs-12">
             {% if entity.game.location %}<strong>{{ entity.game.location }} - {{ entity.game.location.city }}</strong>{% endif %}
-            <span><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> -
+            <span><a href="{{ path('event_games_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></span> -
             {{ entity.game.date|date('d/m/Y') }}  {% trans %}at{% endtrans %} {{ entity.game.date|date('H:i') }}
         </p>
     </div>

@@ -1,0 +1,16 @@
+<ul class="nav nav-pills nav-justified">
+    <li role="presentation" {% if(app.request.attributes.get("_route") == 'event_home') %}class="active"{% endif %}>
+    <a href="{{ path('event_home', {'event': event.id }) }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> {% trans %}Home{% endtrans %}</a>
+    </li>
+    <li role="presentation" {% if(app.request.attributes.get("_route") == 'event_games' or app.request.attributes.get("_route") == 'event_games_by_type') %}class="active"{% endif %}>
+    <a href="{{ path('event_games', {'event': event.id }) }}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> {% trans %}Games{% endtrans %}</a>
+    </li>
+    <li role="presentation" {% if(app.request.attributes.get("_route") == 'event_statistics' 
+                                or app.request.attributes.get("_route") == 'event_scorers' 
+                                or app.request.attributes.get("_route") == 'event_bestoffense') %}class="active"{% endif %}>
+    <a href="{{ path('event_statistics', {'event': event.id }) }}"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> {% trans %}Statistics{% endtrans %}</a>
+    </li>
+    <li role="presentation" {% if(app.request.attributes.get("_route") == 'event_informations') %}class="active"{% endif %}>
+    <a href="{{ path('event_informations', {'event': event.id }) }}"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {% trans %}Informations{% endtrans %}</a>
+    </li>
+</ul>
