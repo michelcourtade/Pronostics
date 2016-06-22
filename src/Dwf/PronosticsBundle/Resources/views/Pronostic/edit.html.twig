@@ -4,8 +4,8 @@
 <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
-    <li><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></li>
+    <li><a href="{{ path('event_games', {'event': event.id }) }}">Tous les matchs</a></li>
+    <li><a href="{{ path('event_games_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></li>
     <li><a href="{{ path('game_show', { 'id': entity.game.id }) }}">{{ entity.game }}</a></li>
     <li>Modifier pronostic sur {{ entity.game }}</li>
     </ul>

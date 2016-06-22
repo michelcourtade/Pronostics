@@ -1,0 +1,25 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{% trans %}Statistics{% endtrans %}</li>
+    </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+    <div class="page-header">
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}Informations{% endtrans %}</h1>
+    </div>
+    <div class="col-sm-12">
+        {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default row">
+                <div class="panel-heading">Informations</div>
+                Informations about {{ event.name }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

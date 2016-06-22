@@ -8,7 +8,7 @@
     <h1>
     <img src='/{{ entity.game.team1.getWebPath }}' /> {{ entity.game.team1.name }} - {{ entity.game.team2.name }} <img src='/{{ entity.game.team2.getWebPath }}' />
     </h1>
-    <h2><a href="{{ path('game_by_type', { 'type': entity.game.type.id }) }}">{{ entity.game.type }}</a></h2>
+    <h2><a href="{{ path('event_games_by_type', { 'type': entity.game.type.id }) }}">{{ entity.game.type }}</a></h2>
 	<p>Se joue le : {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i:s') }}</p>
 	{% if entity.game.played %}
 	<p>Score : {{ entity.game.score }}</p>

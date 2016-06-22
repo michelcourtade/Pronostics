@@ -7,12 +7,16 @@
     <li>{% trans %}Summary{% endtrans %}</li>
     </ul>
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
-</div>
-<div class="col-sm-3">
-    {% include "DwfPronosticsBundle:Event:event-menu.html.twig" %}
-</div>
+    <div class="page-header">
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</h1>
+    </div>
+    <div class="col-sm-12">
+        {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
+    </div>
+    <div class="col-sm-3">
+    {% include "DwfPronosticsBundle:Event:_menu-home.html.twig" %}
+    </div>
+    
 <div class="col-sm-9">
 {% if total %}
     <div class="page-header">

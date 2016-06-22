@@ -3,9 +3,9 @@
     {% block gameTypes %}
     <div class="col-sm-3">
         <ul class="list-group">
-            <li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+            <li class="list-group-item"><a href="{{ path('event_games', {'event': event.id }) }}">{% trans %}All games{% endtrans %}</a></li>
         {% for type in types %}
-            <li class="list-group-item"><a href="{{ path('game_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
+            <li class="list-group-item"><a href="{{ path('event_games_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
         {% endfor %}
         </ul>
     </div>
