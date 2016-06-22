@@ -48,6 +48,7 @@ class EventAdmin extends Admin
         ->end()
         ->with('Pronostics classiques', array('description' => 'Informations sur les pronostics "classiques" avec score'))
             ->add('nbPointsForRightBetWithScore', 'integer', array('label' => 'Nb points bon pronostic avec score', 'required' => false))
+            ->add('nbPointsForRightBetWithScoreAfterOvertime', 'integer', array('label' => 'Nb points bon pronostic avec score après prolongations', 'required' => false))
             ->add('nbPointsForRightBet', 'integer', array('label' => 'Nb points bon pronostic', 'required' => false))
             ->add('nbPointsForWrongBet', 'integer', array('label' => 'Nb points mauvais pronostic', 'required' => false))
             ->add('nbPointsForAlmostRightBet', 'integer', array('label' => 'Nb points bon pronostic mais pas exact', 'required' => false))
@@ -69,7 +70,7 @@ class EventAdmin extends Admin
 
     // Fields to be shown on lists
     protected function configureListFields(ListMapper $listMapper)
-    {    	
+    {
         $listMapper
         ->addIdentifier('name')
         ->add('sport')

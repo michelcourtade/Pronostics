@@ -22,31 +22,31 @@ class Result
             $result = 0;
             //pronostic simple (1 N 2)
             if($game->getEvent()->getSimpleBet()) {
-                if((($game->getWhoWin() == 1) && ($pronostic->getSimpleBet() == 1)) 
-                    || (($game->getWhoWin() == 2) && ($pronostic->getSimpleBet() == 2)) 
+                if((($game->getWhoWin() == 1) && ($pronostic->getSimpleBet() == 1))
+                    || (($game->getWhoWin() == 2) && ($pronostic->getSimpleBet() == 2))
                     || (($game->getWhoWin() == 0) && ($pronostic->getSimpleBet() == 'N'))) {
                     $result = $game->getEvent()->getNbPointsForRightSimpleBet();
                     if(($pronostic->getSliceScore())
                     && (($game->getScoreTeam1() > 0) || ($game->getScoreTeam2() > 0))
-                    && (($game->getScoreDifference() >= $pronostic->getSliceScore()->getMin()) 
+                    && (($game->getScoreDifference() >= $pronostic->getSliceScore()->getMin())
                          && ($game->getScoreDifference() <= $pronostic->getSliceScore()->getMax())))
                     {
                         $result += $game->getEvent()->getNbPointsForRightSliceScore();
                     }
                 }
                 else $result = $game->getEvent()->getNbPointsForWrongSimpleBet();
-                
+
             }
             // pronostic avec score
             else {
                 // match avec prolongations
                 if($game->hasOvertime()) {
                     //score exact en prolongations
-                    if(($game->getScoreTeam1Overtime() == $pronostic->getScoreTeam1Overtime()) 
+                    if(($game->getScoreTeam1Overtime() == $pronostic->getScoreTeam1Overtime())
                     && ($game->getScoreTeam2Overtime() == $pronostic->getScoreTeam2Overtime())
                     && $pronostic->getOvertime())
                     {
-                        $result = 2;
+                        $result = $game->getEvent()->getNbPointsForRightBetWithScoreAfterOvertime();
                     }
                     //equipe gagnante avant les 120 minutes
                     if($game->getWhoWinAfterOvertime() > 0) {
@@ -77,7 +77,7 @@ class Result
                         }
                     }
                     // match nul apres 120 min et vainqueur apres TAB exact
-                    elseif($pronostic->getOvertime() 
+                    elseif($pronostic->getOvertime()
                             && ($game->getWhoWinAfterOvertime() == $pronostic->getWhoWinAfterOvertime())
                             && ($pronostic->getWinner() == $game->getWinner())
                         )
@@ -162,7 +162,7 @@ class Result
            $this->em->flush();
         }
     }
-    
+
     public function setResultsForGroup(\Dwf\PronosticsBundle\Entity\Game $game)
     {
         //$results = $this->em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGame($game);
@@ -175,7 +175,7 @@ class Result
                 $this->em->flush();
             }
         }
-        
+
         //var_dump($results); exit();
         //if(!$results) {
             $nbPointsTeam1 = 0;
@@ -197,7 +197,7 @@ class Result
                     }
                 }
             }
-            
+
             $result = new GameTypeResult();
             $result->setEvent($game->getEvent());
             $result->setGameType($game->getType());
@@ -208,13 +208,13 @@ class Result
             elseif($game->getWhoWin() == 0)
                 $nbPoints = $game->getEvent()->getNbPointsForDraw();
             else $nbPoints = $game->getEvent()->getNbPointsForLoss();
-            
+
             $result->setResult($nbPoints + $nbPointsTeam1);
             $result->setGoalaverage(($game->getScoreTeam1() - $game->getScoreTeam2()) + $goalaverageTeam1);
-            
+
             $this->em->persist($result);
             $this->em->flush();
-            
+
             $result = new GameTypeResult();
             $result->setEvent($game->getEvent());
             $result->setGameType($game->getType());
@@ -227,10 +227,10 @@ class Result
             else $nbPoints = $game->getEvent()->getNbPointsForLoss();
             $result->setResult($nbPoints + $nbPointsTeam2);
             $result->setGoalaverage(($game->getScoreTeam2() - $game->getScoreTeam1()) + $goalaverageTeam2);
-            
+
             $this->em->persist($result);
             $this->em->flush();
         //}
-    
+
     }
 }
