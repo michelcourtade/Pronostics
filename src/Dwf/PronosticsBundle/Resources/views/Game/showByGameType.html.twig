@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ event.name }} - {{ entity.name }} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
 {% block body -%}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
@@ -13,7 +15,7 @@
     <div class="col-sm-12">
         {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
     </div>
-{% include "DwfPronosticsBundle:Game:game-list.html.twig" with {'title': entity.name } %}
+{% include "DwfPronosticsBundle:Game:game-list.html.twig" with {'title': entity.name, 'gameType': entity } %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

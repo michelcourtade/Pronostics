@@ -720,3 +720,6 @@ div.list-match .actions a .popover-button + .popover {
     text-transform: uppercase;
     font-size: 14px;
 }
+div.container div.col-sm-12 ul.nav {
+    margin-bottom: 15px;
+}

@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ event.name }} - {% trans %}Best scorers{% endtrans %} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
 {% block body -%}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
@@ -8,7 +10,7 @@
     </ul>
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     <div class="page-header">
-        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Meilleurs buteurs</h1>
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}Best scorers{% endtrans %}</h1>
     </div>
     <div class="col-sm-12">
         {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}

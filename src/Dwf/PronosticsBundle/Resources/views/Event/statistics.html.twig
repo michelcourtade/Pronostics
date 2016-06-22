@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ event.name }} - {% trans %}Statistics{% endtrans %} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
 {% block body -%}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
