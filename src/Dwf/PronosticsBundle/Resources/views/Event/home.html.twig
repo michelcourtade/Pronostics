@@ -37,7 +37,9 @@
     {% endif %}
     </div>
 {% endif %}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     {{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}
+{% endif %}
 </div>
 {% endblock %}
 {% block javascripts %}

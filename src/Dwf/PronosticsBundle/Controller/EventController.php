@@ -399,8 +399,12 @@ class EventController extends Controller
     
         if($entity->hasBegan() || $entity->getPlayed()) {
             $user = $this->getUser();
-            $groups = $user->getGroups();
-            $pronostics = $em->getRepository('DwfPronosticsBundle:Pronostic')->findAllByGame($entity, $groups);
+            if($user) {
+                $groups = $user->getGroups();
+                $pronostics = $em->getRepository('DwfPronosticsBundle:Pronostic')->findAllByGame($entity, $groups);
+            } else {
+                $pronostics = "";
+            }
         }
         else $pronostics = "";
         if (!$entity) {
@@ -491,11 +495,15 @@ class EventController extends Controller
         {
             $arrayTeams[$team->getId()] = $team;
         }
-        $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
-        $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
-        $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
-        $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
-        $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
+        if($this->getUser()) {
+            $nb = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
+            $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 5);
+            $nbGoodScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 3);
+            $nbBadScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndEventAndResult($this->getUser(), $event, 1);
+            $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByEventAndUser($event, $this->getUser());
+        } else {
+            $nb = $nbPerfectScore = $nbGoodScore = $nbBadScore = $total = "";
+        }
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
         
         return array(

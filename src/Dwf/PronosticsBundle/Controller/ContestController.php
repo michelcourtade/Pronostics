@@ -41,45 +41,49 @@ class ContestController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
-        $myContests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByOwnerAndEvent($this->getUser(), $event);
-        //$otherContests = $em->getRepository('DwfPronosticsBundle:Contest')->findInvitedContestByUserAndEvent($this->getUser(), $event);
-        $groups = $this->getUser()->getGroups();
-        $otherContests = array();
-        if($groups) {
-            foreach ($groups as $group) {
-                if($group->getEvent()->getId() == $event->getId()) {
-                    if($group->getOwner()->getId() != $this->getUser()->getId()) {
-                        array_push($otherContests, $group);
+        if($this->getUser()) {
+            $myContests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByOwnerAndEvent($this->getUser(), $event);
+            //$otherContests = $em->getRepository('DwfPronosticsBundle:Contest')->findInvitedContestByUserAndEvent($this->getUser(), $event);
+            $groups = $this->getUser()->getGroups();
+            $otherContests = array();
+            if($groups) {
+                foreach ($groups as $group) {
+                    if($group->getEvent()->getId() == $event->getId()) {
+                        if($group->getOwner()->getId() != $this->getUser()->getId()) {
+                            array_push($otherContests, $group);
+                        }
                     }
                 }
+            } else {
+                $arrayContests = '';
             }
+    
+    
+            $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
+            $contest = new Contest('');
+    //             $contest->setName('');
+            $contest->setOwner($this->getUser());
+            $contest->setEvent($event);
+            $form = $this->createForm($contestType, $contest, array(
+                    'action' => $this->generateUrl('contests', array('event' => $event->getId())),
+                    'method' => 'PUT',
+            ));
+            $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Create')));
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
+                $em->persist($contest);
+                $em->flush();
+                $this->addFlash(
+                        'success',
+                        $this->get('translator')->trans('Your contest has been created.')
+                );
+                return $this->redirect($this->generateUrl('events'));
+            }
+            $contestForm = $form->createView();
         } else {
-            $arrayContests = '';
+            $myContests = $otherContests = $contestForm = "";
         }
-
-
-        $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
-        $contest = new Contest('');
-//             $contest->setName('');
-        $contest->setOwner($this->getUser());
-        $contest->setEvent($event);
-        $form = $this->createForm($contestType, $contest, array(
-                'action' => $this->generateUrl('contests', array('event' => $event->getId())),
-                'method' => 'PUT',
-        ));
-        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Create')));
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
-            $em->persist($contest);
-            $em->flush();
-            $this->addFlash(
-                    'success',
-                    $this->get('translator')->trans('Your contest has been created.')
-            );
-            return $this->redirect($this->generateUrl('events'));
-        }
-        $contestForm = $form->createView();
 
         return array("myContests"       => $myContests,
                      "otherContests"    => $otherContests,
