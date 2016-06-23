@@ -26,8 +26,7 @@ class UserProvider extends FOSUBUserProvider
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-        var_dump($response->getProfilePicture());
-        exit();
+
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
         $setter = 'set'.ucfirst($service);
@@ -73,7 +72,7 @@ class UserProvider extends FOSUBUserProvider
             if($email)
                 $user->setEmail($email);
             else $user->setEmail($username);
-            
+
             $user->setProfilePicture($response->getProfilePicture());
             if(!$user->getPassword()) {
                 // generate unique token
