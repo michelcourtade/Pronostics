@@ -89,6 +89,8 @@
               <a class="navbar-brand" href="{{ path('home') }}"><img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" /></a>
             </div>
             <div class="navbar-collapse collapse">
+            <a role="button" href="{{ path("fos_user_security_login") }}" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>{% trans %}Log in{% endtrans %}</a>
+            <a role="button" href="{{ path("fos_user_registration_register") }}" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>{% trans %}Register{% endtrans %}</a>
             <ul class="nav navbar-nav">
                 <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}See rules{% endtrans %}</a></li>
             </ul>

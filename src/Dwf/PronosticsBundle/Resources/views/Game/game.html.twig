@@ -9,7 +9,7 @@
         {% if contest %}
             <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
         {% else %}
-            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
         {% endif %}
             <img src='/{{ entity.team1.getWebPath }}' class="img-rounded" />
             <span class="hidden-xs hidden-sm">{{ entity.team1.name }}</span>
@@ -20,7 +20,7 @@
         {% if contest %}
             <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
         {% else %}
-            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
         {% endif %}
         {% if entity.played %}
             <strong>{{ entity.score }}</strong>
@@ -35,7 +35,7 @@
         {% if contest %}
             <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
         {% else %}
-            <a href="{{ path('game_show', { 'id': entity.id }) }}">
+            <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
         {% endif %}
             <img src='/{{ entity.team2.getWebPath }}' class="img-rounded" />
             <span class="hidden-xs hidden-sm ">{{ entity.team2.name }}</span>
@@ -51,7 +51,7 @@
             </a>
         {% endif %}
     {% else %}
-        <a class="btn btn-primary" href="{{ path('game_show', { 'id': entity.id }) }}" title="{% trans %}See game{% endtrans %}">
+        <a class="btn btn-primary" href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}" title="{% trans %}See game{% endtrans %}">
         <span class="glyphicon glyphicon-eye-open"></span>
         </a>
     {% endif %}

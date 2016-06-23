@@ -6,7 +6,7 @@
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     <li><a href="{{ path('event_games', {'event': event.id }) }}">Tous les matchs</a></li>
     <li><a href="{{ path('event_games_by_type', { 'type': game.type.id, 'event': event.id }) }}">{{ game.type }}</a></li>
-    <li><a href="{{ path('game_show', { 'id': game.id }) }}">{{ game }}</a></li>
+    <li><a href="{{ path('event_game_show', { 'id': game.id, 'event': event.id }) }}">{{ game }}</a></li>
     <li>Pronostics sur {{ game }}</li>
     </ul>
     <div class="page-header">

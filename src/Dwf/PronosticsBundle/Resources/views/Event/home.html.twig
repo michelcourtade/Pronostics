@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ event.name }} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
 {% block body -%}
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
@@ -35,7 +37,9 @@
     {% endif %}
     </div>
 {% endif %}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     {{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}
+{% endif %}
 </div>
 {% endblock %}
 {% block javascripts %}

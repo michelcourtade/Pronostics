@@ -10,7 +10,7 @@ Bienvenue {{ user }} !
 </ul>
 {% if nextGame %}
 <h2>Prochain match</h2>
-<a href="{{ path('game_show', { 'id': nextGame.id }) }}">
+<a href="{{ path('event_game_show', { 'id': nextGame.id, 'event': event.id }) }}">
 <h2>
 <img src='/{{ nextGame.team1.getWebPath }}' /> {{ nextGame.team1.name }} - {{ nextGame.team2.name }} <img src='/{{ nextGame.team2.getWebPath }}' />
 </h2>
