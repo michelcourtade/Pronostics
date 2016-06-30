@@ -28,6 +28,9 @@
         <span>{% trans %}Explanation{% endtrans %} :</span><span class="already-bet">{% trans %}Already bet{% endtrans %}</span>
         {% set lastDate = '' %}
         {% for entity in games %}
+            {% if lastDate != entity.date|date('Ymd') %}
+                <a name="{{ entity.date|date('Ymd') }}" id="{{ entity.date|date('Ymd') }}"></a>
+            {% endif %}
             {% if event.simpleBet %}
                 {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
             {% else %}

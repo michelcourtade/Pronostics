@@ -104,6 +104,7 @@ class EventController extends Controller
         $request = $this->getRequest();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
+        $anchorDate = '';
         if($event) {
             if($event->getChampionship()) {
                 $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
@@ -134,6 +135,10 @@ class EventController extends Controller
                 $i = 0;
                 foreach($games as $entity)
                 {
+                    $date = $entity->getDate()->format("Ymd");
+                    if($date == date("Ymd")) {
+                        $anchorDate = date('Ymd');
+                    }
                     $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity));
                     if($pronostic) {
                         $simpleType = new SimplePronosticType();
@@ -178,6 +183,13 @@ class EventController extends Controller
                 $pronostics = "";
                 $nbPronostics = $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
                 $nbPointsWonByChampionshipDay = 0;
+                foreach($games as $entity)
+                {
+                    $date = $entity->getDate()->format("Ymd");
+                    if($date == date("Ymd")) {
+                        $anchorDate = date('Ymd');
+                    }
+                }
             }
             $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
             return array(
@@ -199,6 +211,7 @@ class EventController extends Controller
                     'contest'                       => '',
                     'gameType'                      => '',
                     'adminMessage'                  => $adminMessage,
+                    'anchorDate'                    => $anchorDate,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -334,6 +347,7 @@ class EventController extends Controller
                     'chart'                         => $ob,
                     'contest'                       => '',
                     'adminMessage'                  => $adminMessage,
+                    'anchorDate'                    => '',
             );
         }
         else return $this->redirect($this->generateUrl('events'));

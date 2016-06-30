@@ -1,4 +1,8 @@
 <script type="text/javascript">
+    {% if anchorDate %}
+        var speed = 750; 
+        $('html, body').animate( { scrollTop: $("#{{ 'now'|date('Ymd') }}").offset().top }, speed );
+    {% endif %}
     $(document).ready(function() {
         $('.tabs-container').find('.tabs').css('display','none');
         $.each($('.tabs-container'), function() {

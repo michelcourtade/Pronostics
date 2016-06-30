@@ -531,6 +531,7 @@ class ContestController extends Controller
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
         $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
+        $anchorDate = '';
         if($event) {
             if($event->getChampionship()) {
                 $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
@@ -565,6 +566,10 @@ class ContestController extends Controller
                 $i = 0;
                 foreach($games as $entity)
                 {
+                    $date = $entity->getDate()->format("Ymd");
+                    if($date == date("Ymd")) {
+                        $anchorDate = date('Ymd');
+                    }
                     $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
                     if(!$pronostic) {
                         $pronostic = new Pronostic();
@@ -605,6 +610,10 @@ class ContestController extends Controller
                 $nbPointsWonByChampionshipDay = 0;
                 foreach($games as $entity)
                 {
+                    $date = $entity->getDate()->format("Ymd");
+                    if($date == date("Ymd")) {
+                        $anchorDate = date('Ymd');
+                    }
                     $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
                     array_push($pronostics, $pronostic);
                 }
@@ -635,6 +644,7 @@ class ContestController extends Controller
                     'gameType'                      => '',
                     'messageForContest'             => $messageForContest,
                     'adminMessage'                  => $adminMessage,
+                    'anchorDate'                    => $anchorDate,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -778,6 +788,7 @@ class ContestController extends Controller
                     'chart'                         => $ob,
                     'messageForContest'             => $messageForContest,
                     'adminMessage'                  => $adminMessage,
+                    'anchorDate'                    => '',
             );
         }
         else return $this->redirect($this->generateUrl('events'));
