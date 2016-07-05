@@ -475,6 +475,7 @@ class ContestController extends Controller
                     'contestMessageForm'        => $contestMessageForm,
                     'messageForContest'         => $messageForContest,
                     'adminMessage'              => $adminMessage,
+                    'anchorDate'                => '',
             );
         }
         else return $this->redirect($this->generateUrl('events'));
