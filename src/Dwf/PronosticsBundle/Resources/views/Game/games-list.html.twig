@@ -32,7 +32,7 @@
                 <a name="{{ entity.date|date('Ymd') }}" id="{{ entity.date|date('Ymd') }}"></a>
             {% endif %}
             {% if event.simpleBet %}
-                {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
+                {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics|length ? pronostics[loop.index - 1]:null} %}
             {% else %}
                 {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics|length ? pronostics[loop.index - 1]:null } %}
             {% endif %}
