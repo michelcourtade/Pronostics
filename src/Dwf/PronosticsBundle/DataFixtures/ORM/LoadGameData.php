@@ -410,6 +410,17 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($game);
         $manager->flush();
         $this->addReference($game->__toString(), $game);
+        
+        $game = new Game();
+        $game->setEvent($this->getReference("Championnat NFL 2016"));
+        $game->setTeam1($this->getReference("Carolina Panthers"));
+        $game->setTeam2($this->getReference("Denver Broncos"));
+        $date = new \DateTime("2016-9-8 21:30");
+        $game->setDate($date);
+        $game->setType($this->getReference("Week 1"));
+        $manager->persist($game);
+        $manager->flush();
+        $this->addReference($game->__toString(), $game);
     }
 
     /**
