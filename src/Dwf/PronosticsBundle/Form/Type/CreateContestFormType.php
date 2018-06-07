@@ -17,7 +17,12 @@ class CreateContestFormType extends AbstractType
                 'class'         => 'Dwf\PronosticsBundle\Entity\Event',
                 'query_builder' => function ($repository) use ($options) {
                     return $repository->createQueryBuilder('e')
-                                      ->orderBy('e.name', 'ASC');
+                                    ->where('e.active = :active')
+                                    ->andWhere('e.finishDate > :date')
+                                    ->setParameter('date', date("YmdHis"))
+                                    ->setParameter('active', true)
+                                    ->orderBy('e.startDate', 'ASC')
+                                    ->orderBy('e.name', 'ASC');
                 },
                 'expanded'      => true,
                 'multiple'      => false
