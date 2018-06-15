@@ -31,24 +31,24 @@
     <div class="panel panel-default">
     <div class="panel-heading">{% trans %}Events{% endtrans %}</div>
         <div class="panel-body">
-        <p>{% trans %}Select an event above by clicking on its picture, give a name to your contest and validate.{% endtrans %}</p>
-        {{ form_start(contestForm) }}
-        {{ form_errors(contestForm) }}
-{#     {% for event in events %}#}
-{#         {% if event.getWebPath %}<img src='/{{ event.getWebPath }}' class="contest_logo"/>{% endif %}#}
-{#         <p><input id="dwf_pronosticsbundle_contest_form_type_event" class="form-control form-control" type="radio"  required="required" name="dwf_pronosticsbundle_contest_form_type[contestevent]"><label for="dwf_pronosticsbundle_contest_form_type_event">{{ event.name }}</label></p>#}
-{#     {% endfor %}#}
-        <div class="input-group">
-            {{ form_widget(contestForm.event, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="input-group">
-        {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Choose name for your contest'|trans}}) }}
-            <span class="input-group-btn">
-            {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
-            </span>
-        </div>
-        {{ form_rest(contestForm) }}
-        {{ form_end(contestForm) }}
+            {% if events %}
+                <p>{% trans %}Select an event above by clicking on its picture, give a name to your contest and validate.{% endtrans %}</p>
+                {{ form_start(contestForm) }}
+                {{ form_errors(contestForm) }}
+                <div class="input-group">
+                    {{ form_widget(contestForm.event, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="input-group">
+                {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Choose name for your contest'|trans}}) }}
+                    <span class="input-group-btn">
+                    {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                    </span>
+                </div>
+                {{ form_rest(contestForm) }}
+                {{ form_end(contestForm) }}
+            {% else %}
+                {{ 'No active event at this time ... please come back later !'|trans }}
+            {% endif %}
         </div>
     </div>
 {# {% include "DwfPronosticsBundle:Contest:_createForm.html.twig" with {'contestForm': contestForm } %}#}

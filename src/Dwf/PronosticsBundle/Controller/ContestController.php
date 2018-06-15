@@ -479,6 +479,7 @@ class ContestController extends Controller
                     'contestMessageForm'        => $contestMessageForm,
                     'messageForContest'         => $messageForContest,
                     'adminMessage'              => $adminMessage,
+                    'anchorDate'                => '',
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -575,7 +576,7 @@ class ContestController extends Controller
                         $pronostic = new Pronostic();
                         $pronostic->setGame($entity);
                         $pronostic->setUser($this->getUser());
-                        $pronostic->setEvent($entity->getEvent());
+                        $pronostic->setEvent($event);
                         $pronostic->setContest($contest);
                     }
                     if($event->getScoreDiff()) {

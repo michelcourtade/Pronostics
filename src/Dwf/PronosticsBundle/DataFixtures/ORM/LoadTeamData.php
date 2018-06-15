@@ -122,6 +122,10 @@ class LoadTeamData extends AbstractFixture implements OrderedFixtureInterface
                 'Athletico Madrid'          => array('iso' => 'ATM', 'national' => '0', 'sport' => 'Football'),
                 'Olympiakos Le Pirée'       => array('iso' => 'OLY', 'national' => '0', 'sport' => 'Football'),
                 
+                // NFL
+                'Carolina Panthers'         => array('iso' => 'CAR', 'national' => '0', 'sport' => 'Football Américain'),
+                'Denver Broncos'            => array('iso' => 'DEN', 'national' => '0', 'sport' => 'Football Américain'),
+                
 
         );
         foreach ($teams as $name => $infos) {
