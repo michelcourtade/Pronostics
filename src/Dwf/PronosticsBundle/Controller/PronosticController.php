@@ -61,6 +61,24 @@ class PronosticController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $pronosticRepository = $em->getRepository('DwfPronosticsBundle:Pronostic');
+            $pronostic = $pronosticRepository->findOneBy(
+                [
+                    'contest' => $entity->getContest(),
+                    'user'    => $entity->getUser(),
+                    'game'    => $entity->getGame(),
+                ]
+            );
+            if ($pronostic) {
+                $this->addFlash(
+                    'info',
+                    $this->get('translator')->trans('You already have a bet registered for this game. You can modify it below.')
+                );
+
+                return $this->redirect(
+                    $this->generateUrl('pronostics_edit', array('id' => $pronostic->getId(), 'contestId' => $pronostic->getContest()->getId()))
+                );
+            }
             $em->persist($entity);
             $em->flush();
 
@@ -124,45 +142,59 @@ class PronosticController extends Controller
         $game = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
         $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($game->getType());
         $event = $game->getEvent();
-        if(!$game->hasBegan()) {
-           $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game, 'contest' => $contest));
-            if(!$pronostic) {
-                $entity = new Pronostic();
-                $entity->setGame($game);
-                $entity->setUser($this->getUser());
-                $entity->setEvent($event);
-                $entity->setContest($contest);
+        if ($game->hasBegan() || $game->getPlayed()) {
+            $this->addFlash(
+                'info',
+                $this->get('translator')->trans('Game has already started, you can\'t bet anymore.')
+            );
 
-                $form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
-                        'action' => $this->generateUrl('pronostics_create'),
-                        'method' => 'POST',
-                ));
-
-                $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Bet')));
-
-                $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
-                if($contestMessage) {
-                    $messageForContest = $contestMessage[0];
-                }
-                else $messageForContest = null;
-                $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
-                return array(
-                        'contest'                       => $contest,
-                        'event'                         => $game->getEvent(),
-                        'entity'                        => $entity,
-                        'form'                          => $form->createView(),
-                        'user'                          => $this->getUser(),
-                        'gameType'                      => $gameType,
-                        'messageForContest'             => $messageForContest,
-                        'adminMessage'                  => $adminMessage,
-                );
-            }
-            elseif(!$game->getPlayed()) {
-                return $this->redirect($this->generateUrl('pronostics_edit', array('id' => $pronostic->getId(), 'contestId' => $contest->getId())));
-            }
-            else throw $this->createNotFoundException('Vous avez deja pronostiqué ce match');
+            return $this->redirect(
+                $this->generateUrl('contest_game_show', array('id' => $game->getId(), 'contestId' => $contestId))
+            );
         }
-        else throw $this->createNotFoundException('Pronostic impossible car match déjà commencé !');
+
+        $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $game, 'contest' => $contest));
+        if ($pronostic) {
+            $this->addFlash(
+                'info',
+                $this->get('translator')->trans('You already have a bet registered for this game. You can modify it below.')
+            );
+
+            return $this->redirect(
+                $this->generateUrl('pronostics_edit', array('id' => $pronostic->getId(), 'contestId' => $pronostic->getContest()->getId()))
+            );
+        }
+
+        $entity = new Pronostic();
+        $entity->setGame($game);
+        $entity->setUser($this->getUser());
+        $entity->setEvent($event);
+        $entity->setContest($contest);
+
+        $form = $this->createForm(new PronosticGameType(), $pronostic ? $pronostic:$entity, array(
+                'action' => $this->generateUrl('pronostics_create'),
+                'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => $this->get('translator')->trans('Bet')));
+
+        $messageForContest = null;
+        $contestMessage    = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        if($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+        return array(
+                'contest'                       => $contest,
+                'event'                         => $game->getEvent(),
+                'entity'                        => $entity,
+                'form'                          => $form->createView(),
+                'user'                          => $this->getUser(),
+                'gameType'                      => $gameType,
+                'messageForContest'             => $messageForContest,
+                'adminMessage'                  => $adminMessage,
+        );
     }
 
     /**
