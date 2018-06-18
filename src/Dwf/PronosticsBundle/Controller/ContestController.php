@@ -57,8 +57,8 @@ class ContestController extends Controller
             } else {
                 $arrayContests = '';
             }
-    
-    
+
+
             $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
             $contest = new Contest('');
     //             $contest->setName('');
@@ -231,6 +231,10 @@ class ContestController extends Controller
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
+        $user = $this->getUser();
+        if(!$user->hasGroup($contest->getName())) {
+            return $this->redirect($this->generateUrl('events'));
+        }
 
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
@@ -1027,7 +1031,7 @@ class ContestController extends Controller
             'email'     => $email,
         );
     }
-    
+
     /**
      * Show games of the day for an event
      *
@@ -1041,14 +1045,14 @@ class ContestController extends Controller
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
         else $currentChampionshipDay = '';
-    
+
         $games = $em->getRepository('DwfPronosticsBundle:Game')->findAllByEventAndDate($event, date("Y/m/d"));
         if($event->getSimpleBet()) {
             $forms_games = array();
@@ -1100,9 +1104,9 @@ class ContestController extends Controller
                 $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
                 array_push($pronostics, $pronostic);
             }
-            
+
         }
-    
+
         $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
         foreach ($teams as $team)
         {
@@ -1114,7 +1118,7 @@ class ContestController extends Controller
         }
         else $messageForContest = null;
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
-    
+
         return array(
                 'user'                      => $this->getUser(),
                 'event'                     => $event,
@@ -1128,7 +1132,7 @@ class ContestController extends Controller
                 'messageForContest'         => $messageForContest,
         );
     }
-    
+
     /**
      * Show next games for an event
      *
@@ -1142,14 +1146,14 @@ class ContestController extends Controller
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $event = $contest->getEvent();
-    
+
         if($event->getChampionship()) {
             $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
             $championshipManager->setEvent($event);
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
         else $currentChampionshipDay = '';
-    
+
         $nextGames = $em->getRepository('DwfPronosticsBundle:Game')->findNextGames($event);
         if($event->getSimpleBet()) {
             $forms_nextgames = array();
@@ -1203,7 +1207,7 @@ class ContestController extends Controller
                 array_push($pronostics_nextgames, $pronostic);
             }
         }
-    
+
         $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
         foreach ($teams as $team)
         {
@@ -1215,7 +1219,7 @@ class ContestController extends Controller
         }
         else $messageForContest = null;
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
-    
+
         return array(
                 'user'                      => $this->getUser(),
                 'event'                     => $event,
@@ -1229,6 +1233,6 @@ class ContestController extends Controller
                 'messageForContest'         =>$messageForContest,
         );
     }
-    
+
 
 }

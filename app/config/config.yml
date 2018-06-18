@@ -192,6 +192,8 @@ sonata_block:
         #sonata.media.block.feature_media:
 
 hwi_oauth:
+    http_client:
+        timeout: 10
     connect:
         account_connector: dwf_pronosticsbundle.user_provider
     firewall_name: main
