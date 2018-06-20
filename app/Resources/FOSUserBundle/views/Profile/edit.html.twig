@@ -1,14 +1,23 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}{% trans %}Edit your profile{% endtrans %}{% endblock %}
+{% block title %}
+    {{ 'Edit your profile'|trans }}
+{% endblock %}
 
 {% block body %}
-<ul class="breadcrumb">
-    <li><a href="{{ path('fos_user_profile_show') }}">{% trans %}Your profile{% endtrans %}</a></li>
-    <li>{% trans %}Edit your profile{% endtrans %}</li>
-</ul>
-<div class="page-header">
-    <h1>{% trans %}Edit your profile{% endtrans %}</h1>
-</div>
-{{ form_rest(form) }}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('fos_user_profile_show') }}">{{ 'Your profile'|trans }}</a></li>
+        <li>{{ 'Edit your profile'|trans }}</li>
+    </ul>
+    <div class="page-header">
+        <h1>{{ 'Edit your profile'|trans }}</h1>
+    </div>
+
+    {% trans_default_domain 'FOSUserBundle' %}
+    {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" class="btn btn-lg btn-primary" />
+    </div>
+    {{ form_end(form) }}
 {% endblock %}
