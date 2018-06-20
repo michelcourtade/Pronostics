@@ -1,22 +1,26 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}{% trans %}Your profile{% endtrans %}{% endblock %}
+{% block title %}{{ 'Your profile'|trans }}{% endblock %}
 
 {% block body %}
-<ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li>{% trans %}Your profile{% endtrans %}</li>
-</ul>
+    <ul class="breadcrumb">
+        <li><a href="{{ path('events') }}">{{ 'Home'|trans }}</a></li>
+        <li>{{ 'Your profile'|trans }}</li>
+    </ul>
 
-<div class="page-header">
-    <h1>{% trans %}Your profile{% endtrans %}</h1>
-</div>
-    {% if app.user.profilePicture %}
-        <img src="{{ app.user.profilePicture }}" class="avatar" />
-    {% elseif gravatar_exists(app.user.email) %}
-        <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
-    {% endif %}
-    {% trans %}Username{% endtrans %} : {{ app.user.username }}<br />
-    {% trans %}Email{% endtrans %} : {{ app.user.email }}<br />
-    <a href="{{ path('fos_user_profile_edit') }}">{% trans %}Edit{% endtrans %}</a>
+    <div class="page-header">
+        <h1>{{ 'Your profile'|trans }}</h1>
+
+        {% if app.user.profilePicture %}
+            <img src="{{ app.user.profilePicture }}" class="avatar" />
+        {% elseif gravatar_exists(app.user.email) %}
+            <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
+        {% endif %}
+        <h2>{{ 'Username'|trans }} : <span class="label label-default">{{ app.user.username }}</span></h2>
+        <h2>{{ 'Email'|trans }} : <span class="label label-default">{{ app.user.email }}</span></h2>
+
+        <p><a href="{{ path('fos_user_change_password') }}">{{ 'Change your password'|trans }}</a></p>
+
+        <a class="btn btn-primary" href="{{ path('fos_user_profile_edit') }}">{{ 'Edit your profile'|trans }}</a>
+    </div>
 {% endblock %}
