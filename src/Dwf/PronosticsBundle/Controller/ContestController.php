@@ -2,6 +2,7 @@
 
 namespace Dwf\PronosticsBundle\Controller;
 
+use Pusher\Pusher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -910,6 +911,21 @@ class ContestController extends Controller
         }
         else $messageForContest = null;
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+        $options = array(
+            'cluster' => 'eu',
+            'encrypted' => true
+        );
+        $pusher = new Pusher(
+            'c40f1fb7fa4dad94dfa6',
+            'd4233edaf9fdd79e2b4d',
+            '546696',
+            $options
+        );
+
+        $data['message'] = 'hello world';
+        $pusher->trigger('my-channel', 'my-event', $data);
+
         return array(
                 'contest'               => $contest,
                 'event'                 => $event,
