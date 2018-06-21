@@ -26,7 +26,7 @@ class UserProvider extends FOSUBUserProvider
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-
+var_dump("connect");exit();
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
         $setter = 'set'.ucfirst($service);
@@ -53,7 +53,7 @@ class UserProvider extends FOSUBUserProvider
         $username = $response->getUsername();
         $nickname = $response->getNickname();
         $email = $response->getEmail();
-
+        var_dump("load");exit();
         //$user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
         $user = $this->userManager->findUserBy(array('email' => $email));
         //when the user is registrating
@@ -73,7 +73,11 @@ class UserProvider extends FOSUBUserProvider
                 $user->setEmail($email);
             else $user->setEmail($username);
 
-            $user->setProfilePicture($response->getProfilePicture());
+            if ($response->getProfilePicture()) {
+                $dest = 'web/uploads/'.$username.'.jpg';
+                copy($response->getProfilePicture(), $dest);
+                $user->setProfilePicture($dest);
+            }
             if(!$user->getPassword()) {
                 // generate unique token
                 $secret = md5(uniqid(rand(), true));
