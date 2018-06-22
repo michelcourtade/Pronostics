@@ -58,7 +58,7 @@
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {% if app.user.profilePicture %}
                     <a href="{{ path('fos_user_profile_show') }}">
-                    <img src="{{ app.user.profilePicture }}" class="avatar" />
+                    <img src="{{ asset(app.user.profilePicture) }}" class="avatar" />
                     </a>
                 {% elseif gravatar_exists(app.user.email) %}
                     <a href="{{ path('fos_user_profile_show') }}">
