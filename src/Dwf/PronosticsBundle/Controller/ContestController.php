@@ -2,7 +2,11 @@
 
 namespace Dwf\PronosticsBundle\Controller;
 
+use Dwf\PronosticsBundle\Entity\ChatMessage;
+use Dwf\PronosticsBundle\Entity\ContestRepository;
+use Dwf\PronosticsBundle\Form\Type\ChatMessageFormType;
 use Pusher\Pusher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,6 +25,7 @@ use Dwf\PronosticsBundle\Form\Type\ContestType;
 use Dwf\PronosticsBundle\Form\Type\ContestMessageFormType;
 use Dwf\PronosticsBundle\Form\Type\CreateContestFormType;
 use Dwf\PronosticsBundle\Entity\ContestMessage;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contest controller.
@@ -626,6 +631,18 @@ class ContestController extends Controller
             }
             else $messageForContest = null;
             $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+            $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+            $chatMessage = new ChatMessage();
+            $chatMessage->setUser($this->getUser());
+            $chatMessage->setContest($contest);
+            $chatMessage->setEvent($contest->getEvent());
+            $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+                'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
+                'method' => 'PUT',
+            ));
+            $formMessage->add('submit', 'submit', array('label' => $this->get('translator')->trans('Post')));
+
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -647,6 +664,8 @@ class ContestController extends Controller
                     'messageForContest'             => $messageForContest,
                     'adminMessage'                  => $adminMessage,
                     'anchorDate'                    => $anchorDate,
+                    'formMessage'                   => $formMessage->createView(),
+                    'messages'                      => null,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -911,20 +930,6 @@ class ContestController extends Controller
         }
         else $messageForContest = null;
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
-
-        $options = array(
-            'cluster' => 'eu',
-            'encrypted' => true
-        );
-        $pusher = new Pusher(
-            'c40f1fb7fa4dad94dfa6',
-            'd4233edaf9fdd79e2b4d',
-            '546696',
-            $options
-        );
-
-        $data['message'] = 'hello world';
-        $pusher->trigger('my-channel', 'my-event', $data);
 
         return array(
                 'contest'               => $contest,
@@ -1250,5 +1255,66 @@ class ContestController extends Controller
         );
     }
 
+    /**
+     * send a Message for the contest
+     *
+     * @Route("/contest/{contestId}/send_message", name="contest_send_message")
+     * @Method({"POST", "PUT"})
+     * @Template()
+     */
+    public function publishMessageAction(Request $request, $contestId)
+    {
+        $user = $this->getUser();
+        $em   = $this->getDoctrine()->getManager();
+        /** @var ContestRepository $contestRepository */
+        $contestRepository = $em->getRepository('DwfPronosticsBundle:Contest');
+        $contest = $contestRepository->find($contestId);
+        if (!$user->hasGroup($contest)) {
+            return new Response('Not allowed', 401);
+        }
+        $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+        $chatMessage = new ChatMessage();
+        $chatMessage->setUser($user);
+        $chatMessage->setContest($contest);
+        $chatMessage->setEvent($contest->getEvent());
+        $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+            'action' => '',
+            'method' => 'PUT',
+        ));
+        $formMessage->add('submit', 'submit', array('label' => $this->get('translator')->trans('Post')));
+        $formMessage->handleRequest($request);
+        if ($formMessage->isValid()) {
+            $message = $formMessage->getData()->getMessage();
 
+            $options = array(
+                'cluster'   => 'eu',
+                'encrypted' => true
+            );
+            $pusher = new Pusher(
+                'c40f1fb7fa4dad94dfa6',
+                'd4233edaf9fdd79e2b4d',
+                '546696',
+                $options
+            );
+
+            $data['message'] = $message;
+            $data['user']    = $user->getUsername();
+            $data['date']    = date('H:i');
+            $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
+
+            $chatMessage->setMessage($message);
+
+            //$em->persist($chatMessage);
+            //$em->flush();
+
+            return new JsonResponse(
+                [
+                    'response' => (bool)$response,
+                    'user'     => $user->getUsername(),
+                    'message'  => $message,
+                    'date'     => date('Y-m-d H:i:s'),
+                ]
+            );
+        }
+    }
 }
