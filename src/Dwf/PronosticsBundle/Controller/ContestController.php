@@ -641,7 +641,10 @@ class ContestController extends Controller
                 'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
                 'method' => 'PUT',
             ));
-            $formMessage->add('submit', 'submit', array('label' => $this->get('translator')->trans('Post')));
+            $formMessage->add('submit', 'submit', array(
+                'label' => $this->get('translator')->trans('Send'),
+                'button_class' => 'btn btn-warning btn-sm',
+            ));
 
             return array(
                     'contest'                       => $contest,
