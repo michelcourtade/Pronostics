@@ -4,6 +4,7 @@ configure:
 	@if test ! -f app/config/parameters.yml; then echo "app/config/parameters.yml is missing"; exit 1; fi
 	curl -s http://getcomposer.org/installer | php
 	php composer.phar install
+	php app/console doctrine:migrations:migrate -n --env=$(ENV)
 	php app/console assets:install --symlink
 	php app/console assetic:dump --env=$(ENV)
 
