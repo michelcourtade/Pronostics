@@ -11,6 +11,7 @@ configure:
 install:
 	php app/console doctrine:database:create --env=$(ENV)
 	php app/console doctrine:schema:create --env=$(ENV)
+	php app/console doctrine:migrations:migrate -n --env=$(ENV)
 	php app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
 
 update-dev:
