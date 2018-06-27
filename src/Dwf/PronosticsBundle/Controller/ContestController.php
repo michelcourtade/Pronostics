@@ -533,12 +533,13 @@ class ContestController extends Controller
      */
     public function gamesAction($contestId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
-        $event = $contest->getEvent();
-        $types = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
-        $anchorDate = '';
+        $em                    = $this->getDoctrine()->getManager();
+        $request               = $this->getRequest();
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
+        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $event                 = $contest->getEvent();
+        $types                 = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
+        $anchorDate            = '';
         if($event) {
             if($event->getChampionship()) {
                 $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
@@ -646,6 +647,8 @@ class ContestController extends Controller
                 'button_class' => 'btn btn-warning btn-sm',
             ));
 
+            $chatMessages = $chatMessageRepository->findBy(array('contest' => $contest));
+
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -668,7 +671,7 @@ class ContestController extends Controller
                     'adminMessage'                  => $adminMessage,
                     'anchorDate'                    => $anchorDate,
                     'formMessage'                   => $formMessage->createView(),
-                    'messages'                      => null,
+                    'chatMessages'                  => $chatMessages,
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -1307,8 +1310,8 @@ class ContestController extends Controller
 
             $chatMessage->setMessage($message);
 
-            //$em->persist($chatMessage);
-            //$em->flush();
+            $em->persist($chatMessage);
+            $em->flush();
 
             return new JsonResponse(
                 [

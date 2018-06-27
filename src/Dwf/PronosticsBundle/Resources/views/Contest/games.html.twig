@@ -18,13 +18,6 @@
             <h2>{% if gameType %}{% trans %}Games{% endtrans %} - {{ gameType.name }}{% else %}{% trans %}All games{% endtrans %}{% endif %}</h2>
         </div>
         {% include "DwfPronosticsBundle:Contest:games-list.html.twig" %}
-        <div id="chat">
-            {% for message in messages %}
-                <span>{{ message.user.name }}</span>{{ message.message }}<strong>{{ message.date|date("H:i") }}</strong>
-            {% else %}
-                {{ 'No messages found'|trans }}
-            {% endfor %}
-        </div>
         {% include "DwfPronosticsBundle:Chat:chat.html.twig" %}
     {% endblock %}
 {% endblock %}
