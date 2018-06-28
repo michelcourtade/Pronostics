@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-sm-12">
             <div class="panel panel-primary">
                 <div class="panel-heading" id="accordion">
                     <span class="glyphicon glyphicon-comment"></span> {{ 'Conversation'|trans }}
@@ -17,13 +17,17 @@
                         </ul>
                     </div>
                     <div class="panel-footer">
+
+                        {{ form_start(formMessage, {'attr': {'id': 'chat_form'}}) }}
                         <div class="input-group">
-                            {{ form_start(formMessage, {'attr': {'id': 'chat_form'}}) }}
+                            {{ form_widget(formMessage.message, {'attr': {'class': 'form-control', 'placeholder': 'Type your text here'|trans}}) }}
                             <span class="input-group-btn">
-                                {{ form_row(formMessage.submit) }}
+                                {{ form_widget(formMessage.submit, {'attr': { 'class': 'btn btn-default' }}) }}
                             </span>
-                            {{ form_end(formMessage) }}
                         </div>
+                        {{ form_rest(formMessage) }}
+                        {{ form_end(formMessage) }}
+
                     </div>
                 </div>
             </div>

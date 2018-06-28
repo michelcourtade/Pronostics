@@ -1316,10 +1316,11 @@ class ContestController extends Controller
 
             $html = $this->renderView("DwfPronosticsBundle:Chat:messages.html.twig", array('chatMessages' => $chatMessages));
 
-            $data['message'] = $message;
-            $data['user']    = $user->getUsername();
-            $data['date']    = date('H:i');
-            $data['html']    = $html;
+            $data['message']    = $message;
+            $data['message_id'] = $chatMessage->getId();
+            $data['user']       = $user->getUsername();
+            $data['date']       = date('H:i');
+            $data['html']       = $html;
 
             $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
 
@@ -1327,11 +1328,12 @@ class ContestController extends Controller
 
             return new JsonResponse(
                 [
-                    'response' => (bool)$response,
-                    'user'     => $user->getUsername(),
-                    'message'  => $message,
-                    'date'     => date('Y-m-d H:i:s'),
-                    'html'     => $html,
+                    'response'   => (bool)$response,
+                    'user'       => $user->getUsername(),
+                    'message'    => $message,
+                    'message_id' => $chatMessage->getId(),
+                    'date'       => date('Y-m-d H:i:s'),
+                    'html'       => $html,
                 ]
             );
         }

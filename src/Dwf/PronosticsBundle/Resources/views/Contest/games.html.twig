@@ -46,6 +46,7 @@
         channel.bind('new-message', function(data) {
             var $div = $('ul.chat');
             $div.html(data['html']);
+            $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
         });
     </script>
     <script>
@@ -63,6 +64,7 @@
                     success: function(data) {
                         $('ul.chat').html(data['html']);
                         $input.val('');
+                        $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
                     },
                     failure: function (data) {
                         $chatForm.before("<span class=\"info_ajax\" id=\"span_chat_form\">{{ 'Problem during submission. Retry'|trans }}</span>");
