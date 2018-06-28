@@ -4,6 +4,7 @@ namespace Dwf\PronosticsBundle\Controller;
 
 use Dwf\PronosticsBundle\Entity\ChatMessage;
 use Dwf\PronosticsBundle\Entity\ContestRepository;
+use Dwf\PronosticsBundle\Entity\Repository\ChatMessageRepository;
 use Dwf\PronosticsBundle\Form\Type\ChatMessageFormType;
 use Pusher\Pusher;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -647,7 +648,7 @@ class ContestController extends Controller
                 'button_class' => 'btn btn-warning btn-sm',
             ));
 
-            $chatMessages = $chatMessageRepository->findBy(array('contest' => $contest));
+            $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest);
 
             return array(
                     'contest'                       => $contest,
@@ -1273,7 +1274,10 @@ class ContestController extends Controller
         $user = $this->getUser();
         $em   = $this->getDoctrine()->getManager();
         /** @var ContestRepository $contestRepository */
-        $contestRepository = $em->getRepository('DwfPronosticsBundle:Contest');
+        $contestRepository     = $em->getRepository('DwfPronosticsBundle:Contest');
+        /** @var ChatMessageRepository $chatMessageRepository */
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
+
         $contest = $contestRepository->find($contestId);
         if (!$user->hasGroup($contest)) {
             return new Response('Not allowed', 401);
@@ -1303,15 +1307,23 @@ class ContestController extends Controller
                 $options
             );
 
-            $data['message'] = $message;
-            $data['user']    = $user->getUsername();
-            $data['date']    = date('H:i');
-            $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
-
             $chatMessage->setMessage($message);
 
             $em->persist($chatMessage);
             $em->flush();
+
+            $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest);
+
+            $html = $this->renderView("DwfPronosticsBundle:Chat:messages.html.twig", array('chatMessages' => $chatMessages));
+
+            $data['message'] = $message;
+            $data['user']    = $user->getUsername();
+            $data['date']    = date('H:i');
+            $data['html']    = $html;
+
+            $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
+
+
 
             return new JsonResponse(
                 [
@@ -1319,6 +1331,7 @@ class ContestController extends Controller
                     'user'     => $user->getUsername(),
                     'message'  => $message,
                     'date'     => date('Y-m-d H:i:s'),
+                    'html'     => $html,
                 ]
             );
         }

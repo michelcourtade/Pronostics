@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="accordion">
+                    <span class="glyphicon glyphicon-comment"></span> {{ 'Conversation'|trans }}
+                    <div class="btn-group pull-right">
+                        <a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-collapse collapse" id="collapseOne">
+                    <div class="panel-body">
+                        <ul class="chat">
+                            {% include "DwfPronosticsBundle:Chat:messages.html.twig" %}
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            {{ form_start(formMessage, {'attr': {'id': 'chat_form'}}) }}
+                            <span class="input-group-btn">
+                                {{ form_row(formMessage.submit) }}
+                            </span>
+                            {{ form_end(formMessage) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

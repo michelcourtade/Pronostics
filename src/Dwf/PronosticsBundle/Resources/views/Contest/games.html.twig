@@ -18,7 +18,7 @@
             <h2>{% if gameType %}{% trans %}Games{% endtrans %} - {{ gameType.name }}{% else %}{% trans %}All games{% endtrans %}{% endif %}</h2>
         </div>
         {% include "DwfPronosticsBundle:Contest:games-list.html.twig" %}
-        {% include "DwfPronosticsBundle:Chat:chat.html.twig" %}
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
     {% endblock %}
 {% endblock %}
 {% block javascripts %}
@@ -34,7 +34,6 @@
     {% endif %}
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script>
-
         // Enable pusher logging - don't include this in production
         Pusher.logToConsole = true;
 
@@ -45,8 +44,32 @@
 
         var channel = pusher.subscribe('{{ contest.slugName }}');
         channel.bind('new-message', function(data) {
-            var $div = $('#chat');
-            $div.append("<span>"+data['user']+"</span>"+data['message']+"<strong>"+data['date']+"</strong>");
+            var $div = $('ul.chat');
+            $div.html(data['html']);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var $chatForm = $('#chat_form');
+            var $input = $('#dwf_pronosticsbundle_chat_message_form_type_message');
+            $chatForm.off();
+            $chatForm.submit(function(e) {
+                e.preventDefault(e);
+                var data = $chatForm.serialize();
+                $.ajax({
+                    url : $chatForm.attr('action'),
+                    type: $chatForm.attr('method'),
+                    data : data,
+                    success: function(data) {
+                        $('ul.chat').html(data['html']);
+                        $input.val('');
+                    },
+                    failure: function (data) {
+                        $chatForm.before("<span class=\"info_ajax\" id=\"span_chat_form\">{{ 'Problem during submission. Retry'|trans }}</span>");
+                        setTimeout(function() { $("#span_chat_form").hide("slow"); $("#span_chat_form").remove(); }, 2000);
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}

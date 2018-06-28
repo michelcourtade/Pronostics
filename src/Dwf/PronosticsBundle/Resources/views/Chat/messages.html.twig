@@ -1,0 +1,45 @@
+{% set lastUser = '' %}
+{% for message in chatMessages %}
+    {% if lastUser != message.user.username %}
+        {% if loop.index > 1 %}
+            </div>
+            </li>
+        {% endif %}
+        <li class="{% if loop.index % 2 == 1 %}left{% else %}right{% endif %} clearfix">
+        <span class="chat-img pull-{% if loop.index % 2 == 1 %}left{% else %}right{% endif %}">
+                <img src="http://placehold.it/50/55C1E7/fff&text={{ message.user.username|first|upper }}" alt="{{ message.user.username }}" class="img-circle" />
+            </span>
+        <div class="chat-body clearfix">
+        <div class="header">
+            {% if loop.index % 2 == 1 %}
+                <strong class="primary-font">{{ message.user.username }}</strong>
+                <small class="pull-right text-muted">
+                    <span class="glyphicon glyphicon-time"></span>
+                    {{ message.createdAt|date("H:i") }}
+                </small>
+            {% else %}
+                <small class=" text-muted">
+                    <span class="glyphicon glyphicon-time"></span>
+                    {{ message.createdAt|date("H:i") }}
+                </small>
+                <strong class="pull-right primary-font">{{ message.user.username }}</strong>
+            {% endif %}
+        </div>
+    {% endif %}
+    <p>
+        {{ message.message }}
+    </p>
+    {% if loop.last %}
+        </div>
+        </li>
+    {% endif %}
+    {% set lastUser = message.user.username %}
+{% else %}
+    <li class="left clearfix">
+        <div class="chat-body clearfix">
+            <p>
+                {{ 'No messages found. Why don\'t you post the first message of this contest ? '|trans }}
+            </p>
+        </div>
+    </li>
+{% endfor %}
