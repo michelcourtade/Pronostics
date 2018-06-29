@@ -673,6 +673,7 @@ class ContestController extends Controller
                     'anchorDate'                    => $anchorDate,
                     'formMessage'                   => $formMessage->createView(),
                     'chatMessages'                  => $chatMessages,
+                    'pusher_id'                     => $this->container->getParameter('pusher_id'),
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -1258,7 +1259,7 @@ class ContestController extends Controller
                 'pronostics_nextgames'      => $pronostics_nextgames,
                 'contest'                   => $contest,
                 'adminMessage'              => $adminMessage,
-                'messageForContest'         =>$messageForContest,
+                'messageForContest'         => $messageForContest,
         );
     }
 
@@ -1323,8 +1324,6 @@ class ContestController extends Controller
             $data['html']       = $html;
 
             $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
-
-
 
             return new JsonResponse(
                 [

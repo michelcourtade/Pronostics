@@ -23,13 +23,12 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
     {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
     {% if chart %}
     <script type="text/javascript">
     $(document).ready(function() {
         {{ chart(chart) }}
-        });
+    });
     </script>
     {% endif %}
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
@@ -37,7 +36,8 @@
         // Enable pusher logging - don't include this in production
         Pusher.logToConsole = true;
 
-        var pusher = new Pusher('c40f1fb7fa4dad94dfa6', {
+        var badge = 0;
+        var pusher = new Pusher('{{ pusher_id }}', {
             cluster: 'eu',
             encrypted: true
         });
@@ -47,6 +47,13 @@
             var $div = $('ul.chat');
             $div.html(data['html']);
             $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
+            if (data['user'] != '{{ app.user.username }}') {
+                var favicon = new Favico({
+                    animation:'slide'
+                });
+                badge = badge + 1;
+                favicon.badge(badge);
+            }
         });
     </script>
     <script>
@@ -71,6 +78,9 @@
                         setTimeout(function() { $("#span_chat_form").hide("slow"); $("#span_chat_form").remove(); }, 2000);
                     }
                 });
+            });
+            $('#dwf_pronosticsbundle_chat_message_form_type_message').focusin(function () {
+                favicon.reset();
             });
         });
     </script>
