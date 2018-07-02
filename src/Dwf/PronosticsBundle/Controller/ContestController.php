@@ -1315,7 +1315,12 @@ class ContestController extends Controller
 
             $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest);
 
-            $html = $this->renderView("DwfPronosticsBundle:Chat:messages.html.twig", array('chatMessages' => $chatMessages));
+            $html = $this->renderView("DwfPronosticsBundle:Chat:message.html.twig", array(
+                'message'  => $chatMessage,
+                'lastUser' => '',
+                'index'    => 1,
+                'last'     => true,
+            ));
 
             $data['message']    = $message;
             $data['message_id'] = $chatMessage->getId();

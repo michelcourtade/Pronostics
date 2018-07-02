@@ -45,7 +45,7 @@
         var channel = pusher.subscribe('{{ contest.slugName }}');
         channel.bind('new-message', function(data) {
             var $div = $('ul.chat');
-            $div.html(data['html']);
+            $div.append(data['html']);
             $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
             if (data['user'] != '{{ app.user.username }}') {
                 var favicon = new Favico({
@@ -69,9 +69,9 @@
                     type: $chatForm.attr('method'),
                     data : data,
                     success: function(data) {
-                        $('ul.chat').html(data['html']);
+                        //$('ul.chat').append(data['html']);
                         $input.val('');
-                        $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
+                        //$('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
                     },
                     failure: function (data) {
                         $chatForm.before("<span class=\"info_ajax\" id=\"span_chat_form\">{{ 'Problem during submission. Retry'|trans }}</span>");

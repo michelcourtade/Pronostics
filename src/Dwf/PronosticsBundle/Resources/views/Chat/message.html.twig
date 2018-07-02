@@ -1,0 +1,40 @@
+{% if lastUser != message.user.username %}
+    {% if index > 1 %}
+        </div>
+        </li>
+    {% endif %}
+    <li class="{% if index % 2 == 1 %}left{% else %}right{% endif %} clearfix">
+        <span class="chat-img pull-{% if index % 2 == 1 %}left{% else %}right{% endif %}">
+            {% if message.user.profilePicture %}
+                <img src="{{ message.user.profilePicture }}" class="img-circle avatar" />
+            {% elseif gravatar_exists(message.user.email) %}
+                <img src="{{ gravatar('%this%'|replace({'%this%': message.user.email}),'30') }}" class="img-circle avatar" />
+            {% else %}
+                <img src="http://placehold.it/50/55C1E7/fff&text={{ message.user.username|first|upper }}" alt="{{ message.user.username }}" class="img-circle" />
+            {% endif %}
+        </span>
+    <div class="chat-body clearfix">
+        <div class="header">
+            {% if index % 2 == 1 %}
+                <strong class="primary-font">{{ message.user.username }}</strong>
+                <small class="pull-right text-muted">
+                    <span class="glyphicon glyphicon-time"></span>
+                    {{ message.createdAt|date("H:i") }}
+                </small>
+            {% else %}
+                <small class=" text-muted">
+                    <span class="glyphicon glyphicon-time"></span>
+                    {{ message.createdAt|date("H:i") }}
+                </small>
+                <strong class="pull-right primary-font">{{ message.user.username }}</strong>
+            {% endif %}
+        </div>
+        {% endif %}
+        <p id="message_{{ message.id }}">
+            {{ message.message }}
+        </p>
+        {% if last == true %}
+    </div>
+</li>
+{% endif %}
+{% set lastUser = message.user.username %}

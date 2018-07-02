@@ -19,7 +19,7 @@ class ChatMessageRepository extends EntityRepository
         $qb = $this->createQueryBuilder('c')
             ->where('c.contest = :contest')
             ->setParameter('contest', $contest)
-            ->orderBy('c.createdAt', 'DESC')
+            ->orderBy('c.createdAt', 'ASC')
             ->setFirstResult($first)
             ->setMaxResults($limit)
         ;
