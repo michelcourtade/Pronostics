@@ -13,28 +13,25 @@
                 <img src="http://placehold.it/50/55C1E7/fff&text={{ message.user.username|first|upper }}" alt="{{ message.user.username }}" class="img-circle" />
             {% endif %}
         </span>
-    <div class="chat-body clearfix">
-        <div class="header">
-            {% if index % 2 == 1 %}
-                <strong class="primary-font">{{ message.user.username }}</strong>
-                <small class="pull-right text-muted">
-                    <span class="glyphicon glyphicon-time"></span>
-                    {{ message.createdAt|date("H:i") }}
-                </small>
-            {% else %}
-                <small class=" text-muted">
-                    <span class="glyphicon glyphicon-time"></span>
-                    {{ message.createdAt|date("H:i") }}
-                </small>
-                <strong class="pull-right primary-font">{{ message.user.username }}</strong>
-            {% endif %}
-        </div>
-        {% endif %}
-        <p id="message_{{ message.id }}">
-            {{ message.message }}
-        </p>
-        {% if last == true %}
-    </div>
-</li>
+        <div class="chat-body clearfix" id="{{ message.user.username }}_{{ message.id }}">
+            <div class="header">
+                {% if index % 2 == 1 %}
+                    <strong class="primary-font">{{ message.user.username }}</strong>
+                    <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span>
+                        {{ message.createdAt|date("H:i") }}
+                    </small>
+                {% else %}
+                    <small class=" text-muted">
+                        <span class="glyphicon glyphicon-time"></span>
+                        {{ message.createdAt|date("H:i") }}
+                    </small>
+                    <strong class="pull-right primary-font">{{ message.user.username }}</strong>
+                {% endif %}
+            </div>
 {% endif %}
-{% set lastUser = message.user.username %}
+        {% include "DwfPronosticsBundle:Chat:message-content.html.twig" %}
+    {% if last == true %}
+        </div>
+    </li>
+    {% endif %}

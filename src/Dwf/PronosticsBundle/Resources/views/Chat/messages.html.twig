@@ -1,6 +1,7 @@
 {% set lastUser = '' %}
 {% for message in chatMessages %}
     {% include "DwfPronosticsBundle:Chat:message.html.twig" with {'index': loop.index, 'last': loop.last} %}
+    {% set lastUser = message.user.username %}
 {% else %}
     <li class="left clearfix">
         <div class="chat-body clearfix">

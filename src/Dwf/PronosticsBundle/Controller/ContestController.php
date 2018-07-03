@@ -644,11 +644,12 @@ class ContestController extends Controller
                 'method' => 'PUT',
             ));
             $formMessage->add('submit', 'submit', array(
-                'label' => $this->get('translator')->trans('Send'),
+                'label'        => $this->get('translator')->trans('Send'),
                 'button_class' => 'btn btn-warning btn-sm',
             ));
 
-            $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest);
+            $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
+            $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $countMessages - 20, $countMessages);
 
             return array(
                     'contest'                       => $contest,
@@ -1313,20 +1314,32 @@ class ContestController extends Controller
             $em->persist($chatMessage);
             $em->flush();
 
-            $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest);
+            $sameUser = false;
+            $lastChatMessage = $chatMessageRepository->getLastMessageByContest($contest);
+            if ($lastChatMessage) {
+                if ($lastChatMessage->getUser()->getUsername() == $user->getUsername()) {
+                    $sameUser = true;
+                }
+            }
 
             $html = $this->renderView("DwfPronosticsBundle:Chat:message.html.twig", array(
                 'message'  => $chatMessage,
-                'lastUser' => '',
-                'index'    => 1,
+                'lastUser' => $sameUser ? $user->getUsername() : '',
+                'index'    => 0,
                 'last'     => true,
             ));
+            if ($sameUser) {
+                $html = $this->renderView("DwfPronosticsBundle:Chat:message-content.html.twig", array(
+                    'message'  => $chatMessage,
+                ));
+            }
 
             $data['message']    = $message;
             $data['message_id'] = $chatMessage->getId();
             $data['user']       = $user->getUsername();
             $data['date']       = date('H:i');
             $data['html']       = $html;
+            $data['same_user']  = (bool) $sameUser;
 
             $response = $pusher->trigger($contest->getSlugName(), 'new-message', $data);
 

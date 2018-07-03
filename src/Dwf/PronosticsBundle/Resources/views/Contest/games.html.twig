@@ -44,9 +44,13 @@
 
         var channel = pusher.subscribe('{{ contest.slugName }}');
         channel.bind('new-message', function(data) {
-            var $div = $('ul.chat');
+            if (data['same_user'] == true) {
+                var $div = $('div.chat-body').last();
+            } else {
+                var $div = $('ul.chat');
+            }
             $div.append(data['html']);
-            $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
+            //$('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
             if (data['user'] != '{{ app.user.username }}') {
                 var favicon = new Favico({
                     animation:'slide'
@@ -80,6 +84,9 @@
                 });
             });
             $('#dwf_pronosticsbundle_chat_message_form_type_message').focusin(function () {
+                var favicon = new Favico({
+                    animation:'slide'
+                });
                 favicon.reset();
             });
         });
