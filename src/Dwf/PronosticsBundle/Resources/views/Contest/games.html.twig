@@ -42,6 +42,10 @@
             encrypted: true
         });
 
+        var favicon = new Favico({
+            animation:'slide'
+        });
+
         var channel = pusher.subscribe('{{ contest.slugName }}');
         channel.bind('new-message', function(data) {
             if (data['same_user'] == true) {
@@ -50,11 +54,8 @@
                 var $div = $('ul.chat');
             }
             $div.append(data['html']);
-            //$('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
+            $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
             if (data['user'] != '{{ app.user.username }}') {
-                var favicon = new Favico({
-                    animation:'slide'
-                });
                 badge = badge + 1;
                 favicon.badge(badge);
             }
@@ -84,9 +85,7 @@
                 });
             });
             $('#dwf_pronosticsbundle_chat_message_form_type_message').focusin(function () {
-                var favicon = new Favico({
-                    animation:'slide'
-                });
+                badge = 0;
                 favicon.reset();
             });
         });

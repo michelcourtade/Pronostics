@@ -19,7 +19,7 @@
                     <strong class="primary-font">{{ message.user.username }}</strong>
                     <small class="pull-right text-muted">
                         <span class="glyphicon glyphicon-time"></span>
-                        {{ message.createdAt|date("H:i") }}
+                        {{ message.publicationDate }}
                     </small>
                 {% else %}
                     <small class=" text-muted">

@@ -151,4 +151,14 @@ class ChatMessage
 
         return $this;
     }
+
+    public function getPublicationDate()
+    {
+        if (date("Y-m-d") != $this->getCreatedAt()->format("Y-m-d")) {
+            return $this->getCreatedAt()->format("d/m");
+        }
+
+        return $this->getCreatedAt()->format("i:s");
+    }
+
 }

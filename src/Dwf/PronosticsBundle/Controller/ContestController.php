@@ -649,7 +649,8 @@ class ContestController extends Controller
             ));
 
             $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
-            $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $countMessages - 20, $countMessages);
+            $offset        = max($countMessages - 20, 0);
+            $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
             return array(
                     'contest'                       => $contest,
@@ -1275,6 +1276,7 @@ class ContestController extends Controller
     {
         $user = $this->getUser();
         $em   = $this->getDoctrine()->getManager();
+
         /** @var ContestRepository $contestRepository */
         $contestRepository     = $em->getRepository('DwfPronosticsBundle:Contest');
         /** @var ChatMessageRepository $chatMessageRepository */
@@ -1284,6 +1286,9 @@ class ContestController extends Controller
         if (!$user->hasGroup($contest)) {
             return new Response('Not allowed', 401);
         }
+
+        $lastChatMessage = $chatMessageRepository->getLastMessageByContest($contest);
+
         $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
         $chatMessage = new ChatMessage();
         $chatMessage->setUser($user);
@@ -1315,7 +1320,6 @@ class ContestController extends Controller
             $em->flush();
 
             $sameUser = false;
-            $lastChatMessage = $chatMessageRepository->getLastMessageByContest($contest);
             if ($lastChatMessage) {
                 if ($lastChatMessage->getUser()->getUsername() == $user->getUsername()) {
                     $sameUser = true;
@@ -1351,6 +1355,8 @@ class ContestController extends Controller
                     'message_id' => $chatMessage->getId(),
                     'date'       => date('Y-m-d H:i:s'),
                     'html'       => $html,
+                    'same_user'  => (bool) $sameUser,
+                    'last_user'  => $lastChatMessage->getUser()->getUsername(),
                 ]
             );
         }
