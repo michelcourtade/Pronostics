@@ -234,11 +234,14 @@ class ContestController extends Controller
      */
     public function showAction($contestId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em      = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
+        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+
         $event = $contest->getEvent();
-        $user = $this->getUser();
+        $user  = $this->getUser();
         if(!$user->hasGroup($contest->getName())) {
             return $this->redirect($this->generateUrl('events'));
         }
@@ -276,11 +279,30 @@ class ContestController extends Controller
         $total = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByContestAndUser($contest, $this->getUser());
 
         $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
-            if($contestMessage) {
-                $messageForContest = $contestMessage[0];
-            }
-        else $messageForContest = null;
+        $messageForContest = null;
+        if($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+        $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+        $chatMessage = new ChatMessage();
+        $chatMessage->setUser($this->getUser());
+        $chatMessage->setContest($contest);
+        $chatMessage->setEvent($contest->getEvent());
+        $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+            'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
+            'method' => 'PUT',
+        ));
+        $formMessage->add('submit', 'submit', array(
+            'label'        => $this->get('translator')->trans('Send'),
+            'button_class' => 'btn btn-warning btn-sm',
+        ));
+
+        $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
+        $offset        = max($countMessages - 20, 0);
+        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+
         return array(
                 'contest'                   => $contest,
                 'user'                      => $this->getUser(),
@@ -295,6 +317,9 @@ class ContestController extends Controller
                 'total'                     => $total,
                 'messageForContest'         => $messageForContest,
                 'adminMessage'              => $adminMessage,
+                'formMessage'               => $formMessage->createView(),
+                'chatMessages'              => $chatMessages,
+                'pusher_auth_key'           => $this->container->getParameter('pusher_auth_key'),
         );
     }
 
@@ -308,36 +333,58 @@ class ContestController extends Controller
     public function standingsAction($contestId)
     {
         $em = $this->getDoctrine()->getManager();
-        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
-        $event = $contest->getEvent();
-        if($contest) {
-            $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
-            $championshipManager->setEvent($event);
-            $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
 
-            $groupResults = array();
-            $user = $this->getUser();
-            $entities = array();
-            $groupUser = array();
-            $entities = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
-            $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
-            if($contestMessage) {
-                $messageForContest = $contestMessage[0];
-            }
-            else $messageForContest = null;
-            $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
-            return array(
-                    'contest'                   => $contest,
-                    'user'                      => $user,
-                    'event'                     => $event,
-                    'currentChampionshipDay'    => $currentChampionshipDay,
-                    'entities'                  => $entities,
-                    //'group'                     => $groupUser,
-                    'messageForContest'         => $messageForContest,
-                    'adminMessage'              => $adminMessage,
-            );
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
+        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $event                 = $contest->getEvent();
+
+        if (!$contest) {
+            return $this->redirect($this->generateUrl('events'));
         }
-        else return $this->redirect($this->generateUrl('events'));
+
+        $championshipManager = $this->get('dwf_pronosticbundle.championshipmanager');
+        $championshipManager->setEvent($event);
+        $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
+
+        $user = $this->getUser();
+        $entities          = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
+        $contestMessage    = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        $messageForContest = null;
+        if($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+        $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+        $chatMessage = new ChatMessage();
+        $chatMessage->setUser($this->getUser());
+        $chatMessage->setContest($contest);
+        $chatMessage->setEvent($contest->getEvent());
+        $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+            'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
+            'method' => 'PUT',
+        ));
+        $formMessage->add('submit', 'submit', array(
+            'label'        => $this->get('translator')->trans('Send'),
+            'button_class' => 'btn btn-warning btn-sm',
+        ));
+
+        $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
+        $offset        = max($countMessages - 20, 0);
+        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+
+        return array(
+                'contest'                   => $contest,
+                'user'                      => $user,
+                'event'                     => $event,
+                'currentChampionshipDay'    => $currentChampionshipDay,
+                'entities'                  => $entities,
+                'messageForContest'         => $messageForContest,
+                'adminMessage'              => $adminMessage,
+                'formMessage'               => $formMessage->createView(),
+                'chatMessages'              => $chatMessages,
+                'pusher_auth_key'           => $this->container->getParameter('pusher_auth_key'),
+        );
     }
 
     /**
@@ -559,8 +606,9 @@ class ContestController extends Controller
                 }
                 $gameType = $em->getRepository('DwfPronosticsBundle:GameType')->find($gameTypeId);
                 $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByGameTypeAndEvent($gameType, $event);
+            } else {
+                $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByEvent($event);
             }
-            else $results = $em->getRepository('DwfPronosticsBundle:GameTypeResult')->getResultsByEvent($event);
             $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
             foreach ($teams as $team)
             {
@@ -589,8 +637,7 @@ class ContestController extends Controller
                     }
                     if($event->getScoreDiff()) {
                         $simpleType = new SimplePronosticType();
-                    }
-                    else {
+                    } else {
                         $simpleType = new SimplePronosticType();
                     }
                     $simpleType->setName($entity->getId());
@@ -611,8 +658,7 @@ class ContestController extends Controller
                     array_push($pronostics, $pronostic);
                     $i++;
                 }
-            }
-            else {
+            } else {
                 $forms = "";
                 $pronostics = array();
                 $nbPronostics = $nbPerfectScore = $nbGoodScore = $nbBadScore = 0;
@@ -628,10 +674,11 @@ class ContestController extends Controller
                 }
             }
             $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+            $messageForContest = null;
             if($contestMessage) {
                 $messageForContest = $contestMessage[0];
             }
-            else $messageForContest = null;
+
             $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
             $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
@@ -675,7 +722,7 @@ class ContestController extends Controller
                     'anchorDate'                    => $anchorDate,
                     'formMessage'                   => $formMessage->createView(),
                     'chatMessages'                  => $chatMessages,
-                    'pusher_id'                     => $this->container->getParameter('pusher_id'),
+                    'pusher_auth_key'               => $this->container->getParameter('pusher_auth_key'),
             );
         }
         else return $this->redirect($this->generateUrl('events'));
@@ -968,9 +1015,10 @@ class ContestController extends Controller
      */
     public function pronosticsAction($contestId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em      = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
         $event = $contest->getEvent();
         if($event) {
             if($event->getChampionship()) {
@@ -1028,6 +1076,25 @@ class ContestController extends Controller
             }
             else $messageForContest = null;
             $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+            $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+            $chatMessage = new ChatMessage();
+            $chatMessage->setUser($this->getUser());
+            $chatMessage->setContest($contest);
+            $chatMessage->setEvent($contest->getEvent());
+            $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+                'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
+                'method' => 'PUT',
+            ));
+            $formMessage->add('submit', 'submit', array(
+                'label'        => $this->get('translator')->trans('Send'),
+                'button_class' => 'btn btn-warning btn-sm',
+            ));
+
+            $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
+            $offset        = max($countMessages - 20, 0);
+            $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+
             return array(
                     'contest'                       => $contest,
                     'event'                         => $event,
@@ -1043,6 +1110,9 @@ class ContestController extends Controller
                     'forms'                         => $forms,
                     'messageForContest'             => $messageForContest,
                     'adminMessage'                  => $adminMessage,
+                    'formMessage'                   => $formMessage->createView(),
+                    'chatMessages'                  => $chatMessages,
+                    'pusher_auth_key'               => $this->container->getParameter('pusher_auth_key'),
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');
@@ -1308,9 +1378,9 @@ class ContestController extends Controller
                 'encrypted' => true
             );
             $pusher = new Pusher(
-                'c40f1fb7fa4dad94dfa6',
-                'd4233edaf9fdd79e2b4d',
-                '546696',
+                $this->container->getParameter('pusher_auth_key'),
+                $this->container->getParameter('pusher_secret'),
+                $this->container->getParameter('pusher_app_id'),
                 $options
             );
 
