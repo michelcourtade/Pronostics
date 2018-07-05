@@ -3,30 +3,31 @@
 {% block body -%}
     {% block breadcrumb %}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}Games{% endtrans %}</a></li>
-    <li><a href="{{ path('contest_games_by_type', { 'type': entity.type.id, 'contestId': contest.id }) }}">{{ entity.type }}</a></li>
-    <li>{{ entity.name }}</li>
+        <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+        <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}Games{% endtrans %}</a></li>
+        <li><a href="{{ path('contest_games_by_type', { 'type': entity.type.id, 'contestId': contest.id }) }}">{{ entity.type }}</a></li>
+        <li>{{ entity.name }}</li>
     </ul>
     {% endblock %}
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     {% block contest_header %}
-    {{ parent() }}
+        {{ parent() }}
     {% endblock %}
 
     {% block content %}
-    <div class="page-header">
-        <h2>{% trans %}Game{% endtrans %}</h2>
-    </div>
-    {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': entity, 'showExpert': true } %}
-    {% if nextGame and not event.simpleBet %}
         <div class="page-header">
-            <h2>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {% trans %}Next game{% endtrans %}</h2>
+            <h2>{% trans %}Game{% endtrans %}</h2>
         </div>
-        {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': nextGame, 'pronostic': pronosticNextGame,'pronostics': false, 'showExpert': false, 'scorersTeam1': false, 'scorersTeam2':false } %}
-    {% endif %}
+        {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': entity, 'showExpert': true } %}
+        {% if nextGame and not event.simpleBet %}
+            <div class="page-header">
+                <h2>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {% trans %}Next game{% endtrans %}</h2>
+            </div>
+            {% include "DwfPronosticsBundle:Contest:game.html.twig" with {'entity': nextGame, 'pronostic': pronosticNextGame,'pronostics': false, 'showExpert': false, 'scorersTeam1': false, 'scorersTeam2':false } %}
+        {% endif %}
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
     {% endblock %}
 
 {% endblock %}
