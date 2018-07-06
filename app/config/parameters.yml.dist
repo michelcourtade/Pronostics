@@ -16,3 +16,7 @@ parameters:
     oauth.facebook.id: ~
     oauth.facebook.secret: ~
     app_name: YouBetSport
+
+    pusher_auth_key: ~
+    pusher_secret: ~
+    pusher_app_id: ~

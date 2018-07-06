@@ -42,6 +42,7 @@
             <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">{% trans %}Bet{% endtrans %}</a></div>
         {% endif %}
     {% endif %}
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
     {% endblock %}
 
 {% endblock %}

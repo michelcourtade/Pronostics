@@ -3,10 +3,10 @@
 {% block body -%}
     {% block breadcrumb %}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li>{% trans %}Informations{% endtrans %}</li>
+        <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+        <li>{% trans %}Informations{% endtrans %}</li>
     </ul>
     {% endblock %}
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
@@ -37,7 +37,7 @@
                     <td>{{ loop.index }}</td>
                     <td>
                     {% if player.profilePicture %}
-                        <img src="{{ player.profilePicture }}" class="avatar" />
+                        <img src="{{ asset(player.profilePicture) }}" class="avatar" />
                     {% elseif gravatar_exists(player.email) %}
                         <img src="{{ gravatar('%this%'|replace({'%this%': player.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
                     {% endif %}
@@ -51,6 +51,7 @@
         {% endif %}
         </div>
     </div>
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
     {% endblock %}
     {% block javascripts %}
     {{ parent() }}

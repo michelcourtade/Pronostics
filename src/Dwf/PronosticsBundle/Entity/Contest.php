@@ -210,4 +210,9 @@ class Contest extends BaseGroup
     {
         return $this->contestName;
     }
+
+    public function getSlugName()
+    {
+        return str_replace(' ', '-', $this->getName());
+    }
 }
