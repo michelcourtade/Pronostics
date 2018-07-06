@@ -1,22 +1,35 @@
 <script type="text/javascript">
+    {% if anchorDate %}
+        var speed = 750; 
+        $('html, body').animate( { scrollTop: $("#{{ 'now'|date('Ymd') }}").offset().top }, speed );
+    {% endif %}
     $(document).ready(function() {
-    	$('.tabs-container').find('.tabs').css('display','none');
-    	$.each($('.tabs-container'), function() {
-    		if(!$(this).children('ul').find('li').filter('.active').size()) {
-    		   $(this).children('ul').find('li:first').addClass('active');
-    		}
-    	});
-    	$.each($('.tabs-container'), function() {
-    		$(this).find('.tabs').eq($(this).children('ul').find('li').index($(this).children('ul').find('li.active'))).css('display', 'block');
+        $('.tabs-container').find('.tabs').css('display','none');
+        $.each($('.tabs-container'), function() {
+            if(!$(this).children('ul').find('li').filter('.active').size()) {
+                   $(this).children('ul').find('li:first').addClass('active');
+            }
+    });
+        $.each($('.tabs-container'), function() {
+            $(this).find('.tabs').eq($(this).children('ul').find('li').index($(this).children('ul').find('li.active'))).css('display', 'block');
       });
 
     $('.tabs-container').children('ul').find('li').find('a').on('click', function(){
-    		var index = $(this).parent('li').parent('ul').find('li').index($(this).parent('li'));
-    		$(this).parent('li').parent('ul').parent('.tabs-container').children('.tabs').css('display','none');
-    		$(this).parent('li').parent('ul').parent('.tabs-container').children('ul').find('li').removeClass('active');
-    		$(this).parent('li').addClass('active');
-    		$(this).parent('li').parent('ul').parent('.tabs-container').children('.tabs:eq('+index+')').css('display','block');
+        var index = $(this).parent('li').parent('ul').find('li').index($(this).parent('li'));
+        $(this).parent('li').parent('ul').parent('.tabs-container').children('.tabs').css('display','none');
+        $(this).parent('li').parent('ul').parent('.tabs-container').children('ul').find('li').removeClass('active');
+        $(this).parent('li').addClass('active');
+        $(this).parent('li').parent('ul').parent('.tabs-container').children('.tabs:eq('+index+')').css('display','block');
         return false;
     });
+    $("#delete-contest").on("click", function(e) {
+        e.preventDefault();
+        window.location.href = $(this).data("href");
+    });
+
+    $('.match').each(function() {
+        $(this).find('.actions').find('.popover-button').popover({ trigger: "hover focus" });
+    });
+
     });
 </script>

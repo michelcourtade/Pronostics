@@ -1,26 +1,43 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+<div class="jumbotron">
+    <h1>{% trans %}Welcome on YouBetSport !{% endtrans %}</h1>
+    <p>
+    {% trans %}What about creating a new contest to play with your friends ?{% endtrans %}
+    {% trans %}Just click on "Create a contest" above and enjoy !{% endtrans %}
+    {% trans %}It's private and you can invite who you want.{% endtrans %}
+    </p>
+    
+    <p><a class="btn btn-primary btn-lg" href="{{ path('contest_create') }}" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>{% trans %}Create a contest{% endtrans %}</a></p>
+</div>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     <div class="page-header">
-    <h1>Evenements en cours</h1>
+    <h1>{% trans %}Current events{% endtrans %}</h1>
     </div>
     
-    <table class="records_list table table-striped events">
+    <table class="records_list table events">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Date debut</th>
-                <th>Date fin</th>
-                <th>Actions</th>
+                <th>{% trans %}Event{% endtrans %}</th>
+                <th>{% trans %}Contests{% endtrans %}</th>
+                <th class="hidden-xs">{% trans %}Actions{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
         {% for event in events %}
             <tr>
-                <td>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }}</td>
-                <td>{% if event.startDate %}{{ event.startDate|date('d/m/Y H:i') }}{% endif %}<br /></td>
-                <td>{% if event.finishDate %}{{ event.finishDate|date('d/m/Y H:i') }}{% endif %}<br /></td>
-                <td><a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-default">Entrer</a></td>
+                <td>
+                {% if event.getWebPath %}
+                    <a href="{{ path('event_show', { 'id': event.id }) }}" >
+                    <img src='/{{ event.getWebPath }}' class="contest_logo"/>
+                    </a>
+                {% endif %} <p>{{ event.name }}</p>
+                <p class="small">{% if event.startDate %}{{ event.startDate|date('d/m/Y') }}{% endif %}
+                {% if event.finishDate %} - {{ event.finishDate|date('d/m/Y') }}{% endif %}</p>
+                </td>
+                <td>{{ render(controller("DwfPronosticsBundle:Contest:list", { 'event': event })) }}</td>
+                <td class="hidden-xs"><a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-primary">{% trans %}See event page{% endtrans %}</a></td>
             </tr>
         {% endfor %}
         </tbody>

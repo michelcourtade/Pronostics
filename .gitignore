@@ -11,3 +11,5 @@
 /composer.phar
 /src/Dwf/UserBundle/
 .settings/
+*~
+/web/uploads/*

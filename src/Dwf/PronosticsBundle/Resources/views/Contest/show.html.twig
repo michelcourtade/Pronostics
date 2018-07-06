@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{{ contest.contestName }}</li>
+    </ul>
+    {% endblock %}
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+    {% block contest_header %}
+        <div class="page-header center">
+            <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}{{ contest.contestName }} - <small>{{ event.name }}</small></h1>
+        </div>
+        {% if messageForContest and messageForContest.message %}
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{% trans %}Close{% endtrans %}"><span aria-hidden="true">&times;</span></button>
+                <strong>{% trans %}Announcement{% endtrans %}</strong>
+                    <p>{{ messageForContest.message }}</p>
+            </div>
+        {% endif %}
+        <div class="col-sm-12">
+            {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
+        </div>
+    {% endblock %}
+    <div class="page-header">
+        <h1>{% trans %}Summary{% endtrans %}</h1>
+    </div>
+    <div class="row col-sm-12">
+    {% block content %}
+    <div class="col-sm-3">
+        {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
+    </div>
+    <div class="col-sm-9">
+    {% if total %}
+        {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total } %}
+    {% endif %}
+    </div>
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
+    {% endblock %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+    {% include "DwfPronosticsBundle:Chat:_js-pusher.html.twig" %}
+{% endblock %}

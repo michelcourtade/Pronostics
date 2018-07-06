@@ -15,6 +15,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Sonata\CoreBundle\SonataCoreBundle(),
@@ -24,22 +25,22 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new Sonata\UserBundle\SonataUserBundle(),
-            new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
             new Pix\SortableBehaviorBundle\PixSortableBehaviorBundle(),
             new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
-        	new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Dwf\PronosticsBundle\DwfPronosticsBundle(),
             new Dwf\PageBundle\DwfPageBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            //$bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Webfactory\Bundle\ExceptionsBundle\WebfactoryExceptionsBundle();
         }
 

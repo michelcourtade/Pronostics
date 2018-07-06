@@ -1,40 +1,26 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}Identification - Pronostics{% endblock %}
-{% block bodyclass %} class="login"{% endblock %}
+{% block title %}{{ 'Your profile'|trans }}{% endblock %}
+
 {% block body %}
-    <div class="row row-fluid">
-        {% set has_center = false %}
-        {% for block in blocks %}
-            {% if block.position == 'center' %}
-                {% set has_center = true %}
-            {% endif %}
-        {% endfor %}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('events') }}">{{ 'Home'|trans }}</a></li>
+        <li>{{ 'Your profile'|trans }}</li>
+    </ul>
 
-        <div class="{% if has_center %}span4 col-lg-4{% else %}span6 col-lg-6{% endif %}">
-            {% for block in blocks %}
-                {% if block.position == 'left' %}
-                    {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
-                {% endif %}
-            {% endfor %}
-        </div>
+    <div class="page-header">
+        <h1>{{ 'Your profile'|trans }}</h1>
 
-        {% if has_center %}
-            <div class="span4 col-lg-4">
-                {% for block in blocks %}
-                    {% if block.position == 'center' %}
-                        {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
-                    {% endif %}
-                {% endfor %}
-            </div>
+        {% if app.user.profilePicture %}
+            <img src="{{ asset(app.user.profilePicture) }}" class="avatar" />
+        {% elseif gravatar_exists(app.user.email) %}
+            <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
         {% endif %}
+        <h2>{{ 'Username'|trans }} : <span class="label label-default">{{ app.user.username }}</span></h2>
+        <h2>{{ 'Email'|trans }} : <span class="label label-default">{{ app.user.email }}</span></h2>
 
-        <div class="{% if has_center %}span4 col-lg-4{% else %}span6 col-lg-6{% endif %}">
-            {% for block in blocks %}
-                {% if block.position == 'right' %}
-                    {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
-                {% endif %}
-            {% endfor %}
-        </div>
+        <p><a href="{{ path('fos_user_change_password') }}">{{ 'Change your password'|trans }}</a></p>
+
+        <a class="btn btn-primary" href="{{ path('fos_user_profile_edit') }}">{{ 'Edit your profile'|trans }}</a>
     </div>
 {% endblock %}

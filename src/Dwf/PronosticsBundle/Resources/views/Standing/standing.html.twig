@@ -1,0 +1,53 @@
+    <div class="col-sm-3">
+        {% include "DwfPronosticsBundle:Standing:standing-menu.html.twig" %}
+    </div>
+    <div class="col-sm-9">
+    {% if pager is defined and pager.haveToPaginate %}
+    <div class="pagerfanta">
+    {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
+    </div>
+    {% endif %}
+    <table class="records_list table table-striped">
+        <thead>
+            <tr>
+                <th>Rang</th>
+                <th>Name</th>
+                <th>Points</th>
+                <th>Nb Prono</th>
+{#                 <th>Actions</th>#}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            {% set standing = entity[0] %}
+            {% set total = entity['total'] %}
+            {% set nb_pronostics = entity['nb_pronostics'] %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                {% if gravatar_exists(standing.user.email) %}
+                <img src="{{ gravatar('%this%'|replace({'%this%': standing.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
+                {% endif %}
+                {{ standing.user }}
+                </td>
+                <td>{{ total }}</td>
+                <td>{{ nb_pronostics }}</td>
+{#                 <td>#}
+{#                         {% if user == standing.user %}#}
+{#                         <a href="{{ path('pronostics_event', { 'event': event.id}) }}" class="btn btn-sm btn-default">Voir mes pronostics</a>#}
+{#                         {% else %}#}
+{#                         <a href="{{ path('pronostics_show_user', { 'user_id': standing.user.id, 'event': event.id }) }}" class="btn btn-sm btn-default">Voir ses pronostics</a>#}
+{#                         {% endif %}#}
+{#                 </td>#}
+            </tr>
+        {% else %}
+        <tr><td colspan="4">Pas encore de classement enregistré</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if pager is defined and pager.haveToPaginate %}
+    <div class="pagerfanta">
+    {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
+    </div>
+    {% endif %}
+    </div>

@@ -1,3 +1,36 @@
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /login
+    
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix: /login
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+facebook_login:
+    path: /login/check-facebook
+
 dwf_pronostics:
     resource: "@DwfPronosticsBundle/Controller/"
     type:     annotation
@@ -7,24 +40,8 @@ dwf_page:
     resource: "@DwfPageBundle/Resources/config/routing.yml"
     prefix:   /
 
-sonata_user_security:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_security_1.xml"
-
-sonata_user_resetting:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_resetting_1.xml"
-    prefix: /resetting
-
-sonata_user_profile:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_profile_1.xml"
-    prefix: /profile
-
-sonata_user_register:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_registration_1.xml"
-    prefix: /register
-
-sonata_user_change_password:
-    resource: "@SonataUserBundle/Resources/config/routing/sonata_change_password_1.xml"
-    prefix: /profile
+#fos_user:
+#    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
     
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
@@ -33,8 +50,4 @@ admin:
 _sonata_admin:
     resource: .
     type: sonata_admin
-    prefix: /admin
-    
-sonata_user:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
     prefix: /admin

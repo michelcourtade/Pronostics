@@ -15,7 +15,9 @@ class GameTypeAdmin extends Admin
         ->add('name')
         ->add('canHaveOvertime', 'checkbox', array('required' => false))
         ->add('events','entity', array('required' => false,
-        								'class' => 'Dwf\PronosticsBundle\Entity\Event'))
+        								'class' => 'Dwf\PronosticsBundle\Entity\Event',
+                                        'expanded' => true,
+                                        'multiple' => true,))
         ;
     }
 

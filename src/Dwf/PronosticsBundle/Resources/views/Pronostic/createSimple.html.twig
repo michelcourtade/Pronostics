@@ -1,4 +1,7 @@
 {{ form_start(form, {'attr': {'id': 'dwf_pronosticsbundle_pronostic_'~id, 'class': 'prono' }}) }}
 {{ form_widget(form.simpleBet, {'attr': {'class': 'simple_bet'}}) }}
+{% if event.scoreDiff %}
+{{ form_widget(form.sliceScore, {'placeholder': 'Ecart' ,'attr': {'placeholder': 'Ecart'}}) }}
+{% endif %}
 {{ form_rest(form) }}
 {{ form_end(form) }}

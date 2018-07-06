@@ -15,24 +15,24 @@ class GameRepository extends EntityRepository
 {
     public function findAllOrderedByDate()
     {
-        $qb = $this->createQueryBuilder('g')        
+        $qb = $this->createQueryBuilder('g')
         ->orderBy('g.date', 'ASC');
-        
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findAllByEventOrderedByDate(Dwf\PronosticsBundle\Entity\Event $event)
     {
     	$qb = $this->createQueryBuilder('g')
     	->where('g.event = :event')
     	->setParameter('event', $event)
     	->orderBy('g.date', 'ASC');
-    
+
     	$query = $qb->getQuery();
     	return $query->getResult();
     }
-    
+
     public function findNextGame()
     {
         $qb = $this->createQueryBuilder('g')
@@ -44,25 +44,25 @@ class GameRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findNextGameAfter(Dwf\PronosticsBundle\Entity\Game $game)
     {
-    	$qb = $this->createQueryBuilder('g')
-    	->where('g.date >= :date')
-    	->setParameter('date', $game->getDate())
-    	->andWhere('g.id != :id')
-    	->setParameter('id', $game->getId())
-    	->andWhere('g.played = 0')
-    	->andWhere('g.event = :event')
-    	->setParameter('event', $game->getEvent())
-    	->orderBy('g.date', 'ASC')
-    	->setMaxResults(1)
-    	;
-    
-    	$query = $qb->getQuery();
-    	return $query->getOneOrNullResult();
+        $qb = $this->createQueryBuilder('g')
+        ->where('g.id >= :id')
+        ->setParameter('id', $game->getId())
+        ->andWhere('g.id != :id')
+        ->setParameter('id', $game->getId())
+        ->andWhere('g.played = 0')
+        ->andWhere('g.event = :event')
+        ->setParameter('event', $game->getEvent())
+        ->orderBy('g.id', 'ASC')
+        ->setMaxResults(1)
+        ;
+
+        $query = $qb->getQuery();
+        return $query->getOneOrNullResult();
     }
-    
+
     public function findNextGames(Dwf\PronosticsBundle\Entity\Event $event)
     {
         $qb = $this->createQueryBuilder('g')
@@ -74,18 +74,18 @@ class GameRepository extends EntityRepository
         ->orderBy('g.date', 'ASC')
         ->setMaxResults(3);
         ;
-    
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findAllByType($type)
     {
         $qb = $this->createQueryBuilder('g')
         ->where('g.type = :type')
         ->setParameter('type', $type)
         ->orderBy('g.date', 'ASC');
-    
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
@@ -98,21 +98,21 @@ class GameRepository extends EntityRepository
         ->andWhere('g.event = :event')
         ->setParameter('event', $event)
         ->orderBy('g.date', 'ASC');
-    
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findById($id)
     {
         $qb = $this->createQueryBuilder('g')
         ->where('g.id = :id')
         ->setParameter('id', $id);
-    
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findAllByEventAndDate(Dwf\PronosticsBundle\Entity\Event $event, $date)
     {
         $qb = $this->createQueryBuilder('g')
@@ -125,11 +125,11 @@ class GameRepository extends EntityRepository
         ->andWhere('g.date<= :date2')
         ->setParameter('date2', $date . " 23:59:59")
         ->orderBy('g.date', 'ASC');
-    
+
         $query = $qb->getQuery();
         return $query->getResult();
     }
-    
+
     public function findLastGamePlayedByEvent(Dwf\PronosticsBundle\Entity\Event $event)
     {
     	$qb = $this->createQueryBuilder('g')
@@ -139,12 +139,12 @@ class GameRepository extends EntityRepository
     	->orderBy('g.date', 'DESC')
     	->setMaxResults(1);
     	;
-    	
+
     	$query = $qb->getQuery();
-    	
+
     	return $query->getResult();
     }
-    
+
     public function findGamesLeftByEventAndGameType(Dwf\PronosticsBundle\Entity\Event $event, Dwf\PronosticsBundle\Entity\GameType $gameType)
     {
     	$qb = $this->createQueryBuilder('g')
@@ -155,7 +155,7 @@ class GameRepository extends EntityRepository
     	->andWhere('g.played = 0')
     	->orderBy('g.date', 'ASC')
     	;
-    
+
     	$query = $qb->getQuery();
     	return $query->getResult();
     }

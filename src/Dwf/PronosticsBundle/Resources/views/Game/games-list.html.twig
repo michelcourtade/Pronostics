@@ -1,0 +1,87 @@
+<div class="row">
+    {% if types %}
+    {% block gameTypes %}
+    <div class="col-sm-3">
+        <ul class="list-group">
+            <li class="list-group-item{% if not gameType %} active{% endif %}"><a href="{{ path('event_games', {'event': event.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+        {% for type in types %}
+            <li class="list-group-item{% if gameType and gameType.id == type.id %} active{% endif %}"><a href="{{ path('event_games_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endblock gameTypes %}
+    {% endif %}
+    <div class="list-match col-sm-9">
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{% trans %}Games{% endtrans %}</a></li>
+            {% if results %}
+                {% if event.championship or (not event.championship and gameType) %}
+                    <li><a href="#">{% trans %}Standings{% endtrans %}{% if not gameType %} {{ event.name }}{% else %} {{ gameType.name }}{% endif %}</a></li>
+                {% endif %}
+            {% endif %}
+            {% if event.championship %}
+            <li><a href="#">{% trans %}Results{% endtrans %}</a></li>
+            {% endif %}
+        </ul>
+    <div class="tabs">
+        <span>{% trans %}Explanation{% endtrans %} :</span><span class="already-bet">{% trans %}Already bet{% endtrans %}</span>
+        {% set lastDate = '' %}
+        {% for entity in games %}
+            {% if lastDate != entity.date|date('Ymd') %}
+                <a name="{{ entity.date|date('Ymd') }}" id="{{ entity.date|date('Ymd') }}"></a>
+            {% endif %}
+            {% if event.simpleBet %}
+                {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics|length ? pronostics[loop.index - 1]:null} %}
+            {% else %}
+                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics|length ? pronostics[loop.index - 1]:null } %}
+            {% endif %}
+            {% set lastDate = entity.date|date('Ymd') %}
+        {% else %}
+                <p>{% trans %}There are no games {% endtrans %}</p>
+        {% endfor %}
+    </div>
+    <div style="display:none;" class="tabs">
+        {% if results %}
+        <div class="panel panel-default row">
+        <!-- Default panel contents -->
+        <div class="panel-heading">{% trans %}Standings{% endtrans %}{% if not gameType %} {{ event.name }}{% else %} {{ gameType.name }}{% endif %}</div>
+            <table class="table">
+            <thead>
+            <tr>
+            <th>#</th>
+            <th>{% trans %}Team{% endtrans %}</th>
+            <th>{% trans %}Points{% endtrans %}</th>
+            <th>{% trans %}Goals diff.{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                {% if teams[result.team_id].getWebPath %}
+                    <img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
+                {% endif %}
+                {{ result.team }}
+                </td>
+                <td>{{ result.total }}</td>
+                <td>{% if(result.goals >= 0) %}+{% endif %}{{ result.goals }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>{% trans %}No standings yet{% endtrans %}</p>
+    {% endif %}
+    </div>
+    {% if event.championship %}
+    <div style="display:none;" class="tabs">
+        {% include "DwfPronosticsBundle:Game:_points.html.twig" with { 'totalPoints': nbPointsWonByChampionshipDay } %}
+        <div id="chart" style="margin: 0 auto" class="col-sm-9"></div>
+    </div>
+    {% endif %}
+    </div>
+    </div>
+</div>

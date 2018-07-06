@@ -1,0 +1,20 @@
+# This file is auto-generated during the composer install
+parameters:
+    email_headers:
+        generic:
+            from: 
+                contact@youbetsport.com: YouBetSport
+            bcc: [michel.courtade@gmail.com]
+        admin_account_creation:
+            subject: "[YouBetSport] - Inscription"
+            from: 
+                contact@youbetsport.com: YouBetSport
+            bcc: [michel.courtade@gmail.com]
+        contact:
+            subject: "[YouBetSport] - Contact sur le site"
+            from: 
+                contact@youbetsport.com: YouBetSport
+            to: 
+                michel.courtade@gmail.com: YouBetSport
+            bcc: [michel.courtade@gmail.com]
+        

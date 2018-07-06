@@ -1,0 +1,4 @@
+<ul class="list-group">
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_scorers') %} active{% endif %}"><a href="{{ path('event_scorers', {'event': event.id }) }}">{% trans %}Best scorers{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_bestoffense') %} active{% endif %}"><a href="{{ path('event_bestoffense', {'event': event.id }) }}">{% trans %}Best offenses{% endtrans %}</a></li>
+</ul>

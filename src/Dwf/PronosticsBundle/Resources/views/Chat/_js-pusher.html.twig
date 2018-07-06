@@ -1,0 +1,59 @@
+<script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+<script>
+    {% if app.environment == 'dev' %}
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+    {% endif %}
+
+    var badge = 0;
+    var pusher = new Pusher('{{ pusher_auth_key }}', {
+        cluster: 'eu',
+        encrypted: true
+    });
+
+    var favicon = new Favico({
+        animation:'slide'
+    });
+
+    var channel = pusher.subscribe('{{ contest.slugName }}');
+    channel.bind('new-message', function(data) {
+        if (data['same_user'] == true) {
+            var $div = $('div.chat-body').last();
+        } else {
+            var $div = $('ul.chat');
+        }
+        $div.append(data['html']);
+        $('#collapseOne').scrollTop($('#message_'+data['message_id']).offset().top);
+        if (data['user'] != '{{ app.user.username }}') {
+            badge = badge + 1;
+            favicon.badge(badge);
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var $chatForm = $('#chat_form');
+        var $input = $('#dwf_pronosticsbundle_chat_message_form_type_message');
+        $chatForm.off();
+        $chatForm.submit(function(e) {
+            e.preventDefault(e);
+            var data = $chatForm.serialize();
+            $.ajax({
+                url : $chatForm.attr('action'),
+                type: $chatForm.attr('method'),
+                data : data,
+                success: function(data) {
+                    $input.val('');
+                },
+                failure: function (data) {
+                    $chatForm.before("<span class=\"info_ajax\" id=\"span_chat_form\">{{ 'Problem during submission. Retry'|trans }}</span>");
+                    setTimeout(function() { $("#span_chat_form").hide("slow"); $("#span_chat_form").remove(); }, 2000);
+                }
+            });
+        });
+        $('#dwf_pronosticsbundle_chat_message_form_type_message').focusin(function () {
+            badge = 0;
+            favicon.reset();
+        });
+    });
+</script>

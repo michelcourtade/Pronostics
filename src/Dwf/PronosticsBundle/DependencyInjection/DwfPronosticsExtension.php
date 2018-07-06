@@ -22,6 +22,11 @@ class DwfPronosticsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('dwf_pronostics.from_email', array($config['from_email']['address'] => $config['from_email']['sender_name']));
+
+        $container->setParameter('dwf_pronostics.invitation.template', $config['invitation']['template']);
+        $container->setParameter('dwf_pronostics.admin_creation.template', $config['admin_creation']['template']);
+        
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
     }

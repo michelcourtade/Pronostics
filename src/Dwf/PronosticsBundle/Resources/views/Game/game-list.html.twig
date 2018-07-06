@@ -2,9 +2,9 @@
     {% if types %}
     <div class="col-sm-3">
         <ul class="list-group">
-        	<li class="list-group-item"><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
+        	<li class="list-group-item{% if not gameType %} active{% endif %}"><a href="{{ path('event_games', {'event': event.id }) }}">Tous les matchs</a></li>
         {% for type in types %}
-            <li class="list-group-item"><a href="{{ path('game_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
+            <li class="list-group-item{% if gameType and gameType.id == type.id %} active{% endif %}"><a href="{{ path('event_games_by_type', { 'type': type.id, 'event': event.id }) }}">{{ type }}</a></li>
         {% endfor %}
         </ul>
     </div>
@@ -20,11 +20,11 @@
         </ul>
     <div class="tabs">
     {% set lastDate = '' %}
-        {% for entity in entities %}
-        	{% if event.simpleBet %}
-            	{% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
+        {% for entity in games %}
+            {% if event.simpleBet %}
+                {% include "DwfPronosticsBundle:Game:game-simpleBet.html.twig" with {'pronostic': pronostics[loop.index - 1]} %}
             {% else %}
-            	{% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+                {% include "DwfPronosticsBundle:Game:game.html.twig" with {'entity': entity, 'lastDate': lastDate, 'pronostic': pronostics[loop.index - 1] } %}
             {% endif %}
             {% set lastDate = entity.date|date('Ymd') %}
             {% else %}

@@ -1,15 +1,20 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ event.name }} - {% trans %}All games{% endtrans %} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
 {% block body -%}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">Accueil</a></li>
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>Matchs</li>
+    <li>{% trans %}Games{% endtrans %}</li>
     </ul>
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Tous les matchs</h1>
-</div>
-{% include "DwfPronosticsBundle:Game:game-list.html.twig" with {'title': event.name } %}
+    <div class="page-header">
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}All games{% endtrans %}</h1>
+    </div>
+    <div class="col-sm-12">
+        {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
+    </div>
+{% include "DwfPronosticsBundle:Game:games-list.html.twig" with {'title': event.name } %}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

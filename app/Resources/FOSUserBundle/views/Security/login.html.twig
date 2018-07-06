@@ -1,0 +1,219 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId={{ facebookId }}";
+        fjs.parentNode.insertBefore(js, fjs);
+    }
+    (document, 'script', 'facebook-jssdk'));
+
+
+        function fb_login() {
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    // connected
+                    //alert('Already connected, redirect to login page to create token.');
+                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                } else {
+                    // not_authorized
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                        } else {
+                            alert('Cancelled.');
+                        }
+                    }, {scope: 'email'});
+                }
+            });
+        }
+    </script>
+
+        <h1><img class="img-responsive home_logo" src="{{ asset('bundles/dwfpronostics/images/Youbetsport.png') }}" alt="{{ app_name }}" /></h1>
+        <div class="div_logo">
+{#         <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false" onlogin="fb_login()"></div>#}
+        <div class="index-social-col">
+            <button id="home_account_fb" class="btn btn-facebook btn-block" type="button" onclick="fb_login()">
+            <span class="label">{% trans %}Login with Facebook{% endtrans %}</span>
+            </button>
+        </div>
+        <span class="tiret">- </span><strong>{% trans %}or{% endtrans %}</strong><span class="tiret"> -</span>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
+            <h2 class="form-signin-heading">{% trans %}Login{% endtrans %}</h2>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+            <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control" placeholder="{% trans %}Username{% endtrans %}" required="required" />
+
+            <input type="password" id="password" name="_password" class="form-control" placeholder="{% trans %}Password{% endtrans %}" required="required" />
+
+            <label for="remember_me">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                {% trans %}Stay logged{% endtrans %}
+            </label>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{% trans %}Login{% endtrans %}" />
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+            {% trans %}Log in{% endtrans %}
+            </button>
+        </form>
+        <span class="login"><a href="{{ path('fos_user_resetting_request') }}">{% trans %}Lost password ?{% endtrans %}</a></span>
+        </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-primary" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">{% trans %}Play with your friends !{% endtrans %}</h2>
+                    <hr class="light">
+                    <p class="text-faded">
+                    {% trans %}You bet sport ! Your new website to bet with your friends !{% endtrans %}
+                    {% trans %}Create your contests for each sport event you want, and bet on it with your friends !{% endtrans %}
+                    {% trans %}Invite your family, friends or collegues and play with them very easily !{% endtrans %}
+                    </p>
+                    <a href="#services" class="page-scroll btn btn-default btn-xl sr-button">{% trans %}Create my account{% endtrans %}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">{% trans %}You bet sport !{% endtrans %}</h2>
+                    <hr class="primary">
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-4x fa-check text-primary sr-icons"></i>
+                        <h3>{% trans %}Contests{% endtrans %}</h3>
+                        <p class="text-muted">{% trans %}You can create multiple contests for each event on YouBetSport !{% endtrans %}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-4x fa-list text-primary sr-icons"></i>
+                        <h3>{% trans %}Standings{% endtrans %}</h3>
+                        <p class="text-muted">{% trans %}Standings are updated after each games{% endtrans %}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-4x fa-comment text-primary sr-icons"></i>
+                        <h3>{% trans %}Invite your friends{% endtrans %}</h3>
+                        <p class="text-muted">{% trans %}Create your contest and simply invite your friends.{% endtrans %}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="service-box">
+                        <i class="fa fa-4x fa-globe text-primary sr-icons"></i>
+                        <h3>{% trans %}Multiple Sports{% endtrans %}</h3>
+                        <p class="text-muted">{% trans %}Soccer, Rugby, Tennis, Football ... Find your favorite sport !{% endtrans %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="no-padding" id="portfolio">
+        <div class="container-fluid">
+            <div class="row no-gutter popup-gallery">
+                <div class="col-lg-4 col-sm-6">
+                    <a href="uploads/documents/uefa-euro-2016.png" class="portfolio-box">
+                        <img src="uploads/documents/thumbnails/uefa-euro-2016.jpg" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    UEFA Euro 2016
+                                </div>
+                                <div class="project-name">
+                                    Terminé !
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="uploads/documents/thumbnails/roland-garros-2016.jpg" class="portfolio-box">
+                        <img src="uploads/documents/thumbnails/roland-garros-2016.jpg" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Roland Garros 2016
+                                </div>
+                                <div class="project-name">
+                                    Terminé !
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a href="uploads/documents/thumbnails/coupe-monde-fifa-2018.png" class="portfolio-box">
+                        <img src="uploads/documents/thumbnails/coupe-monde-fifa-2018.png" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Coupe du Monde de la FIFA Russie 2018
+                                </div>
+                                <div class="project-name">
+                                    Ouvert !
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <aside class="bg-dark">
+        <div class="container text-center">
+            <div class="call-to-action">
+                <h2>{% trans %}Free to use and play !{% endtrans %}</h2>
+                <a href="{{ path("fos_user_registration_register") }}" class="btn btn-default btn-xl sr-button">{% trans %}Create my account{% endtrans %}</a>
+            </div>
+        </div>
+    </aside>
+
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">{% trans %}Contact us{% endtrans %}</h2>
+                    <hr class="primary">
+                    <p>{% trans %}Having trouble using Youbetsport ? Feel free to contact us !{% endtrans %}<br />
+                    {% trans %}We would like some feedback too ! Here's how you can join us{% endtrans %} :</p>
+                </div>
+                <div class="col-lg-4 col-lg-offset-2 text-center">
+                    <i class="fa fa-facebook fa-3x sr-contact"></i>
+                    <p><a href="https://www.facebook.com/YouBetSportPage" target="_blank">{% trans %}See our Facebook page{% endtrans %}</a></p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fa fa-twitter fa-3x sr-contact"></i>
+                    <p><a href="https://twitter.com/youbetsport" target="_blank">{% trans %}Join us on Twitter{% endtrans %}</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock fos_user_content %}
+

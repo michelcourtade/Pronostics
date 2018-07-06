@@ -1,0 +1,280 @@
+registration:
+    email:
+        subject: YouBetSport - Bienvenue sur YouBetSport %username% !
+        message: |
+            Bonjour %username% !
+
+            Pour valider votre compte utilisateur sur YouBetSport, merci de vous rendre sur %confirmationUrl%
+
+            Cordialement,
+            L'équipe YouBetSport.
+        message_html: |
+            <html>
+            <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
+            <p>Bonjour %username% !
+
+            <p>Pour valider votre compte utilisateur sur YouBetSport, merci de vous rendre sur %confirmationUrl%</p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe YouBetSport.</p>
+            </body>
+            </html>
+resetting:
+    email:
+        subject: YouBetSport - Réinitialiser votre mot de passe
+        message: |
+            Bonjour %username% !
+
+            Vous pouvez reinitialiser votre mot de passe en cliquant sur %confirmationUrl
+
+            Cordialement,
+            L'équipe YouBetSport
+        message_html: |
+            <html>
+            <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
+            <p>Bonjour %username% !
+
+            <p>Vous pouvez reinitialiser votre mot de passe sur YouBetSport en cliquant sur <a href='%confirmationUrl%'>%confirmationUrl%</a></p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe YouBetSport.</p>
+            </body>
+            </html>
+invitation:
+    email:
+        subject: YouBetSport - Vous venez d'etre invité par %username% !
+        message: |
+            Bonjour,
+
+            L'utilisateur %username% vient de vous inviter à participer à une compétition sur le site YouBetSport.
+
+            Pour rejoindre la compétition, merci de vous rendre sur le lien suivant %confirmationUrl% ou de rentrer le code suivant lors de la création de votre profil :
+            %invitation_code%
+
+            A très vite sur YouBetSport !
+            
+            Cordialement,
+            L'équipe YouBetSport.
+        message_html: |
+            <html>
+            <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
+            <p>Bonjour,</p>
+
+            <p>L'utilisateur %username% vient de vous inviter à participer à une compétition sur le site YouBetSport.</p>
+
+            <p>Pour rejoindre la compétition, merci de vous rendre sur le lien suivant <a href='%confirmationUrl%'>%confirmationUrl%</a> ou de rentrer le code suivant lors de la création de votre profil :</p>
+            <p><strong>%invitation_code%</strong></p>
+
+            <p>A très vite sur YouBetSport !</p>
+
+            <p>Cordialement,</p>
+            <p>L'équipe YouBetSport.</p>
+            </body>
+            </html>
+admin_creation:
+    email:
+        subject: YouBetSport - Votre mot de passe YouBetSport !
+        message: |
+            Bonjour %username% !
+
+            Vous avez demandé à recevoir un nouveau mot de passe. 
+            Voici votre mot nouveau mot de passe:
+            
+            %password%
+            
+            Nous vous conseillons de le changer dès que vous aurez réussi à vous connecter à nouveau sur votre compte.
+            
+            Se connecter: %loginUrl%
+            Cordialement,
+            L'équipe YouBetSport.
+        message_html: |
+            <html>
+            <body>
+            <div id="header"><a href="http://www.youbetsport.com"><img src="http://www.youbetsport.com/bundles/dwfpronostics/images/Youbetsport.png" border:"0"/></a></div>
+            <p>Bonjour %username% !</p>
+            
+            <p>Vous avez demandé à recevoir un nouveau mot de passe. Voici votre nouveau mot de passe : </p>
+            <p><strong>%password%</strong></p>
+            
+            <p>Nous vous conseillons de le changer dès que vous aurez réussi à vous connecter à nouveau sur votre compte.</p>
+            
+            <p><a href="%loginUrl%">Se connecter</a></p>
+            
+            <p>Cordialement,</p>
+            <p>L'équipe YouBetSport.</p>
+            </body>
+            </html>
+Current events: Evènements en cours
+Event: Evènement
+Contests: Compétitions
+Actions: Actions
+Create a new contest: Créer une compétition
+Create: Créer
+See event page: Voir l'évènement
+My contests: Mes compétitions
+Home: Accueil
+Standings: Classement
+Games: Matchs
+Bets: Pronostics
+Manage: Configurer
+Login: Connectez-vous
+Username: Pseudo
+Password: Mot de passe
+Stay logged: Rester connecté
+Log in: Se connecter
+Register: S'enregistrer
+Points won: Points gagnés
+Av Pts / Bet: Moy. Pts / Pronostic
+Good scores: Bon scores
+points: points
+Place: Place
+Name: Nom
+Points: Points
+Nb Bets: Nb Pronos
+All games: Tous les matchs
+Team: Equipe
+Points: Points
+Goals diff.: Diff buts
+Game: Match
+My bet: Mon pronostic
+My bets: Mes pronostics
+Bets on this game: Pronostics sur ce match
+User: Pseudo
+Bet: Pronostiquer
+Pts won: Pts gagnés
+Difference: Différence
+Change name: Changer le nom
+Generate new access code: Générer un nouveau code d'accès
+Post your message: Poster votre message
+Admin: Administration
+Access: Accès
+Invitations: Invitations
+Users: Joueurs
+Rules: Règles
+Announcement: Annonce
+Contest access: Accès compétition
+Generating access code will allow you to open your contest to multiple users very easily.: Générer un code d'accès vous permettra d'ouvrir votre compétition à plusieurs joueurs très facilement.
+Invite by email: Inviter par mail
+Send Invitation by email: Envoyer une invitation par mail
+Send: Envoyer
+Invitations already sent: Invitations déjà envoyées
+Invite by username: Inviter par pseudo
+Invite Facebook friends: Inviter vos amis Facebook
+No users in your contest.: Pas de joueurs dans votre compétition
+Announcement for your contest: Annonce pour votre compétition
+If you post a message here, it will be instantanately visible by users in your contest, in each top of pages.: Si vous postez votre message ici, il sera instantanément visible par tous les utilisateurs de votre compétition, en haut de chaque page.
+Your announcement: Votre message
+Contest properties: Propriétés de votre compétition
+Danger zone: Zone de danger
+Be careful with this button ! Deleting a contest can't be undone ! Your bets will still be availables but your friends in this contest won't see your results anymore.: Soyez prudent avec ce bouton ! Supprimer une compétition est définitif !
+Delete contest: Supprimer la compétition
+Modify: Modifier
+Winner if draw: Vainqueur si nul
+Will go overtime: Ira aux prolongations
+at: à
+Your bet has been modified.: Votre pronostic a été modifié.
+Modify my bet: Modifier mon pronostic
+Next game: Prochain match
+Old events: Historique
+There are no standings: Il n'y a pas de classement pour le moment.
+There are no games: Pas de match pour le moment
+No standings yet: Pas encore de classement
+No bet yet. Go see: Pas de pronostic enregistré. Allez voir 
+game listing: la liste des matchs
+to bet.: pour parier.
+Toggle navigation: Réduire le menu
+See rules: Règles
+About: A propos
+Play: Jouer
+Contact: Contact
+Play with your friends !: Pronostiquez entre amis !
+You bet sport ! Your new website to bet with your friends !: YouBetSport : votre nouveau site pour pronostiquer entre amis.
+Create your contests for each sport event you want, and bet on it with your friends !: Créez vos compétitions sur chaque évènement et pronostiquez avec vos amis !
+Invite your family, friends or collegues and play with them very easily !: Invitez votre famille, vos amis vos collègues et jouez avec eux très facilement !
+Create my account: Créer mon compte
+You bet sport !: Pronostiquez !
+Standings are updated after each games: Les classements sont mis à jour après chaque match
+You can create multiple contests for each event on YouBetSport !: Vous pouvez créer plusieurs compétitions pour chaque évènement sur YouBetSport
+Invite your friends: Invitez vos amis
+Create your contest and simply invite your friends.: Créez votre compétition et invitez vos amis très simplement
+Multiple Sports: Multi-sports
+Soccer, Rugby, Tennis, Football ... Find your favorite sport !: Football, Rugby, Tennis, Foot américain ... Trouvez votre sport favori !
+Free to use and play !: Utilisation et inscription totalement gratuite !
+Contact us: Contactez nous
+Having trouble using Youbetsport ? Feel free to contact us !: Vous avez des problèmes d'utilisation sur YouBetSport ? N'hésitez pas à nous contacter !
+We would like some feedback too ! Here's how you can join us: Nous aimerions avoir votre avis ! Voici comment nous joindre
+See our Facebook page: Voir notre page Facebook
+Join us on Twitter: Rejoignez nous sur Twitter
+or: ou
+Login with Facebook: Connectez-vous
+Create with Facebook: Connectez-vous
+Invitation code: Code d'invitation
+Invitation code (optional): Code d'invitation (optionnel)
+Already have an account ?: Vous avez déjà un compte ?
+Password (6 char min): Mot de passe (6 car. min)
+Confirm: Confirmez
+Welcome on YouBetSport !: Bienvenue sur YouBetSport !
+What about creating a new contest to play with your friends ?: Pourquoi ne pas créer une compétition privée pour jouer avec vos amis ?
+Just click on "Create a contest" above and enjoy !: Cliquez simplement sur le bouton "Créer une compétition" ci-dessous et profitez !
+It's private and you can invite who you want.: C'est un groupe de jeu privé et vous pouvez y inviter qui vous souhaitez.
+Create a contest: Créer une compétition
+Create new contest: Créer une compétition
+Join a contest: Rejoindre une compétition
+Create a private contest and bet with your friends !: Créez une compétition privée et pronostiquez avec vos amis !
+Select an event: Choisissez un évènement sportif
+Events: Evènements
+Choose name for your contest: Nom de votre compétition
+Your invitation code: Votre code d'invitation
+Join with code: Rejoindre la compétition
+Join a contest to bet with your friends !: Rejoignez une compétition grâce à votre code d'invitation et jouez avec vos amis !
+Your profile: Votre profil
+Email: Email
+Edit: Modifier
+Edit your profile: Editer vos informations personnelles
+Bet on: Pronostiquer sur
+See game: Voir le match
+Select an event above by clicking on its picture, give a name to your contest and validate.: Séléctionnez un évènement ci-dessous en cliquant sur l'image, puis donnez un nom à votre compétition et validez !
+Summary: Résumé
+Perfect scores: Pronostics avec score exact
+Informations: Informations
+Position: Position
+Your contest has been created.: Votre compétition a bien été créée.
+Close: Fermer
+Lost password: Mot de passe oublié
+Lost password ?: Mot de passe perdu ?
+You've lost your password to access to YouBetSport ?: Vous avez perdu votre mot de passe d'accès à YouBetSport ?
+goal: but
+Best scorers: Meilleurs marqueurs
+Best scorers rankings: Classement meilleurs marqueurs
+Player: Joueur
+Nb goals: Nb buts
+Total: Total
+Bad bets: Mauvais pronostics
+Good bets: Bons pronostics
+Good bets with perfect scores: Bons pronostics avec score exact
+pts: pts
+Result: Résultat
+Already bet: Déjà pronostiqué
+Explanation: Légende
+Best offenses ranking (without owngoals): Classement meilleures attaques (sans les buts csc)
+Best offenses: Meilleures attaques
+Best defenses: Meilleures defenses
+Best defenses ranking: Classement meilleures défenses
+His best scorer: Son meilleur marqueur
+%user% doesn't have any bet for %event%: %user% n'a pas encore pronostiqué sur %event%
+%user%'s bets: Pronostics de %user%
+Games of the day: Matchs du jour
+Next games: Prochains matchs
+No more game to play: Il n'y a plus de matchs à jouer
+Statistics: Statistiques
+Bet with your friends on: Pronostiquez avec vos amis sur
+There are no games today: Il n'y a aucun match aujourd'hui.
+No active event at this time ... please come back later !: Pas d'évènement actif pour le moment, merci de revenir plus tard !
+You already have a bet registered for this game. You can modify it below.: Vous avez déjà pronostiqué sur ce match. Vous pouvez modifier votre pronostic existant ci-dessous.
+Game has already started, you can't bet anymore.: Le match a déjà commencé, vous ne pouvez plus pronostiquer !
+With extra time, final score: Avec prolongations, score final
+Change your password: Modifier votre mot de passe
+Problem during submission. Retry: Problème lors de l'envoi. Réésayez un peu plus tard.

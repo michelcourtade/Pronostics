@@ -1,0 +1,17 @@
+{% if myContests %}
+<p class="small">{% trans %}My contests{% endtrans %}</p>
+    <ul>
+    {% for contest in myContests %}
+        <li><a href="{{ path('contest_show', { 'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if otherContests %}
+    <ul>
+    {% for contest in otherContests %}
+        <li><a href="{{ path('contest_show', { 'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% include "DwfPronosticsBundle:Contest:_createForm.html.twig" with {'contestForm': contestForm } %}

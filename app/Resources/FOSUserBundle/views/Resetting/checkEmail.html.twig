@@ -1,0 +1,12 @@
+{% extends '::base.html.twig' %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block body %}
+<div class="page-header">
+    <h1>{{ "Lost password"|trans({}, 'messages') }}</h1>
+</div>
+<p>
+{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+{% endblock %}

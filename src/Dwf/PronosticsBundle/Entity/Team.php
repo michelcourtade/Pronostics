@@ -4,6 +4,8 @@ namespace Dwf\PronosticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Cocur\Slugify\Slugify;
 
 /**
  * Team
@@ -36,43 +38,51 @@ class Team
      * @ORM\Column(name="national", type="boolean")
      */
     private $national;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="iso", type="string", length=3)
      */
     private $iso;
-    
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Sport")
+     * @ORM\JoinColumn(name="sport", referencedColumnName="id")
+     */
+    private $sport;
+
     /**
      * @var file
      *
-     * @ORM\Column(name="file", type="string", length=255)
+     * @ORM\Column(name="file", type="string", length=255, nullable=true)
      * @Assert\File(maxSize="6000000")
      */
     private $file;
-    
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     protected function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
-    
+
     protected function getUploadDir()
     {
         // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
@@ -80,10 +90,30 @@ class Team
         return 'uploads/documents';
     }
 
+    public function getFixturesPath()
+    {
+        return $this->getAbsolutePath() . 'web/uploads/documents/fixtures/';
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -106,43 +136,32 @@ class Team
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-    
+
     public function __toString()
     {
     	return $this->getName();
     }
-	/**
-     * @return the $img
-     */
-    public function getFile() {
-        return $this->file;
-    }
 
-	/**
-     * @param \Dwf\PronosticsBundle\Entity\file $img
-     */
-    public function setFile($file) {
-        $this->file = $file;
-    }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
     public function preUpload()
     {
-        if (null !== $this->file) {
-            // faites ce que vous voulez pour générer un nom unique
-            $this->path = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+        if (null !== $this->file && !$this->path) {
+            $slugify = new Slugify();
+            $sport = $slugify->slugify($this->getSport());
+            $this->path = $sport.'-'.($this->getNational() ? 'NAT-' : 'CLU-').$this->getIso().'.'.$this->file->guessExtension();
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -152,16 +171,16 @@ class Team
         if (null === $this->file) {
             return;
         }
-    
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
@@ -203,7 +222,7 @@ class Team
     /**
      * Get national
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getNational()
     {
@@ -226,10 +245,33 @@ class Team
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * Set sport
+     *
+     * @param \Dwf\PronosticsBundle\Entity\Sport $sport
+     * @return Team
+     */
+    public function setSport(\Dwf\PronosticsBundle\Entity\Sport $sport = null)
+    {
+        $this->sport = $sport;
+
+        return $this;
+    }
+
+    /**
+     * Get sport
+     *
+     * @return \Dwf\PronosticsBundle\Entity\Sport
+     */
+    public function getSport()
+    {
+        return $this->sport;
     }
 }

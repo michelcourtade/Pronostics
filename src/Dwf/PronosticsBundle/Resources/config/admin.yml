@@ -22,6 +22,16 @@ services:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.slice_score:
+        class: Dwf\PronosticsBundle\Admin\SliceScoreAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Tranches de score" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\SliceScore
+            - ~
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
     sonata.admin.game_type:
         class: Dwf\PronosticsBundle\Admin\GameTypeAdmin
         tags:
@@ -116,4 +126,75 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [DwfPronosticsBundle]]
-            - [ setMailer, [@dwf_pronosticbundle.mailer]]
+            - [ setMailer, [@dwf_pronosticbundle.user_swift_mailer]]
+    sonata.admin.contest:
+        class: Dwf\PronosticsBundle\Admin\ContestAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Contests" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Contest
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.dwf_user:
+        class: Dwf\PronosticsBundle\Admin\DwfUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Utilisateurs", label: "Users" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\User
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+            - [ setUserManager, ['@fos_user.user_manager']]
+    sonata.admin.country:
+        class: Dwf\PronosticsBundle\Admin\CountryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Pays" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Country
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.city:
+        class: Dwf\PronosticsBundle\Admin\CityAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Villes" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\City
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.location:
+        class: Dwf\PronosticsBundle\Admin\LocationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Lieux" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\Location
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    sonata.admin.admin_message:
+        class: Dwf\PronosticsBundle\Admin\AdminMessageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contenu", label: "Annonce" }
+        arguments:
+            - ~
+            - Dwf\PronosticsBundle\Entity\AdminMessage
+            - ~
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+        calls:
+            - [ setTranslationDomain, [DwfPronosticsBundle]]
+    dwf_pronosticsbundle.form.type.dwf_pronosticsbundle_admin_password:
+        class: Dwf\PronosticsBundle\Form\Type\DwfPronosticsBundleAdminPasswordType
+        tags:
+        - { name: form.type, alias: dwf_pronosticsbundle_admin_password }

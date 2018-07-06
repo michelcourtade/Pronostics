@@ -33,7 +33,7 @@
         {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
         {% set lastDate = entity.game.date|date('Ymd') %}
     {% else %}
-        <p>Pas encore de pronostic enregistré. Allez voir la <a href="{{ path('games_event', {'event': event.id }) }}">liste des matchs</a> pour pronostiquer.</p>
+        <p>Pas encore de pronostic enregistré. Allez voir la <a href="{{ path('event_games', {'event': event.id }) }}">liste des matchs</a> pour pronostiquer.</p>
     {% endfor %}
 </div>
 <div class="page-header">

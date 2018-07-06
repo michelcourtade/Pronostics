@@ -4,53 +4,10 @@
     <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>Classement</li>
+    <li>{{ event.name }} - Classement général</li>
     </ul>
-<div class="page-header">
-    <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Classement</h1>
-</div>
-{% for group in groupResults %}
-<div class="page-header">
-    <h1>Groupe {{ group.group.name }}</h1>
-</div>
-    <table class="records_list table table-striped">
-        <thead>
-            <tr>
-                <th>Rang</th>
-                <th>Name</th>
-                <th>Points</th>
-                <th>Nb Prono</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in group.results %}
-{#         {{ dump(entity) }}#}
-            {% set prono = entity[0] %}
-            {% set total = entity['total'] %}
-            {% set nb_pronostics = entity['nb_pronostics'] %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>
-                {% if gravatar_exists(prono.user.email) %}
-  				<img src="{{ gravatar('%this%'|replace({'%this%': prono.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
-				{% endif %}
-                {{ prono.user }}
-                </td>
-                <td>{{ total }}</td>
-                <td>{{ nb_pronostics }}</td>
-                <td>
-                        {% if user == prono.user %}
-                        <a href="{{ path('pronostics_event', { 'event': event.id}) }}" class="btn btn-sm btn-default">Voir mes pronostics</a>
-                        {% else %}
-                        <a href="{{ path('pronostics_show_user', { 'user_id': prono.user.id, 'event': event.id }) }}" class="btn btn-sm btn-default">Voir ses pronostics</a>
-                        {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-<p>Pas de resultat</p>
-{% endfor %}
+    <div class="page-header">
+        <h1>{% if event.getWebPath %}<img src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - Classement général</h1>
+    </div>
+{% include "DwfPronosticsBundle:Standing:standing.html.twig" %}
 {% endblock %}

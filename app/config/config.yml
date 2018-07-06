@@ -4,7 +4,9 @@ imports:
     - { resource: doctrine_extensions.yml }
     - { resource: @DwfPronosticsBundle/Resources/config/admin.yml }
     - { resource: @DwfPageBundle/Resources/config/admin.yml }
-    - { resource: "@DwfPronosticsBundle/Resources/config/services.yml" }
+    - { resource: @DwfPronosticsBundle/Resources/config/services.yml }
+    - { resource: @DwfPronosticsBundle/Resources/config/parameters.yml }
+    - { resource: bundles/braincrafted.yml }
 
 framework:
     #esi:             ~
@@ -35,6 +37,11 @@ twig:
     form:
         resources:
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+    form_themes:
+        - 'Form/fields.html.twig'
+    globals:
+        facebookId: %oauth.facebook.id%
+        app_name: %app_name%
 
 # Assetic Configuration
 assetic:
@@ -72,8 +79,8 @@ doctrine:
                 connection:       default
                 #auto_mapping: true
                 mappings:
-                    ApplicationSonataUserBundle: ~
-                    SonataUserBundle: ~
+                    #ApplicationSonataUserBundle: ~
+                    #SonataUserBundle: ~
                     FOSUserBundle: ~
                     DwfPronosticsBundle: ~
                     DwfPageBundle: ~
@@ -112,18 +119,26 @@ fos_user:
     firewall_name:  main
     user_class:     Dwf\PronosticsBundle\Entity\User
     #user_class:     Application\Sonata\UserBundle\Entity\User
-    #from_email:
-     #   address:        michel@dwf.fr
-     #   sender_name:    MichelDwf
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    YouBetSport
+    resetting:
+        email:
+            template: email/resetting.email.html.twig
     registration:
+        confirmation:
+            enabled: false
+            template: email/confirmation.email.html.twig
         form:
             type: dwf_pronosticsbundle_user_registration
     group:
-        group_class:   Application\Sonata\UserBundle\Entity\Group
-        group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+        group_class:   Dwf\PronosticsBundle\Entity\Group
+        group_manager: fos_user.group_manager.default                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
 
     service:
-        user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+        #mailer: fos_user.mailer.twig_swift
+        mailer: dwf_pronosticbundle.user_swift_mailer
+        user_manager: fos_user.user_manager.default                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
 
 sonata_admin:
     templates:
@@ -143,18 +158,18 @@ sonata_admin:
         object_permissions: [VIEW, EDIT, DELETE, UNDELETE, OPERATOR, MASTER, OWNER]
         
         
-sonata_user:
-    security_acl: true
-    manager_type: orm # can be orm or mongodb
-    class:
-        user: Dwf\PronosticsBundle\Entity\User
-    profile:
-        dashboard:
-            blocks:
-                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Bienvenue !</h2> <ul class='nav-profile'><li><a href='/1_reglement' class='btn btn-default'>Règlement</a></li><li><a href='/' class='btn btn-default'>Aller pronostiquer</a></li></ul>"} }
-        register:
-            form:
-                type: dwf_pronosticsbundle_user_registration
+#sonata_user:
+#    security_acl: true
+#    manager_type: orm # can be orm or mongodb
+#    class:
+#        user: Dwf\PronosticsBundle\Entity\User
+#    profile:
+#        dashboard:
+#            blocks:
+#                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Bienvenue !</h2> <ul class='nav-profile'><li><a href='/1_reglement' class='btn btn-default'>Règlement</a></li><li><a href='/' class='btn btn-default'>Aller pronostiquer</a></li></ul>"} }
+#        register:
+#            form:
+#                type: dwf_pronosticsbundle_user_registration
     
 sonata_block:
     default_contexts: [cms]
@@ -162,8 +177,8 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts:   [admin]
         
-        sonata.user.block.menu:    # used to display the menu in profile pages
-        sonata.user.block.account: # used to display menu option (login option)
+        #sonata.user.block.menu:    # used to display the menu in profile pages
+        #sonata.user.block.account: # used to display menu option (login option)
         
         #sonata.admin_doctrine_orm.block.audit:
         #    contexts:   [admin]
@@ -175,7 +190,56 @@ sonata_block:
         #sonata.media.block.media:
         #sonata.media.block.gallery:
         #sonata.media.block.feature_media:
+
+hwi_oauth:
+    http_client:
+        timeout: 10
+    connect:
+        account_connector: dwf_pronosticsbundle.user_provider
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
+            facebook: facebook_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           %oauth.facebook.id%
+            client_secret:       %oauth.facebook.secret%
+            scope: "public_profile,email,user_friends"
+            options:
+                display: popup #dialog is optimized for popup window
+                #auth_type: rerequest # Re-asking for Declined Permission
+            infos_url:     "https://graph.facebook.com/me?fields=id,name,email,picture.type(square)"
+            paths:
+                email:          email
+                profilepicture: picture.data.url
+
+    # an optional setting to configure a query string parameter which can be used to redirect
+    # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
+    # redirect the user to /my/destination after facebook authenticates them.  If this is not
+    # set then the user will be redirected to the original resource that they requested, or
+    # the base address if no resource was requested.  This is similar to the behaviour of
+    # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
+    # target_path_parameter: _destination
+
+    # an optional setting to use the HTTP REFERER header to be used in case no
+    # previous URL was stored in the session (i.e. no resource was requested).
+    # This is similar to the behaviour of
+    # [using the referring URL for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html#using-the-referring-url).
+    # use_referer: true
+    
+dwf_pronostics:
+    app_name: %app_name%
+    from_email:
+        address:        contact@dwf.fr
+        sender_name:    YouBetSport
+    invitation:
+        template: email/invitation.email.html.twig
+    admin_creation:
+        template: email/admin_creation.email.html.twig
         
 parameters:
-    sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin
-    sonata.user.admin.user.entity: Dwf\PronosticsBundle\Entity\User
+    #sonata.user.admin.user.class: Dwf\PronosticsBundle\Admin\UserAdmin
+    #sonata.user.admin.user.entity: Dwf\PronosticsBundle\Entity\User

@@ -1,15 +1,33 @@
 <div class="page-header">
     <div class="head-date row">
         <p class="date col-xs-12">
-            <span><a href="{{ path('game_by_type', { 'type': entity.type.id, 'event': event.id }) }}">{{ entity.type }}</a></span> - 
-            {{ entity.date|date('d/m/Y') }} à {{ entity.date|date('H:i:s') }}
+            <span>
+            {% if contest %}
+            <a href="{{ path('contest_games_by_type', { 'type': entity.type.id, 'contestId': contest.id }) }}">{{ entity.type }}</a>
+            {% else %}
+            <a href="{{ path('event_games_by_type', { 'type': entity.type.id, 'event': event.id }) }}">{{ entity.type }}</a>
+            {% endif %}
+            </span> -
+            {{ entity.date|date('d/m/Y') }} {% trans %}at{% endtrans %} {{ entity.date|date('H:i:s') }}
         </p>
-	</div>
+    </div>
     <div class="show-match row">
         <div class="team{% if(entity.getWhoLose() == 1) %} looser{% endif %} col-xs-4 col-sm-4 col-md-4">
-            <span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.name }}</a></span>
-            <span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.iso }}</a></span>
             <img src='/{{ entity.team1.getWebPath }}' />
+            <span class="hidden-xs">
+            {% if contest %}
+                <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+            {% else %}
+                <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
+            {% endif %}
+            {{ entity.team1.name }}</a></span>
+            <span class="hidden-sm hidden-md hidden-lg">
+            {% if contest %}
+                <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+            {% else %}
+                <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
+            {% endif %}
+            {{ entity.team1.iso }}</a></span>
             {% if scorersTeam1 %}
                 <div class="scorers">
                     {% for scorer in scorersTeam1 %}
@@ -17,24 +35,37 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            
+
         </div>
         <div class="score col-xs-4 col-sm-4 col-md-4">
          {% if entity.played %}
-    		<strong>{{ entity.score }}</strong>
-    		{% if entity.overtime %}
-    		   <span>{{ entity.scoreAfterOvertime }}</span>
-    		   {% if entity.winner %}
-    		      <span>{{ entity.winner }}</span>
-    		   {% endif %}
-    		{% endif %}
+            <strong>{{ entity.score }}</strong>
+            {% if entity.overtime %}
+               <span>{{ entity.scoreAfterOvertime }}</span>
+               {% if entity.winner %}
+                  <span>{{ entity.winner }}</span>
+               {% endif %}
+            {% endif %}
         {% else %}
         -
         {% endif %}
         </div>
         <div class="team ext{% if(entity.getWhoLose() == 2) %} looser{% endif %} col-xs-4 col-sm-4 col-md-4">
-            <span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.name }}</a></span>
-            <span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.iso }}</a></span> 
+            <span class="hidden-xs">
+            {% if contest %}
+                <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+            {% else %}
+                <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
+            {% endif %}
+            {{ entity.team2.name }}</a></span>
+            <span class="hidden-sm hidden-md hidden-lg">
+            {% if contest %}
+                <a href="{{ path('contest_game_show', { 'id': entity.id, 'contestId': contest.id }) }}">
+            {% else %}
+                <a href="{{ path('event_game_show', { 'id': entity.id, 'event': event.id }) }}">
+            {% endif %}
+
+            {{ entity.team2.iso }}</a></span>
             <img src='/{{ entity.team2.getWebPath }}' />
             {% if scorersTeam2 %}
                 <div class="scorers">
@@ -48,81 +79,67 @@
     </div>
     <div class="row">
     <div class="well center-block col-xs-12 col-sm-6 col-md-4">
-    	{% if pronostic %}
-    		{% if event.simpleBet %}
-    			{% if not entity.played and not entity.hasBegan() %}
-    				{% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id} %}
-				{% else %}
-					Mon pronostic :
-					<div class="simple_bet">
-	        		<span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
-	        		<span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
-	        		<span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
-	        		</div>
-{# 					{% if pronostic.simpleBet == "N" %}#}
-{# 					<span class="prono">Nul</span>#}
-{# 					{% elseif pronostic.simpleBet == "1" %}#}
-{# 					<span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.name }}</a></span>#}
-{#             		<span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team1.iso }}</a></span>#}
-{#             		<img src='/{{ entity.team1.getWebPath }}' />#}
-{#             		{% elseif pronostic.simpleBet == "2" %}#}
-{# 					<span class="hidden-xs"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.name }}</a></span>#}
-{#             		<span class="hidden-sm hidden-md hidden-lg"><a href="{{ path('game_show', { 'id': entity.id }) }}">{{ entity.team2.iso }}</a></span>#}
-{#             		<img src='/{{ entity.team2.getWebPath }}' />#}
-{# 					{% endif %}#}
-				{% endif %}
-    		{% else %}
-    	   Mon pronostic : <span class="prono">{{ pronostic.score }}</span>
-    	   {% if pronostic.overtime %}
-    		   <p>
-    		   Avec prolongations, score final : {{ pronostic.scoreAfterOvertime }}
-    		   {% if pronostic.winner %}
-    		       <strong>Vainqueur : {{ pronostic.winner }}</strong>
-    		   {% endif %}
-    		   </p>
+        {% if pronostic and false %}
+            {% if event.simpleBet %}
+                {% if not entity.played and not entity.hasBegan() %}
+                    {% include "DwfPronosticsBundle:Pronostic:updateSimple.html.twig" with {'id': entity.id} %}
+                {% else %}
+                    {% trans %}My bet{% endtrans %} :
+                    <div class="simple_bet">
+                   <span{% if pronostic.simpleBet == "1" %} class='active'{% endif %}>1</span>
+                    <span{% if pronostic.simpleBet == "N" %} class='active'{% endif %}>N</span>
+                    <span{% if pronostic.simpleBet == "2" %} class='active'{% endif %}>2</span>
+                    </div>
+                {% endif %}
+            {% else %}
+            {% trans %}My bet{% endtrans %} : <span class="prono">{{ pronostic.score }}</span>
+            {% if pronostic.overtime %}
+               <p>
+               {% trans %}Overtime, final score{% endtrans %} : {{ pronostic.scoreAfterOvertime }}
+               {% if pronostic.winner %}
+                   <strong>{% trans %}Winner{% endtrans %} : {{ pronostic.winner }}</strong>
+               {% endif %}
+               </p>
             {% endif %}
-    	   {% if not entity.played and not entity.hasBegan() %}
-		   <a class="btn btn-lg btn-primary" href="{{ path('pronostics_edit', { 'id': pronostic.id }) }}">
-	            Modifier mon pronostic
-	       </a>
-    	   {% endif %}
-    	   {% if pronostic.result %}
-    	       <span class="points pts-{{ pronostic.result }}"{{ pronostic.result }} pts</span>
-    	   {% endif %}
-    	   {% endif %}
-    	{% else %}
-    	   {% if not entity.played and not entity.hasBegan() %}
-	    	   {% if event.simpleBet %}
-	    	   		{% include "DwfPronosticsBundle:Pronostic:createSimple.html.twig" with {'id': entity.id} %}
-	    		{% else %}
-		    	   <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id }) }}">
-		                Pronostiquer
-		           </a>
-	           {% endif %}
-    	   {% endif %}
-    	{% endif %}
+            {% if not entity.played and not entity.hasBegan() %}
+            <a class="btn btn-lg btn-primary" href="{{ path('pronostics_edit', { 'id': pronostic.id }) }}">
+                 {% trans %}Modify my bet{% endtrans %}
+            </a>
+            {% endif %}
+            {% if pronostic.result %}
+                <span class="points pts-{{ pronostic.result }}"{{ pronostic.result }} pts</span>
+            {% endif %}
+            {% endif %}
+        {% else %}
+            {% if not entity.played and not entity.hasBegan() and contest %}
+                {% if event.simpleBet %}
+                    {% include "DwfPronosticsBundle:Pronostic:createSimple.html.twig" with {'id': entity.id} %}
+                {% else %}
+                    <a class="btn btn-lg btn-primary" href="{{ path('pronostics_new_forgame', { 'id': entity.id, 'contestId': contest.id }) }}">
+                        {% trans %}Bet{% endtrans %}
+                   </a>
+               {% endif %}
+           {% endif %}
+        {% endif %}
     </div>
     </div>
 </div>
 
-{% if entity.played or entity.hasBegan() %}
-	{% if pronostics %}
-	<div class="page-header">
-	    <h2>Tous les pronostics sur le match</h2>
-	</div>
-{# 	<div class='center'>#}
-	<table class="records_list table table-striped">
+{% if entity.played or entity.hasBegan() and contest %}
+    {% if pronostics %}
+    <div class="page-header">
+        <h2>{% trans %}All bets on this game{% endtrans %}</h2>
+    </div>
+    <table class="records_list table table-striped">
         <thead>
             <tr>
-                <th>User</th>
-                <th>Groupe</th>
-                <th>Pronostic</th>
-                <th>Pts gagnés</th>
+                <th>{% trans %}User{% endtrans %}</th>
+                <th>{% trans %}Bet{% endtrans %}</th>
+                <th>{% trans %}Pts won{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
         {% for pronostic in pronostics %}
-        {% set groupName = pronostic["group_name"] %}
         {% set pronostic = pronostic[0] %}
             <tr>
                 <td>
@@ -131,44 +148,43 @@
                 {% endif %}
                 <a href="{{ path('pronostics_show_user', { 'user_id': pronostic.user.id, 'event': event.id }) }}" >{{ pronostic.user }}</a>
                 </td>
-                <td>{{ groupName }}</td>
                 <td>
                 {% if event.simpleBet %}
-                	{% if pronostic.simpleBet == "N" %}
-					Match Nul
-					{% elseif pronostic.simpleBet == "1" %}
-            		<img src='/{{ entity.team1.getWebPath }}' width="20" />
-					<span class="hidden-xs">{{ entity.team1.name }}</span>
-            		<span class="hidden-sm hidden-md hidden-lg">{{ entity.team1.iso }}</span>
-            		{% elseif pronostic.simpleBet == "2" %}
-            		<img src='/{{ entity.team2.getWebPath }}' width="20" />
-					<span class="hidden-xs">{{ entity.team2.name }}</span>
-            		<span class="hidden-sm hidden-md hidden-lg">{{ entity.team2.iso }}</span>
-					{% endif %}
+                    {% if pronostic.simpleBet == "N" %}
+                    {% trans %}Draw{% endtrans %}
+                    {% elseif pronostic.simpleBet == "1" %}
+                    <img src='/{{ entity.team1.getWebPath }}' width="20" />
+                    <span class="hidden-xs">{{ entity.team1.name }}</span>
+                    <span class="hidden-sm hidden-md hidden-lg">{{ entity.team1.iso }}</span>
+                    {% elseif pronostic.simpleBet == "2" %}
+                    <img src='/{{ entity.team2.getWebPath }}' width="20" />
+                    <span class="hidden-xs">{{ entity.team2.name }}</span>
+                    <span class="hidden-sm hidden-md hidden-lg">{{ entity.team2.iso }}</span>
+                    {% endif %}
                 {% else %}
-	                {{ pronostic.score }}
-	                {% if pronostic.game.type.canHaveOvertime and pronostic.overtime %}    
-	                    - 90 min<br />{{ pronostic.scoreAfterOvertime }} - 120 min
-	                    {% if pronostic.winner and pronostic.whoWinAfterOvertime == 0 %}
-	                        <br />{{ pronostic.winner }} - TAB
-	                    {% endif %}
-	                {% endif %}
+                    {{ pronostic.score }}
+                    {% if pronostic.game.type.canHaveOvertime and pronostic.overtime %}
+                        - 90 min<br />{{ pronostic.scoreAfterOvertime }} - 120 min
+                        {% if pronostic.winner and pronostic.whoWinAfterOvertime == 0 %}
+                            <br />{{ pronostic.winner }} - {% trans %}TAB{% endtrans %}
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
                 </td>
                 <td class="points pts-{{ pronostic.result }}">{{ pronostic.result }}</td>
             </tr>
         {% endfor %}
         </tbody>
-    </table>	
-{# 	</div>#}
-	{% endif %}
+    </table>
+
+    {% endif %}
 {% endif %}
 
 {% if entity.comment and showExpert == true %}
-	<div class="expert">
-    	<h2>L'avis de l'expert</h2>
-    	<div>
-    	{{ entity.comment|raw }}
-    	</div>
+    <div class="expert">
+        <h2>L'avis de l'expert</h2>
+        <div>
+        {{ entity.comment|raw }}
+        </div>
     </div>
 {% endif %}

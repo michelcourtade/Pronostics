@@ -9,43 +9,50 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * Transforms an Invitation to an invitation code.
  */
+
 class InvitationToCodeTransformer implements DataTransformerInterface
 {
-	protected $entityManager;
+    private $entityManager;
 
-	public function __construct(EntityManager $entityManager)
-	{
-		$this->entityManager = $entityManager;
-	}
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
-	public function transform($value)
-	{
-		if (null === $value) {
-			return null;
-		}
+    public function transform($value)
+    {
+        if (null === $value) {
+            return null;
+        }
 
-		if (!$value instanceof Invitation) {
-			throw new UnexpectedTypeException($value, 'Dwf\PronosticsBundle\Entity\Invitation');
-		}
+        if (!$value instanceof Invitation) {
+            throw new UnexpectedTypeException($value, 'AppBundle\Entity\Invitation');
+        }
 
-		return $value->getCode();
-	}
+        return $value->getCode();
+    }
 
-	public function reverseTransform($value)
-	{
-		if (null === $value || '' === $value) {
-			return null;
-		}
+    public function reverseTransform($value)
+    {
+        if (null === $value || '' === $value) {
+            return null;
+        }
 
-		if (!is_string($value)) {
-			throw new UnexpectedTypeException($value, 'string');
-		}
+        if (!is_string($value)) {
+            throw new UnexpectedTypeException($value, 'string');
+        }
 
-		return $this->entityManager
-		->getRepository('Dwf\PronosticsBundle\Entity\Invitation')
-		->findOneBy(array(
-				'code' => $value,
-				'user' => null,
-		));
-	}
+        $dql = <<<DQL
+SELECT i
+FROM DwfPronosticsBundle:Invitation i
+WHERE i.code = :code
+DQL;
+//AND NOT EXISTS(SELECT 1 FROM DwfPronosticsBundle:User u WHERE u.invitation = i)
+
+        return $this->entityManager
+        ->createQuery($dql)
+        ->setParameter('code', $value)
+        ->setMaxResults(1)
+        ->getOneOrNullResult();
+    }
 }

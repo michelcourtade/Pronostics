@@ -5,6 +5,7 @@ namespace Dwf\PronosticsBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Dwf\PronosticsBundle\Entity\SliceScoreRepository;
 
 class SimplePronosticType extends AbstractType
 {
@@ -23,16 +24,34 @@ class SimplePronosticType extends AbstractType
     {
         $builder
             //->add('game')
-            ->add('simpleBet', 'choice', 
-            					array('expanded' => true, 
-            							'choices' => array('1' => '1','N' => 'N','2' => '2'),
-            							//'attr' => array('onclick'=>'$("#dwf_pronosticsbundle_pronostic").submit()')
-        	))
+            ->add('simpleBet', 'choice',
+                                array('expanded' => true,
+                                        'choices' => array('1' => '1','N' => 'N','2' => '2'),
+                                        //'attr' => array('onclick'=>'$("#dwf_pronosticsbundle_pronostic").submit()')
+            ))
+            
             ->add('user', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\User'))
             ->add('game', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Game'))
             ->add('event', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Event'))
+            ->add('contest', 'entity_hidden', array('class' => 'Dwf\PronosticsBundle\Entity\Contest'))
+            
             //->add('gameId', 'hidden', array('attr' => array('name' => 'gameId'),'data' => $this->gameId, 'mapped' => false))
         ;
+        if($options['data']->getEvent()->getScoreDiff()) {
+            $builder->add('sliceScore', 'entity',
+                    array('expanded' => false,
+                            'class' => 'Dwf\PronosticsBundle\Entity\SliceScore',
+                            'query_builder' => function (SliceScoreRepository $er) use ($options) {
+                                return $er->createQueryBuilder('s')
+                                ->leftJoin('s.sports', 'sp')
+                                ->where('sp.id = :sport')
+                                ->setParameter('sport', array($options['data']->getEvent()->getSport()))
+                                ->orderBy('s.id', 'ASC');
+                            },
+                            'multiple' => false,
+                            'required' => false,
+                    ));
+        }
     }
     
     /**

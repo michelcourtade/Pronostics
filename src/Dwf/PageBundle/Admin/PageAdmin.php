@@ -18,7 +18,7 @@ class PageAdmin extends Admin
         $collection->remove('show');
         $collection->add('show',  $this->getRouterIdParameter().'/show');
     }
-    
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -29,30 +29,30 @@ class PageAdmin extends Admin
                 'data-theme' => 'advanced'
             )
         ));
-        
+
         $subject = $this->getSubject();
         if ($subject->getId()) {
             $optImg = array('label' => 'Heading image', 'required' => false);
-        
+
             if ($subject->hasImage()) {
                 $optImg['required'] = false;
                 $container = $this->getConfigurationPool()->getContainer();
                 $fullPath = $container->get('request')->getBasePath().$subject->getWebPath();
-            
+
                 $optImg['help'] = '<img src="'.$fullPath.'" width="200" />';
             }
             $formMapper->add('file', 'file', $optImg);
-            
+
             if($subject->hasImage()) {
                 $formMapper
                 ->add('delete_file', 'checkbox', array('mapped' => false, 'required' => false))
                 ->end();
             }
         }
-        
-        $formMapper->add('active', null, array('required' => false))
 
-        ->with('Seo')
+        $formMapper->add('active', null, array('required' => false))->end();
+
+        $formMapper->with('Seo')
             ->add('linkRewrite')
             ->add('metaTitle')
             ->add('metaDescription')
@@ -84,11 +84,11 @@ class PageAdmin extends Admin
         ))
         ;
     }
-    
+
     public function prePersist($page) {
         $this->manageFileUpload($page);
     }
-    
+
     public function preUpdate($page) {
         if ($page->getId()) {
             if ($page->hasImage()) {
@@ -101,7 +101,7 @@ class PageAdmin extends Admin
         }
         $this->manageFileUpload($page);
     }
-    
+
     private function manageFileUpload($page) {
         if ($page->getFile()) {
             $page->refreshUpdated();

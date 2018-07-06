@@ -5,6 +5,7 @@
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_pronostics', {'event': event.id }) }}">{{ event.name }}</a></li>
     </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
 <div class="page-header">
 <h1>Mon meilleur marqueur</h1>
 </div>
@@ -31,7 +32,7 @@
         {% for entity in pronostics %}
             <tr>
                 <td>
-	                <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+	                <a href="{{ path('event_game_show', { 'id': entity.game.id, 'event': event.id }) }}">
 	                <img src='/{{ entity.game.team1.getWebPath }}' /> {{ entity.game.team1.name|upper }}
 	                </a>
                 </td>
@@ -46,7 +47,7 @@
                 {% endif %}
                 </td>
                 <td>
-	                <a href="{{ path('game_show', { 'id': entity.game.id }) }}">
+	                <a href="{{ path('event_game_show', { 'id': entity.game.id, 'event': event.id }) }}">
 	                {{ entity.game.team2.name|upper }} <img src='/{{ entity.game.team2.getWebPath }}' />
 	                </a>
                 </td>

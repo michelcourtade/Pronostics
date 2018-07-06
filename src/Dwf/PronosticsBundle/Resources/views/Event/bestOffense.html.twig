@@ -1,0 +1,62 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ event.name }} - {% trans %}Best offenses{% endtrans %} - {{ event.sport.name }} - {% trans %}Bet with your friends on{% endtrans %} {{ app_name }}{% endblock title %}
+
+{% block body -%}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li>{% trans %}Best offenses{% endtrans %}</li>
+    </ul>
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+    <div class="page-header">
+        <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %} {{ event.name }} - {% trans %}Best offenses{% endtrans %}</h1>
+    </div>
+    <div class="col-sm-12">
+        {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
+    </div>
+    <div class="col-sm-3">
+        {% include "DwfPronosticsBundle:Event:_menu-statistics.html.twig" %}
+    </div>
+    {% if bestOffenses %}
+<div class="row">
+<div class="col-sm-8">
+    <div class="panel panel-default row">
+  <!-- Default panel contents -->
+  <div class="panel-heading">{% trans %}Best offenses ranking (without owngoals){% endtrans %}</div>
+  <!-- Table -->
+    <table class="table">
+    <thead>
+    <tr>
+    <th>#</th>
+    <th>{% trans %}Team{% endtrans %}</th>
+    <th>{% trans %}Nb goals{% endtrans %}</th>
+{#     <th>Nb matchs</th>#}
+    </tr>
+    </thead>
+    <tbody>
+    {% for result in bestOffenses %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+        {% if teams[result.team_id].getWebPath %}
+            <img src='/{{ teams[result.team_id].getWebPath }}' width="20" />
+        {% endif %}
+        {{ result.name }}
+        </td>
+        <td>{{ result.total }}</td>
+{#         <td>{{ result.nbGames }}</td>#}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+{% endblock %}

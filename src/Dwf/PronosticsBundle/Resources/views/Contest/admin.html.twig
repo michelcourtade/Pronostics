@@ -1,0 +1,166 @@
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
+
+{% block body -%}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+    <li>{% trans %}Admin{% endtrans %}</li>
+    </ul>
+    {% endblock %}
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+    {% block contest_header %}
+    {{ parent() }}
+    {% endblock %}
+    {% block content %}
+    <div class="page-header">
+        <h2>{% trans %}Admin{% endtrans %}</h2>
+    </div>
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">{% trans %}Access{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Invitations{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Users{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Rules{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Announcement{% endtrans %}</a></li>
+            <li><a href="#">{% trans %}Manage{% endtrans %}</a></li>
+        </ul>
+        <div class="tabs">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Contest access{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+            {% if invitationCode %}
+                <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Your acces code : {% endtrans %}</p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-6 center">
+                    <span class="label label-primary">{{ invitationCode }}</span>
+                </div>
+            {% endif %}
+            <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Generating access code will allow you to open your contest to multiple users very easily. {% endtrans %}</p>
+            </div>
+            <div class="col-xs-3 col-sm-3 col-md-6 center">
+                {{ form_start(invitationFormContest) }}
+                {{ form_errors(invitationFormContest) }}
+                <div class="input-group">
+                    {{ form_widget(invitationFormContest.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                </div>
+                {{ form_rest(invitationFormContest) }}
+                {{ form_end(invitationFormContest) }}
+            </div>
+            </div>
+            </div>
+        </div>
+    <div class="tabs">
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Invite by email{% endtrans %}</div>
+            <div class="panel-body">
+            {{ form_start(invitationForm) }}
+            {{ form_errors(invitationForm) }}
+                <div class="input-group">
+                    {{ form_widget(invitationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Send Invitation by email'|trans}}) }}
+                    <span class="input-group-btn">
+                    {{ form_widget(invitationForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                    </span>
+                </div>
+            {{ form_rest(invitationForm) }}
+            {{ form_end(invitationForm) }}
+            {% if invitationsAlreadySent %}
+            <div class="panel">
+            <h4>{% trans %}Invitations already sent{% endtrans %}</h4>
+            <ul class="list-group">
+                {% for invitation in invitationsAlreadySent %}
+                    {% if invitation.email %}<li class="list-group-item">{{ invitation.email }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+{#         <div class="panel panel-default">#}
+{#             <div class="panel-heading">{% trans %}Invite by username{% endtrans %}</div>#}
+{#             <div class="panel-body">#}
+{#             form username#}
+{#             </div>#}
+{#         </div>#}
+{#         <div class="panel panel-default">#}
+{#             <div class="panel-heading">{% trans %}Invite Facebook friends{% endtrans %}</div>#}
+{#             <div class="panel-body">#}
+{#             friends list#}
+{#             </div>#}
+{#         </div>#}
+    </div>
+        <div style="display:none;" class="tabs">
+        {% if users %}
+            <ul class="list-group">
+            {% for player in users %}
+                <li class="list-group-item">{{ player.username }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+        <p>{% trans %}No users in your contest.{% endtrans %}</p>
+        {% endif %}
+        </div>
+        <div style="display:none;" class="tabs">
+        </div>
+        <div class="tabs">
+        <div class="panel panel-default">
+            <div class="panel-heading">{% trans %}Announcement for your contest{% endtrans %}</div>
+            <div class="panel-body">
+            <p>{% trans %}If you post a message here, it will be instantanately visible by users in your contest, in each top of pages.{% endtrans %}</p>
+            {{ form_start(contestMessageForm) }}
+            {{ form_errors(contestMessageForm) }}
+                <div class="input-group">
+                    {{ form_widget(contestMessageForm.message, {'attr': {'class': 'form-control', 'placeholder': 'Your announcement'|trans}}) }}
+                    {{ form_widget(contestMessageForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+                </div>
+            {{ form_rest(contestMessageForm) }}
+            {{ form_end(contestMessageForm) }}
+            </div>
+            </div>
+        </div>
+        <div style="display:none;" class="tabs">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Contest properties{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+            {{ form_start(contestForm, {'attr': {'class':'navbar-form'}}) }}
+            {{ form_errors(contestForm) }}
+            <div class="input-group">
+            {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Change name'|trans}}) }}
+            <span class="input-group-btn">
+            {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
+            </span>
+            </div>
+            {{ form_rest(contestForm) }}
+            {{ form_end(contestForm) }}
+            </div>
+        </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Danger zone{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-xs-3 col-sm-3 col-md-6">
+                <p>{% trans %}Be careful with this button ! Deleting a contest can't be undone ! Your bets will still be availables but your friends in this contest won't see your results anymore.{% endtrans %}</p>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-6 center">
+                <button type="button" class="btn btn-default" data-href="{{ path('contest_delete', {'contestId': contest.id }) }}" id='delete-contest'>
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> {% trans %}Delete contest{% endtrans %}
+                </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
+    {% endblock %}
+{% endblock %}

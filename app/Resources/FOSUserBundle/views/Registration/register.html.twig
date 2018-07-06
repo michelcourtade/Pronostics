@@ -1,64 +1,111 @@
-{% extends '::base.html.twig' %}
+{% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block title %}Identification - Pronostics{% endblock %}
-{% block bodyclass %} class="login"{% endblock %}
-{% block body %}
-{{ form_start(form, {'attr': { 'class': 'form-signin' }}) }}
+{% block fos_user_content %}
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId={{ facebookId }}";
+        fjs.parentNode.insertBefore(js, fjs);
+    }
+    (document, 'script', 'facebook-jssdk'));
+
+
+        function fb_login() {
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    // connected
+                    //alert('Already connected, redirect to login page to create token.');
+                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                } else {
+                    // not_authorized
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                        } else {
+                            alert('Cancelled.');
+                        }
+                    }, {scope: 'email'});
+                }
+            });
+        }
+    </script>
+    <h1><img class="img-responsive home_logo" src="{{ asset('bundles/dwfpronostics/images/Youbetsport.png') }}" alt="{{ app_name }}" /></h1>
+    <div class="div_logo">
+    <div class="index-social-col">
+            <button id="home_account_fb" class="btn btn-facebook btn-block" type="button" onclick="fb_login()">
+            <span class="label">{% trans %}Create with Facebook{% endtrans %}</span>
+            </button>
+        </div>
+        <span class="tiret">- </span><strong>{% trans %}or{% endtrans %}</strong><span class="tiret"> -</span>
+    {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': { 'class': 'form-signin' }}) }}
     <div data-rel="errors" class="errors">{{ form_errors(form) }}</div>
-{#     <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">#}
-    <h2 class="form-signin-heading">Inscrivez-vous</h2>
-{#         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
-	{% if form_errors(form.username) %}
-	<div class='alert alert-danger'>
-	{{ form_errors(form.username) }}
-	</div>
-	{% endif %}
-    {{ form_widget(form.username, {'attr': { 'class': 'form-control first', 'placeholder': 'Nom d\'utilisateur' }}) }}
-    {% if form_errors(form.email) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.email) }}
-    </div>
+    <h2 class="form-signin-heading">{% trans %}Register{% endtrans %}</h2>
+
+    {% if form.username.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.username) }}
+        </div>
     {% endif %}
-    {{ form_widget(form.email, {'attr': { 'class': 'form-control last', 'placeholder': 'Email' }}) }}
-    
-    {% if form_errors(form.plainPassword.first) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.plainPassword.first) }}
-    </div>
+    {{ form_widget(form.username, {'attr': { 'class': 'form-control first', 'placeholder': 'Username'|trans }}) }}
+    {% if form.email.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.email) }}
+        </div>
     {% endif %}
-    {{ form_widget(form.plainPassword.first, {'attr': { 'class': 'form-control first', 'placeholder': 'Mot de passe' }}) }}
-    {% if form_errors(form.plainPassword.second) %}
-    <div class='alert alert-danger'>
-    {{ form_errors(form.plainPassword.second) }}
-    </div>
+    {{ form_widget(form.email, {'value': app.request.get('email'), 'attr': { 'class': 'form-control last', 'placeholder': 'Email'|trans }}) }}
+
+    {% if form.plainPassword.first.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.plainPassword.first) }}
+        </div>
     {% endif %}
-    {{ form_widget(form.plainPassword.second, {'attr': { 'class': 'form-control last', 'placeholder': 'Vérification' }}) }}
-       
-    {% if form_errors(form.groups) %} 
-    <div class='alert alert-danger'>
-    {{ form_errors(form.groups) }}
-    </div>
+    {{ form_widget(form.plainPassword.first, {'attr': { 'class': 'form-control first', 'placeholder': 'Password (6 char min)'|trans }}) }}
+    {% if form.plainPassword.second.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.plainPassword.second) }}
+        </div>
     {% endif %}
-    <p>Choisissez un ou plusieurs groupe de jeu et entrez votre code d'invitation reçu par mail</p>
-    {{ form_widget(form.groups, {'attr': { 'class': 'form-control first', 'placeholder': 'Groupes' }}) }}
-    
-    {% if form_errors(form.invitation) %} 
-    <div class='alert alert-danger'>
-    {{ form_errors(form.invitation) }}
-    </div>
+    {{ form_widget(form.plainPassword.second, {'attr': { 'class': 'form-control last', 'placeholder': 'Confirm'|trans }}) }}
+    {% if form.invitation.vars.errors|length %}
+        <div class='alert alert-danger'>
+        {{ form_errors(form.invitation) }}
+        </div>
     {% endif %}
-    {{ form_widget(form.invitation, {'attr': { 'class': 'form-control last', 'placeholder': 'Code d\'invitation' }}) }}
-        
-{#         {{ form_widget(form.invitation, {'attr': { 'class': 'form-control first', 'placeholder': 'Invitation' }}) }}#}
-    
-{#             <label for="username">{{ 'security.login.username'|trans }}</label>#}
-{#         <input type="text" id="username" name="_username" value="" class="form-control" placeholder="Nom d'utilisateur" required="required" />#}
-    
-{#             <label for="password">{{ 'security.login.password'|trans }}</label>#}
-{#         <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required="required" />#}
-    <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="S'inscrire" />
-    <p class="change">J'ai déjà un compte, <a href="{{ path("sonata_user_security_login") }}">me logguer</a></p>
-{#     </form>#}
+    {{ form_widget(form.invitation, {'value': app.request.get('invitation'), 'attr': { 'class': 'form-control last', 'placeholder': 'Invitation code (optional)'|trans }}) }}
+    <button type="submit" class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{% trans %}Register{% endtrans %}" />
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+    {% trans %}Register{% endtrans %}
+    </button>
     {{ form_rest(form) }}
-{{ form_end(form) }}
-{% endblock body %}
+    {{ form_end(form) }}
+    <span class="login">{% trans %}Already have an account ? {% endtrans %} <a href="{{ path('fos_user_security_login') }}">{% trans %}Log in{% endtrans %}</a></span>
+    </div>
+    </div>
+    </div>
+</header>
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">{% trans %}Contact us{% endtrans %}</h2>
+                    <hr class="primary">
+                    <p>{% trans %}Having trouble using Youbetsport ? Feel free to contact us !{% endtrans %}<br />
+                    {% trans %}We would like some feedback too ! Here's how you can join us{% endtrans %} :</p>
+                </div>
+                <div class="col-lg-4 col-lg-offset-2 text-center">
+                    <i class="fa fa-phone fa-3x sr-contact"></i>
+                    <p><a href="https://www.facebook.com/YouBetSportPage" target="_blank">{% trans %}See our Facebook page{% endtrans %}</a></p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fa fa-envelope-o fa-3x sr-contact"></i>
+                    <p><a href="https://twitter.com/youbetsport" target="_blank">{% trans %}Join us on Twitter{% endtrans %}</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock fos_user_content %}

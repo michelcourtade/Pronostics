@@ -1,0 +1,5 @@
+<ul class="list-group">
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_home') %} active{% endif %}"><a href="{{ path('event_home', {'event': event.id }) }}">{% trans %}Summary{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_gameday') %} active{% endif %}"><a href="{{ path('event_gameday', {'event': event.id }) }}">{% trans %}Games of the day{% endtrans %}</a></li>
+    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'event_nextgames') %} active{% endif %}"><a href="{{ path('event_nextgames', {'event': event.id }) }}">{% trans %}Next games{% endtrans %}</a></li>
+</ul>

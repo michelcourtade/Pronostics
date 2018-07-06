@@ -1,0 +1,34 @@
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
+
+{% block body -%}
+    {% block breadcrumb %}
+    <ul class="breadcrumb">
+    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+    <li>{% trans %}Games{% endtrans %}</li>
+    </ul>
+    {% endblock %}
+    {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+    {% block contest_header %}
+    {{ parent() }}
+    {% endblock %}
+    {% block content %}
+        <div class="page-header">
+            <h2>{% if gameType %}{% trans %}Games{% endtrans %} - {{ gameType.name }}{% else %}{% trans %}All games{% endtrans %}{% endif %}</h2>
+        </div>
+        {% include "DwfPronosticsBundle:Contest:games-list.html.twig" %}
+        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}
+    {% if chart %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        {{ chart(chart) }}
+    });
+    </script>
+    {% endif %}
+{% endblock %}

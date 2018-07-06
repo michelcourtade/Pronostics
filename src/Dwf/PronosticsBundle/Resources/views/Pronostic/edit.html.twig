@@ -4,16 +4,16 @@
 <ul class="breadcrumb">
     <li><a href="{{ path('events') }}">Accueil</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('games_event', {'event': event.id }) }}">Tous les matchs</a></li>
-    <li><a href="{{ path('game_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></li>
-    <li><a href="{{ path('game_show', { 'id': entity.game.id }) }}">{{ entity.game }}</a></li>
+    <li><a href="{{ path('event_games', {'event': event.id }) }}">Tous les matchs</a></li>
+    <li><a href="{{ path('event_games_by_type', { 'type': entity.game.type.id, 'event': event.id }) }}">{{ entity.game.type }}</a></li>
+    <li><a href="{{ path('event_game_show', { 'id': entity.game.id, 'event': event.id }) }}">{{ entity.game }}</a></li>
     <li>Modifier pronostic sur {{ entity.game }}</li>
     </ul>
     <div class="page-header">
     <h1>{{ entity.game }} - Mon pronostic<br /><small>{{ entity.event }} - {{ entity.game.type }}</small></h1>
     </div>
     <img src='/{{ entity.game.team1.getWebPath }}' /> - <img src='/{{ entity.game.team2.getWebPath }}' />
-	<h2>{{ entity.game.type }}</h2>
-	<p>Se joue le : {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i') }}</p>
+    <h2>{{ entity.game.type }}</h2>
+    <p>Se joue le : {{ entity.game.date|date('d/m/Y') }} à {{ entity.game.date|date('H:i') }}</p>
     {{ form(edit_form) }}
 {% endblock %}
