@@ -1,7 +1,9 @@
 <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
 <script>
+    {% if app.environment == 'dev' %}
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
+    {% endif %}
 
     var badge = 0;
     var pusher = new Pusher('{{ pusher_auth_key }}', {
