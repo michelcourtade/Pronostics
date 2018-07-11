@@ -1,30 +1,30 @@
 <script type="text/javascript">
 
     function ajaxizePronos() {
-  	  $.each($('form.prono'), function() {
-  	    var $form = $('#'+$(this).attr('id'));
-  	    var $form_name = $(this).attr('id');
-  	    $form.off();
-  	    $form.on('change', function(e) {
-  	      e.preventDefault();
-  	      var data = $form.serialize();
-  	      $.ajax({
-  	        url : $form.attr('action'),
-  	        type: $form.attr('method'),
-  	        data : data,
-  	        success: function(html) {
-  	          $form.after("<span class=\"info_ajax\" id=\"span_"+$form_name+"\">Pronostic enregistré...</span>");
-  	          setTimeout(function() { $("#span_"+$form_name).hide("slow"); $("#span_"+$form_name).remove(); }, 2000);
-  	          $form.replaceWith(
-  	            $(html).find("#"+$form_name)
-  	          );
-  	          ajaxizePronos();
-  	        }
-  	      });
-  	    });
-  	  });
-  	}
+        $.each($('form.prono'), function() {
+            var $form = $('#'+$(this).attr('id'));
+            var $form_name = $(this).attr('id');
+            $form.off();
+            $form.on('change', function(e) {
+                e.preventDefault();
+                var data = $form.serialize();
+                $.ajax({
+                    url : $form.attr('action'),
+                    type: $form.attr('method'),
+                    data : data,
+                    success: function(html) {
+                        $form.after("<span class=\"info_ajax\" id=\"span_"+$form_name+"\">Pronostic enregistré...</span>");
+                        setTimeout(function() { $("#span_"+$form_name).hide("slow"); $("#span_"+$form_name).remove(); }, 2000);
+                        $form.replaceWith(
+                            $(html).find("#"+$form_name)
+                        );
+                        ajaxizePronos();
+                    }
+                });
+            });
+        });
+    }
     $(document).ready(function() {
-    	ajaxizePronos();
+        ajaxizePronos();
     });
 </script> 

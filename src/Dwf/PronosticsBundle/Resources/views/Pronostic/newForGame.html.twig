@@ -75,7 +75,7 @@
     {{ parent() }}
     <script type="text/javascript">
     function toggleOvertime(obj) {
-        if(obj.is(':checked')){
+        if (obj.is(':checked') && ($("#dwf_pronosticsbundle_pronostic_scoreTeam1").val() === $("#dwf_pronosticsbundle_pronostic_scoreTeam2").val())) {
             $('.overtime_content').show();
         } else {
             $('.overtime_content').hide();
