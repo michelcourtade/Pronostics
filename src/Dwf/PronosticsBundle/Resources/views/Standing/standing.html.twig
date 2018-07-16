@@ -22,7 +22,7 @@
             {% set standing = entity[0] %}
             {% set total = entity['total'] %}
             {% set nb_pronostics = entity['nb_pronostics'] %}
-            <tr>
+            <tr class="standing-{{ loop.index }}">
                 <td>{{ loop.index }}</td>
                 <td>
                 {% if gravatar_exists(standing.user.email) %}
