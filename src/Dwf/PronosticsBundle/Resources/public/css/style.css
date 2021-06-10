@@ -1,0 +1,9 @@
+tr.standing-1 > td {
+    background-color: #FFD700;
+}
+tr.standing-2 > td {
+    background-color: #C0C0C0;
+}
+tr.standing-3 > td {
+    background-color: #CD7F32;
+}
