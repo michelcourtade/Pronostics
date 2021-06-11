@@ -43,7 +43,7 @@
         "sonata-project/datagrid-bundle": "dev-master",
         "sonata-project/translation-bundle": "^2.0",
         "stof/doctrine-extensions-bundle": "^1.1",
-        "beberlei/DoctrineExtensions": "dev-master",
+        "beberlei/doctrineextensions": "dev-master",
         "pixassociates/sortable-behavior-bundle": "dev-master",
         "avalanche123/imagine-bundle": "dev-master",
         "ornicar/gravatar-bundle" : "dev-master",
