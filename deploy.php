@@ -33,6 +33,9 @@ require 'recipe/common.php';
 
 \Deployer\task('install', function () {
     \Deployer\cd('{{deploy_path}}/current');
+    \Deployer\set('env', [
+        'PHP_VERSION' => '/usr/bin/php7.2',
+    ]);
     \Deployer\run('make configure');
     \Deployer\run('make update');
 });
