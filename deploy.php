@@ -37,7 +37,6 @@ require 'recipe/common.php';
         'PHP_VERSION' => '/usr/bin/php7.2',
     ]);
     \Deployer\run('make configure', ['timeout' => 600]);
-    \Deployer\run('make update', ['timeout' => 600]);
 });
 
 /**
