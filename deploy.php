@@ -39,6 +39,10 @@ require 'recipe/common.php';
     \Deployer\run('make configure', ['timeout' => 600]);
 });
 
+\Deployer\after('deploy:symlink', 'cachetool:clear:opcache');
+\Deployer\task('cachetool:clear:opcache', function () {
+    \Deployer\run('sudo /usr/sbin/apachectl graceful');
+});
 /**
  * Main task
  */
