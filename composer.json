@@ -64,6 +64,9 @@
         "webfactory/exceptions-bundle": "@stable"
     },
     "scripts": {
+        "auto-scripts": {
+            "app/console cache:clear --no-warmup": "script"
+        },
         "post-install-cmd": [
             "@auto-scripts"
         ],
