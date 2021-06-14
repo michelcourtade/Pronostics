@@ -2,7 +2,7 @@ ENV = "dev"
 
 configure:
 	@if test ! -f app/config/parameters.yml; then echo "app/config/parameters.yml is missing"; exit 1; fi
-	curl -s http://getcomposer.org/installer | php
+	./getComposer.sh
 	$(PHP_VERSION) composer.phar install
 	$(PHP_VERSION) app/console doctrine:migrations:migrate -n --env=$(ENV)
 	$(PHP_VERSION) app/console assets:install --symlink
