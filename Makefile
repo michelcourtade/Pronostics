@@ -34,3 +34,11 @@ cs:
 
 cc:
 	rm -Rf app/cache/*
+
+configure-dev:
+	@if test ! -f app/config/parameters.yml; then echo "app/config/parameters.yml is missing"; exit 1; fi
+	./getComposer.sh
+	symfony composer install
+	symfony console doctrine:migrations:migrate -n --env=$(ENV)
+	symfony console assets:install --symlink
+	symfony console assetic:dump --env=$(ENV)
