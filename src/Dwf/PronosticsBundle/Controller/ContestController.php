@@ -47,6 +47,7 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $user = $this->getUser();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         if($this->getUser()) {
             $myContests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByOwnerAndEvent($this->getUser(), $event);
@@ -64,11 +65,8 @@ class ContestController extends Controller
             } else {
                 $arrayContests = '';
             }
-
-
             $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
             $contest = new Contest('');
-    //             $contest->setName('');
             $contest->setOwner($this->getUser());
             $contest->setEvent($event);
             $form = $this->createForm($contestType, $contest, array(
@@ -80,6 +78,8 @@ class ContestController extends Controller
             if ($form->isValid()) {
                 $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
                 $em->persist($contest);
+                $user->addGroup($contest);
+                $em->persist($user);
                 $em->flush();
                 $this->addFlash(
                         'success',
@@ -92,9 +92,9 @@ class ContestController extends Controller
             $myContests = $otherContests = $contestForm = "";
         }
 
-        return array("myContests"       => $myContests,
-                     "otherContests"    => $otherContests,
-                     "contestForm"      => $contestForm);
+        return array("myContests" => $myContests,
+                     "otherContests" => $otherContests,
+                     "contestForm"=> $contestForm);
     }
 
     /**
@@ -108,6 +108,7 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $user = $this->getUser();
 
         $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
         $contestType = new CreateContestFormType("Dwf\PronosticsBundle\Entity\User");
@@ -123,7 +124,11 @@ class ContestController extends Controller
         if ($form->isValid()) {
             $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
             $em->persist($contest);
+
+            $user->addGroup($contest);
+            $em->persist($user);
             $em->flush();
+
             $this->addFlash(
                     'success',
                     $this->get('translator')->trans('Your contest has been created.')
@@ -133,8 +138,8 @@ class ContestController extends Controller
         $contestForm = $form->createView();
 
         return array(
-                "events"            => $events,
-                "contestForm"       => $contestForm
+                "events" => $events,
+                "contestForm" => $contestForm
         );
 
     }
