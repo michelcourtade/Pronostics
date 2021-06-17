@@ -34,11 +34,16 @@
             </tr>
         </thead>
         <tbody>
+        {% set totalLastUser = 0 %}
+        {% set standingIndex = 0 %}
         {% for entity in entities %}
             {% set standing = entity[0] %}
             {% set total = entity['total'] %}
             {% set nb_pronostics = entity['nb_pronostics'] %}
-            <tr class="standing-{{ loop.index }}">
+            {% if (total != totalLastUser) %}
+                {% set standingIndex = standingIndex + 1 %}
+            {% endif %}
+            <tr class="standing-{{ standingIndex }}">
                 <td>{{ loop.index }}</td>
                 <td>
                 {% if standing.user.profilePicture %}
@@ -58,6 +63,7 @@
 {#                         {% endif %}#}
 {#                 </td>#}
             </tr>
+            {% set totalLastUser = total %}
         {% else %}
             <tr><td colspan="4">{% trans %}There are no standings{% endtrans %}</td></tr>
         {% endfor %}
