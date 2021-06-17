@@ -2,7 +2,6 @@
 
 namespace Dwf\PronosticsBundle\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Dwf\PronosticsBundle\Entity\ChatMessage;
 use Dwf\PronosticsBundle\Entity\ContestRepository;
 use Dwf\PronosticsBundle\Entity\Repository\ChatMessageRepository;
@@ -1527,7 +1526,7 @@ class ContestController extends Controller
     }
 
     /**
-     * Finds and displays a Game entity.
+     * Show user's valid bets for a contest
      *
      * @Route("/contest/{contestId}/user/{userId}", name="contest_user_show")
      * @Method({"GET","POST", "PUT"})
