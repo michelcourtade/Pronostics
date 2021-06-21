@@ -57,6 +57,7 @@ class PronosticController extends Controller
      */
     public function createAction(Request $request)
     {
+        $user = $this->getUser();
         $entity = new Pronostic();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -82,6 +83,31 @@ class PronosticController extends Controller
                 );
             }
             $em->persist($entity);
+            if ($user->isUniqueBet()) {
+                foreach ($user->getGroups() as $group) {
+                    if ($group->getId() != $entity->getContest()->getId()) {
+                        $otherContest = $em->getRepository('DwfPronosticsBundle:Contest')->find($group->getId());
+                        if ($otherContest && $otherContest->getEvent() == $entity->getEvent()) {
+                            $otherPronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $user, 'game' => $entity->getGame(), 'contest' => $otherContest));
+                            if (!$otherPronostic) {
+                                $otherPronostic = new Pronostic();
+                                $otherPronostic->setGame($entity->getGame());
+                                $otherPronostic->setUser($this->getUser());
+                                $otherPronostic->setEvent($entity->getEvent());
+                                $otherPronostic->setContest($otherContest);
+                            }
+                            $otherPronostic->setSimpleBet($entity->getSimpleBet());
+                            $otherPronostic->setSliceScore($entity->getSliceScore());
+                            $otherPronostic->setScoreTeam1($entity->getScoreTeam1());
+                            $otherPronostic->setScoreTeam2($entity->getScoreTeam2());
+                            $otherPronostic->setScoreTeam1Overtime($entity->getScoreTeam1Overtime());
+                            $otherPronostic->setScoreTeam2Overtime($entity->getScoreTeam2Overtime());
+                            $otherPronostic->setWinner($entity->getWinner());
+                            $em->persist($otherPronostic);
+                        }
+                    }
+                }
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('contest_game_show', array('id' => $entity->getGame()->getId(), 'contestId' => $entity->getContest()->getId())));
@@ -508,6 +534,7 @@ class PronosticController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('DwfPronosticsBundle:Pronostic')->find($id);
         if (!$entity) {
@@ -517,6 +544,31 @@ class PronosticController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
+            if ($user->isUniqueBet()) {
+                foreach ($user->getGroups() as $group) {
+                    if ($group->getId() != $entity->getContest()->getId()) {
+                        $otherContest = $em->getRepository('DwfPronosticsBundle:Contest')->find($group->getId());
+                        if ($otherContest && $otherContest->getEvent() == $entity->getEvent()) {
+                            $otherPronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $user, 'game' => $entity->getGame(), 'contest' => $otherContest));
+                            if (!$otherPronostic) {
+                                $otherPronostic = new Pronostic();
+                                $otherPronostic->setGame($entity->getGame());
+                                $otherPronostic->setUser($user);
+                                $otherPronostic->setEvent($entity->getEvent());
+                                $otherPronostic->setContest($otherContest);
+                            }
+                            $otherPronostic->setSimpleBet($entity->getSimpleBet());
+                            $otherPronostic->setSliceScore($entity->getSliceScore());
+                            $otherPronostic->setScoreTeam1($entity->getScoreTeam1());
+                            $otherPronostic->setScoreTeam2($entity->getScoreTeam2());
+                            $otherPronostic->setScoreTeam1Overtime($entity->getScoreTeam1Overtime());
+                            $otherPronostic->setScoreTeam2Overtime($entity->getScoreTeam2Overtime());
+                            $otherPronostic->setWinner($entity->getWinner());
+                            $em->persist($otherPronostic);
+                        }
+                    }
+                }
+            }
             $em->flush();
             $this->addFlash(
                     'success',

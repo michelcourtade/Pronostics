@@ -634,6 +634,7 @@ class ContestController extends Controller
         $event                 = $contest->getEvent();
         $types                 = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
         $anchorDate            = '';
+        $user = $this->getUser();
         if (!$event) {
             return $this->redirect($this->generateUrl('events'));
         }
@@ -695,6 +696,31 @@ class ContestController extends Controller
                         $pronostic->setSliceScore(null);
                     }
                     $em->persist($pronostic);
+                    if ($user->isUniqueBet()) {
+                        foreach ($user->getGroups() as $group) {
+                            if ($group->getId() != $contest->getId()) {
+                                $otherContest = $em->getRepository('DwfPronosticsBundle:Contest')->find($group->getId());
+                                if ($otherContest && $otherContest->getEvent() == $event) {
+                                    $otherPronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $otherContest));
+                                    if (!$otherPronostic) {
+                                        $otherPronostic = new Pronostic();
+                                        $otherPronostic->setGame($entity);
+                                        $otherPronostic->setUser($this->getUser());
+                                        $otherPronostic->setEvent($event);
+                                        $otherPronostic->setContest($otherContest);
+                                    }
+                                    $otherPronostic->setSimpleBet($pronostic->getSimpleBet());
+                                    $otherPronostic->setSliceScore($pronostic->getSliceScore());
+                                    $otherPronostic->setScoreTeam1($pronostic->getScoreTeam1());
+                                    $otherPronostic->setScoreTeam2($pronostic->getScoreTeam2());
+                                    $otherPronostic->setScoreTeam1Overtime($pronostic->getScoreTeam1Overtime());
+                                    $otherPronostic->setScoreTeam2Overtime($pronostic->getScoreTeam2Overtime());
+                                    $otherPronostic->setWinner($pronostic->getWinner());
+                                    $em->persist($otherPronostic);
+                                }
+                            }
+                        }
+                    }
                     $em->flush();
                 }
 

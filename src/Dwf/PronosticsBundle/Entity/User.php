@@ -60,6 +60,13 @@ class User extends BaseUser
     protected $facebook_access_token;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="unique_bet", type="boolean")
+     */
+    protected $uniqueBet = true;
+
+    /**
      * Unmapped property to send mail
      * @var boolean
      */
@@ -266,4 +273,21 @@ class User extends BaseUser
     public function refreshUpdated() {
         //$this->setUpdatedAt(new \DateTime("now"));
     }
+
+    /**
+     * @return bool
+     */
+    public function isUniqueBet()
+    {
+        return $this->uniqueBet;
+    }
+
+    /**
+     * @param bool $uniqueBet
+     */
+    public function setUniqueBet($uniqueBet)
+    {
+        $this->uniqueBet = $uniqueBet;
+    }
+
 }
