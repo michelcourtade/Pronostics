@@ -10,7 +10,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('uniqueBet', CheckboxType::class, ['label' => 'Bets are identical on every event']);
+        $builder->add('uniqueBet', CheckboxType::class, [
+                'label' => 'Bets are identical on every event',
+                'required' => false,
+            ]
+        );
     }
 
     public function getParent() {
