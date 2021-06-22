@@ -37,7 +37,13 @@
         {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total } %}
     {% endif %}
     </div>
-        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
+    {% if chart is defined and chart %}
+        <div id="piechart" class="row col-sm-12" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    {% endif %}
+    {% if chartBets is defined and chartBets %}
+        <div id="piechart2" class="row col-sm-12" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    {% endif %}
+    {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
     {% endblock %}
     </div>
 {% endblock %}
@@ -45,4 +51,18 @@
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
     {% include "DwfPronosticsBundle:Chat:_js-pusher.html.twig" %}
+    {% if chart is defined and chart %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                {{ chart(chart) }}
+            });
+        </script>
+    {% endif %}
+    {% if chartBets is defined and chartBets %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                {{ chart(chartBets) }}
+            });
+        </script>
+    {% endif %}
 {% endblock %}

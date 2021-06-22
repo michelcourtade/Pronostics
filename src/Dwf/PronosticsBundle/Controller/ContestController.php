@@ -260,14 +260,14 @@ class ContestController extends Controller
      */
     public function showAction($contestId)
     {
-        $em      = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
 
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
-        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
 
         $event = $contest->getEvent();
-        $user  = $this->getUser();
+        $user = $this->getUser();
         if (!$user->hasGroup($contest->getName())) {
             return $this->redirect($this->generateUrl('events'));
         }
@@ -279,7 +279,7 @@ class ContestController extends Controller
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
 
-        $players      = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
+        $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         $arrayPlayers = array();
         if ($players) {
             foreach ($players as $player) {
@@ -287,18 +287,42 @@ class ContestController extends Controller
             }
         }
 
-        $teams      = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
+        $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
         $arrayTeams = array();
         if ($teams) {
             foreach ($teams as $team) {
                 $arrayTeams[$team->getId()] = $team;
             }
         }
-        $nb             = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
-        $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 5);
-        $nbGoodScore    = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 3);
-        $nbBadScore     = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 1);
-        $total          = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByContestAndUser($contest, $this->getUser());
+        $nbPerfectScore = 0;
+        $nbGoodScore = 0;
+        $nbBadScore = 0;
+        $total = array('total' => 0);
+        $pronosticRepository = $em->getRepository('DwfPronosticsBundle:Pronostic');
+        $nb = $pronosticRepository->getNbByUserAndEvent($this->getUser(), $event);
+        if ($nb) {
+            $nbPerfectScore = $pronosticRepository->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, Pronostic::NB_POINTS_EXACT_SCORE);
+            $nbGoodScore = $pronosticRepository->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, Pronostic::NB_POINTS_GOOD_SCORE);
+            $nbBadScore = $pronosticRepository->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, Pronostic::NB_POINTS_BAD_SCORE);
+            $total = $pronosticRepository->getResultsByContestAndUser($contest, $this->getUser());
+        }
+
+        $chart = $this->get('dwf_pronosticbundle.highchartmanager');
+        $data = array();
+        $dataBets = array();
+        if ($total && $total['total'] > 0) {
+            $data = array(
+                array('name' => $translator->trans('Good bets with perfect scores'), 'y' => round((($nbPerfectScore * 100) / $nb))),
+                array($translator->trans('Good bets'), round((($nbGoodScore * 100) / $nb))),
+                array($translator->trans('Bad bets'), round((($nbBadScore * 100) / $nb))),
+            );
+
+            $dataBets = array(
+                array($translator->trans('Total bet points due to perfect scores'), round((($nbPerfectScore * Pronostic::NB_POINTS_EXACT_SCORE * 100) / $total['total']))),
+                array($translator->trans('Total bet points due to good bets'), round((($nbGoodScore * Pronostic::NB_POINTS_GOOD_SCORE * 100) / $total['total']))),
+                array($translator->trans('Total bet points due to bad bets'), round((($nbBadScore * Pronostic::NB_POINTS_BAD_SCORE * 100) / $total['total']))),
+            );
+        }
 
         $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
         $messageForContest = null;
@@ -317,31 +341,33 @@ class ContestController extends Controller
             'method' => 'PUT',
         ));
         $formMessage->add('submit', 'submit', array(
-            'label'        => $this->get('translator')->trans('Send'),
+            'label' => $translator->trans('Send'),
             'button_class' => 'btn btn-warning btn-sm',
         ));
 
         $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
-        $offset        = max($countMessages - 20, 0);
-        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+        $offset = max($countMessages - 20, 0);
+        $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
         return array(
-                'contest'                   => $contest,
-                'user'                      => $this->getUser(),
-                'event'                     => $event,
-                'currentChampionshipDay'    => $currentChampionshipDay,
-                'teams'                     => $arrayTeams,
-                'players'                   => $arrayPlayers,
-                'nbPronostics'              => $nb,
-                'nbPerfectScore'            => $nbPerfectScore,
-                'nbGoodScore'               => $nbGoodScore,
-                'nbBadScore'                => $nbBadScore,
-                'total'                     => $total,
-                'messageForContest'         => $messageForContest,
-                'adminMessage'              => $adminMessage,
-                'formMessage'               => $formMessage->createView(),
-                'chatMessages'              => $chatMessages,
-                'pusher_auth_key'           => $this->container->getParameter('pusher_auth_key'),
+            'contest'=> $contest,
+            'user' => $this->getUser(),
+            'event' => $event,
+            'currentChampionshipDay'=> $currentChampionshipDay,
+            'teams' => $arrayTeams,
+            'players' => $arrayPlayers,
+            'nbPronostics' => $nb,
+            'nbPerfectScore' => $nbPerfectScore,
+            'nbGoodScore' => $nbGoodScore,
+            'nbBadScore' => $nbBadScore,
+            'total' => $total,
+            'messageForContest' => $messageForContest,
+            'adminMessage' => $adminMessage,
+            'formMessage' => $formMessage->createView(),
+            'chatMessages'=> $chatMessages,
+            'pusher_auth_key'=> $this->container->getParameter('pusher_auth_key'),
+            'chart' => sizeof($data) > 0 ? $chart->piechart('piechart', $translator->trans('Bets distribution'), $data) : null,
+            'chartBets' => sizeof($dataBets) ? $chart->piechart('piechart2', $translator->trans('Bet points distribution'), $dataBets) : null,
         );
     }
 

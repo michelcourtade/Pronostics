@@ -14,6 +14,10 @@ use Dwf\PronosticsBundle\Entity\User as User;
  */
 class Pronostic
 {
+    const NB_POINTS_EXACT_SCORE = 5;
+    const NB_POINTS_GOOD_SCORE = 3;
+    const NB_POINTS_BAD_SCORE = 1;
+
     /**
      * @var integer
      *

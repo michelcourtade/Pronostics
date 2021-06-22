@@ -1,15 +1,20 @@
 <div class="page-header">
-    <h2>{% trans %}Points won{% endtrans %}: <span class="label label-default">{{ totalPoints }}</span></h2>
-    {% if nbPronostics %}
-        <h2>{% trans %}Av Pts / Bet{% endtrans %}: <span class="label label-default">{{ (totalPoints / nbPronostics)|round(1, 'floor') }}</span></h2>
-    {% endif %}
-    {% if nbPerfectScore and not event.simpleBet %}
-        <h2>{% trans %}Good bets with perfect scores{% endtrans %}(5 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbPerfectScore }}</span></h2>
-    {% endif %}
-    {% if nbGoodScore %}
-        <h2>{% trans %}Good bets{% endtrans %} (3 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbGoodScore }}</span></h2>
-    {% endif %}
-    {% if nbBadScore %}
-        <h2>{% trans %}Bad bets{% endtrans %} (1 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbBadScore }}</span></h2>
+    {% if nbPronostics is defined and nbPronostics > 0 %}
+        <h2>{% trans %}Points won{% endtrans %}: <span class="label label-default">{{ totalPoints ?: 0}}</span></h2>
+        <h3>{% trans %}Nb bets{% endtrans %}: <span class="label label-default">{{ nbPronostics }}</span></h3>
+        {% if nbPronostics %}
+            <h3>{% trans %}Av Pts / Bet{% endtrans %}: <span class="label label-default">{{ (totalPoints / nbPronostics)|round(1, 'floor') }}</span></h3>
+        {% endif %}
+        {% if nbPerfectScore and not event.simpleBet %}
+            <h3>{% trans %}Good bets with perfect scores{% endtrans %}(5 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbPerfectScore }}</span></h3>
+        {% endif %}
+        {% if nbGoodScore %}
+            <h3>{% trans %}Good bets{% endtrans %} (3 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbGoodScore }}</span></h3>
+        {% endif %}
+        {% if nbBadScore %}
+            <h3>{% trans %}Bad bets{% endtrans %} (1 {% trans %}points{% endtrans %}): <span class="label label-default">{{ nbBadScore }}</span></h3>
+        {% endif %}
+    {% else %}
+        <p>{% trans %}No bet yet. Go see {% endtrans %} <a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}game listing{% endtrans %}</a> {% trans %} to bet.{% endtrans %}</p>
     {% endif %}
 </div>
