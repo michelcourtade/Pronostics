@@ -1,4 +1,8 @@
 services:
+ app.form.profile:
+  class: Dwf\PronosticsBundle\Form\Type\UserType
+  tags:
+   - { name: form.type, alias: app_user_profile }
  dwf_pronosticsbundle.type.entity_hidden:
   class: Dwf\PronosticsBundle\Form\Type\EntityHiddenType
   arguments: ["@doctrine.orm.entity_manager"]
