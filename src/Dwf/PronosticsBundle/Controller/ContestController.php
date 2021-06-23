@@ -299,7 +299,7 @@ class ContestController extends Controller
         $nbBadScore = 0;
         $total = array('total' => 0);
         $pronosticRepository = $em->getRepository('DwfPronosticsBundle:Pronostic');
-        $nb = $pronosticRepository->getNbByUserAndEvent($this->getUser(), $event);
+        $nb = $pronosticRepository->getNbByUserAndContest($this->getUser(), $contest);
         if ($nb) {
             $nbPerfectScore = $pronosticRepository->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, Pronostic::NB_POINTS_EXACT_SCORE);
             $nbGoodScore = $pronosticRepository->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, Pronostic::NB_POINTS_GOOD_SCORE);
