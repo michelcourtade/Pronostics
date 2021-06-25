@@ -1,0 +1,14 @@
+{% if betsChart is defined and betsChart %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {{ chart(betsChart) }}
+        });
+    </script>
+{% endif %}
+{% if betPointsChart is defined and betPointsChart %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {{ chart(betPointsChart) }}
+        });
+    </script>
+{% endif %}
