@@ -18,8 +18,9 @@
     <div class="page-header">
         <h2>{% trans %}My bets{% endtrans %}</h2>
     </div>
-    {% if total %}
-        {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total} %}
+    {% if scores.totalScores > 0 %}
+        {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}
+        {% include "DwfPronosticsBundle:Contest:_charts.html.twig" %}
     {% endif %}
 
     <div class="list-match col-sm-12">
@@ -50,4 +51,5 @@
 {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+    {% include "DwfPronosticsBundle:Contest:_js-charts.html.twig" %}
 {% endblock %}
