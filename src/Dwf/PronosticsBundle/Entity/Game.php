@@ -341,44 +341,61 @@ class Game
         return $this->type;
     }
 
+    /**
+     * @return int
+     */
     public function getWhoWin()
     {
-    	if($this->getScoreTeam1() > $this->getScoreTeam2())
-    		return 1;
-    	elseif($this->getScoreTeam2() > $this->getScoreTeam1())
-    		return 2;
-    	else return 0;
+        if ($this->getScoreTeam1() > $this->getScoreTeam2()) {
+            return 1;
+        } elseif ($this->getScoreTeam2() > $this->getScoreTeam1()) {
+            return 2;
+        }
+
+        return 0;
     }
 
+    /**
+     * @return int
+     */
     public function getWhoWinAfterOvertime()
     {
-    	if($this->getScoreTeam1Overtime() > $this->getScoreTeam2Overtime())
-    		return 1;
-    	elseif($this->getScoreTeam2Overtime() > $this->getScoreTeam1Overtime())
-    		return 2;
-    	else return 0;
+        if ($this->getScoreTeam1Overtime() > $this->getScoreTeam2Overtime()) {
+            return 1;
+        } elseif ($this->getScoreTeam2Overtime() > $this->getScoreTeam1Overtime()) {
+            return 2;
+        }
+
+        return 0;
     }
 
+    /**
+     * @return int
+     */
     public function getWhoLose()
     {
-        if($this->getWhoWin() == 1)
+        if ($this->getWhoWin() == 1) {
             return 2;
-        elseif($this->getWhoWin() == 2)
+        } elseif ($this->getWhoWin() == 2) {
             return 1;
-        elseif($this->hasOvertime()) {
-            if($this->getWhoWinAfterOvertime() == 1)
+        } elseif ($this->hasOvertime()) {
+            if ($this->getWhoWinAfterOvertime() == 1) {
                 return 2;
-            elseif($this->getWhoWinAfterOvertime() == 2)
+            } elseif ($this->getWhoWinAfterOvertime() == 2) {
                 return 1;
-            elseif($winner = $this->getWinner()) {
-                if($winner->getId() == $this->getTeam1()->getId())
+            } elseif ($winner = $this->getWinner()) {
+                if ($winner->getId() == $this->getTeam1()->getId()) {
                     return 2;
-                elseif($winner->getId() == $this->getTeam2()->getId())
+                } elseif ($winner->getId() == $this->getTeam2()->getId()) {
                     return 1;
+                }
+
                 return 0;
             }
+
             return 0;
         }
+
         return 0;
     }
 
