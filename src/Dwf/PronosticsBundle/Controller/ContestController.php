@@ -713,6 +713,7 @@ class ContestController extends Controller
                                     $otherPronostic->setSliceScore($pronostic->getSliceScore());
                                     $otherPronostic->setScoreTeam1($pronostic->getScoreTeam1());
                                     $otherPronostic->setScoreTeam2($pronostic->getScoreTeam2());
+                                    $otherPronostic->setOvertime($pronostic->getOvertime());
                                     $otherPronostic->setScoreTeam1Overtime($pronostic->getScoreTeam1Overtime());
                                     $otherPronostic->setScoreTeam2Overtime($pronostic->getScoreTeam2Overtime());
                                     $otherPronostic->setWinner($pronostic->getWinner());

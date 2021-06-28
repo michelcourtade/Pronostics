@@ -100,6 +100,7 @@ class PronosticController extends Controller
                             $otherPronostic->setSliceScore($entity->getSliceScore());
                             $otherPronostic->setScoreTeam1($entity->getScoreTeam1());
                             $otherPronostic->setScoreTeam2($entity->getScoreTeam2());
+                            $otherPronostic->setOvertime($entity->getOvertime());
                             $otherPronostic->setScoreTeam1Overtime($entity->getScoreTeam1Overtime());
                             $otherPronostic->setScoreTeam2Overtime($entity->getScoreTeam2Overtime());
                             $otherPronostic->setWinner($entity->getWinner());
