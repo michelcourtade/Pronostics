@@ -22,7 +22,8 @@
     <div class="page-header-title">
         <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}
         {% if contest %}
-            {{ contest.contestName }} - <small>{{ event.name }}</small>
+            {{ contest.contestName }}
+            <small>{{ event.name }}</small>
         {% else %}
             {{ event.name }}
         {% endif %}
