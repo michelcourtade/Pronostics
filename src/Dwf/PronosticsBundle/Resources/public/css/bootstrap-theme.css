@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
 
 body {
     padding-top:70px;
@@ -173,14 +173,17 @@ body {
   background-repeat: repeat-x;
 }
 .navbar-default .navbar-nav > .active > a {
-  background-image: -webkit-linear-gradient(top, #ebebeb 0%, #f3f3f3 100%);
-  background-image:         linear-gradient(to bottom, #ebebeb 0%, #f3f3f3 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb', endColorstr='#fff3f3f3', GradientType=0);
+  background-image: -webkit-linear-gradient(top, #428bca 0%, #428bca 100%);
+  background-image:         linear-gradient(to bottom, #428bca 0%, #428bca 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#428bca', endColorstr='#428bca', GradientType=0);
   background-repeat: repeat-x;
   -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
           box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
 }
-.navbar-brand,
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus
+.navbar-brand {
+    color: #ffffff;
+}
 .navbar-nav > li > a {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
 }
@@ -722,4 +725,19 @@ div.list-match .actions a .popover-button + .popover {
 }
 div.container div.col-sm-12 ul.nav {
     margin-bottom: 15px;
+}
+
+.page-header-title {
+    background-image: url('../../../bundles/dwfpronostics/images/banner.jpg');
+    height: 200px;
+    color: #000000;
+}
+.page-header-title small {
+    display: block;
+}
+.page-header-title h1 {
+    height: 200px;
+    width: 100%;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0) 100%);
 }

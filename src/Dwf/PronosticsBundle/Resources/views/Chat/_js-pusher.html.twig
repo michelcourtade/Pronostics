@@ -1,3 +1,4 @@
+{% if pusher_auth_key is defined %}
 <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
 <script>
     {% if app.environment == 'dev' %}
@@ -57,3 +58,4 @@
         });
     });
 </script>
+{% endif %}

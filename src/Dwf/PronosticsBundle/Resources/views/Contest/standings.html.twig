@@ -1,80 +1,79 @@
 {% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
-{% block body -%}
-    {% block breadcrumb %}
+{% block breadcrumb %}
     <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li>{% trans %}Standings{% endtrans %}</li>
+        <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+        <li>{% trans %}Standings{% endtrans %}</li>
     </ul>
-    {% endblock %}
+{% endblock %}
+
+{% block body -%}
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}
+
     {% block content %}
         <div class="page-header">
-        <h1>{% trans %}Standings{% endtrans %}</h1>
+            <h1>{% trans %}Standings{% endtrans %}</h1>
         </div>
         <div class="col-sm-12">
-    {% if pager is defined and pager.haveToPaginate %}
-    <div class="pagerfanta">
-    {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
-    </div>
-    {% endif %}
-    <table class="records_list table table-striped">
-        <thead>
-            <tr>
-                <th>{% trans %}Place{% endtrans %}</th>
-                <th>{% trans %}Name{% endtrans %}</th>
-                <th>{% trans %}Points{% endtrans %}</th>
-                <th>{% trans %}Nb Bets{% endtrans %}</th>
-{#                 <th>Actions</th>#}
-            </tr>
-        </thead>
-        <tbody>
-        {% set totalLastUser = 0 %}
-        {% set standingIndex = 0 %}
-        {% for entity in entities %}
-            {% set standing = entity[0] %}
-            {% set total = entity['total'] %}
-            {% set nb_pronostics = entity['nb_pronostics'] %}
-            {% if (total != totalLastUser) %}
-                {% set standingIndex = standingIndex + 1 %}
+            {% if pager is defined and pager.haveToPaginate %}
+                <div class="pagerfanta">
+                {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
+                </div>
             {% endif %}
-            <tr class="standing-{{ standingIndex }}">
-                <td>{{ loop.index }}</td>
-                <td>
-                {% if standing.user.profilePicture %}
-                    <img src="{{ asset(standing.user.profilePicture) }}" class="avatar" />
-                {% elseif gravatar_exists(standing.user.email) %}
-                    <img src="{{ gravatar('%this%'|replace({'%this%': standing.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
-                {% endif %}
-                    <a href="{{ path('contest_user_show', {'contestId': contest.id, 'userId': standing.user.id }) }}" title="{% trans with {'%user%': standing.user} %}See %user% bets{% endtrans %}">{{ standing.user }}</a>
-                </td>
-                <td>{{ total }}</td>
-                <td>{{ nb_pronostics }}</td>
-{#                 <td>#}
-{#                         {% if user == standing.user %}#}
-{#                         <a href="{{ path('pronostics_event', { 'event': event.id}) }}" class="btn btn-sm btn-default">Voir mes pronostics</a>#}
-{#                         {% else %}#}
-{#                         <a href="{{ path('pronostics_show_user', { 'user_id': standing.user.id, 'event': event.id }) }}" class="btn btn-sm btn-default">Voir ses pronostics</a>#}
-{#                         {% endif %}#}
-{#                 </td>#}
-            </tr>
-            {% set totalLastUser = total %}
-        {% else %}
-            <tr><td colspan="4">{% trans %}There are no standings{% endtrans %}</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% if pager is defined and pager.haveToPaginate %}
-    <div class="pagerfanta">
-    {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
-    </div>
-    {% endif %}
+            <table class="records_list table table-striped">
+                <thead>
+                    <tr>
+                        <th>{% trans %}Place{% endtrans %}</th>
+                        <th>{% trans %}Name{% endtrans %}</th>
+                        <th>{% trans %}Points{% endtrans %}</th>
+                        <th>{% trans %}Nb Bets{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set totalLastUser = 0 %}
+                {% set standingIndex = 0 %}
+                {% for entity in entities %}
+                    {% set standing = entity[0] %}
+                    {% set total = entity['total'] %}
+                    {% set nb_pronostics = entity['nb_pronostics'] %}
+                    {% if (total != totalLastUser) %}
+                        {% set standingIndex = standingIndex + 1 %}
+                    {% endif %}
+                    <tr class="standing-{{ standingIndex }}">
+                        <td>{{ loop.index }}</td>
+                        <td>
+                        {% if standing.user.profilePicture %}
+                            <img src="{{ asset(standing.user.profilePicture) }}" class="avatar" />
+                        {% elseif gravatar_exists(standing.user.email) %}
+                            <img src="{{ gravatar('%this%'|replace({'%this%': standing.user.email}),'30', 'g', 'defaultimage.png') }}" class="avatar"/>
+                        {% endif %}
+                            <a href="{{ path('contest_user_show', {'contestId': contest.id, 'userId': standing.user.id }) }}" title="{% trans with {'%user%': standing.user} %}See %user% bets{% endtrans %}">{{ standing.user }}</a>
+                        </td>
+                        <td>{{ total }}</td>
+                        <td>{{ nb_pronostics }}</td>
+                    </tr>
+                    {% set totalLastUser = total %}
+                {% else %}
+                    <tr><td colspan="4">{% trans %}There are no standings{% endtrans %}</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if pager is defined and pager.haveToPaginate %}
+                <div class="pagerfanta">
+                {{ pagerfanta(pager,  'twitter_bootstrap3_translated') }}
+                </div>
+            {% endif %}
+
             {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
-    </div>
+
+        </div>
     {% endblock %}
+
 {% endblock %}

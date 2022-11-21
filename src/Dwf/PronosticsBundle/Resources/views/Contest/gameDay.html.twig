@@ -1,1 +1,45 @@
 {% extends 'DwfPronosticsBundle:Event:gameDay.html.twig' %}
+
+{% block navbar_bottom %}
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div class="container">
+            <div class="navbar-header col-sm-12">
+                <ul class="nav navbar-nav col-sm-12 text-center">
+                    <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_show') %} active{% endif %}">
+                        <a title="{{ 'Home'|trans }}" href="{{ path('contest_show', {'contestId': contest.id }) }}">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Home{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_standings') %} active{% endif %}">
+                        <a title="{{ 'Standings'|trans }}" href="{{ path('contest_standings', {'contestId': contest.id }) }}">
+                            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Standings{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_pronostics') %} active{% endif %}">
+                        <a title="{{ 'Bets'|trans }}" href="{{ path('contest_pronostics', {'contestId': contest.id }) }}">
+                            <span class="glyphicon glyphicon-check" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Bets{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_games' or app.request.attributes.get("_route") == 'contest_games_by_type') %} active{% endif %}">
+                        <a title="{{ 'Games'|trans }}" href="{{ path('contest_games', {'contestId': contest.id }) }}">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Games{% endtrans %}</span>
+                        </a>
+                    </li>
+                    {% if user.id == contest.owner.id %}
+                        <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_admin') %} active{% endif %}">
+                            <a title="{{ 'Manage'|trans }}" href="{{ path('contest_admin', {'contestId': contest.id }) }}">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Manage{% endtrans %}</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li role="presentation" class="col-xs-2{% if(app.request.attributes.get("_route") == 'contest_infos') %} active{% endif %}">
+                            <a title="{{ 'Informations'|trans }}" href="{{ path('contest_infos', {'contestId': contest.id }) }}">
+                                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <span class="hidden-xs hidden-sm" >{% trans %}Informations{% endtrans %}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
