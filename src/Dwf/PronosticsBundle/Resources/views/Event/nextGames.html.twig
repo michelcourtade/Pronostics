@@ -1,4 +1,8 @@
-{% extends '::base.html.twig' %}
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
+
+{% block navbar_bottom %}
+
+{% endblock %}
 
 {% block body -%}
     <ul class="breadcrumb">
@@ -10,15 +14,16 @@
     
     <li>{% trans %}Next games{% endtrans %}</li>
     </ul>
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
-    <div class="page-header center">
+
+    <div class="page-header-title">
     <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}
     {% if contest %}
-        {{ contest.contestName }} - <small>{{ event.name }}</small>
+            {{ contest.contestName }} - <small>{{ event.name }}</small>
         {% else %}
-        {{ event.name }} 
+            {{ event.name }}
         {% endif %}
-     - {% trans %}Next games{% endtrans %}
      </h1>
     </div>
     {% if messageForContest and messageForContest.message %}
@@ -29,9 +34,7 @@
         </div>
     {% endif %}
     <div class="col-sm-12">
-    {% if contest %}
-        {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
-    {% else %}
+    {% if contest is not defined %}
         {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
     {% endif %}
     </div>
@@ -60,8 +63,11 @@
         {% endfor %}
         </div>
     </div>
+
     {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
+
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
