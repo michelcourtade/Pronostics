@@ -17,41 +17,36 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body{% block bodyclass %}{% endblock %}>
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">{% trans %}Toggle navigation{% endtrans %}</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="{{ path('home') }}">
-              <img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" />
-              <span class="logo">{{ app_name }}</span>
-              </a>
-            </div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">{% trans %}Toggle navigation{% endtrans %}</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ path('home') }}">
+                            <img class="img-responsive youbetsport_logo" src="{{ asset('bundles/dwfpronostics/images/coupe.png') }}" alt="{{ app_name }}" />
+                            <span class="logo">{{ app_name }}</span>
+                        </a>
+                    </div>
             <div class="navbar-collapse collapse">
-{#             {% if event is defined %}#}
-{#                 {% if event %}#}
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-{#                     <li><button type="button" class="btn btn-default navbar-btn">{% trans %}Create new contest{% endtrans %}</button></li>#}
-                    <li><a href='{{ path('contest_create') }}'>{% trans %}Create new contest{% endtrans %}</a></li>
-                    <li><a href='{{ path('contest_join') }}'>{% trans %}Join a contest{% endtrans %}</a></li>
-{#                 <li><a href='{{ path('standings_event', {'event': event.id}) }}'>Classement</a></li>#}
-{#                 {% if currentChampionshipDay is defined and currentChampionshipDay %}#}
-{#                 <li><a href='{{ path('game_by_type', { 'type': currentChampionshipDay.id, 'event': event.id }) }}'>Matchs {{ currentChampionshipDay.name }}</a></li>#}
-{#                 {% else %}#}
-{#                 <li><a href='{{ path('games_event', {'event': event.id}) }}'>Matchs</a></li>#}
-{#                 {% endif %}#}
-{#                 <li><a href='{{ path('pronostics_event', {'event': event.id}) }}'>Mes pronostics</a></li>#}
-{#                 <li><a href='{{ path('events_old') }}'>{% trans %}Old events{% endtrans %}</a></li>#}
-                <li><a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}Rules{% endtrans %}</a></li>
+                    <li>
+                        <a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a>
+                    </li>
+                    <li>
+                        <a href='{{ path('contest_create') }}'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> {% trans %}Create new contest{% endtrans %}</a>
+                    </li>
+                    <li>
+                        <a href='{{ path('contest_join') }}'><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> {% trans %}Join a contest{% endtrans %}</a>
+                    </li>
+                    <li>
+                        <a href='{{ path('DwfPageBundle_page', { 'id': 1, 'linkRewrite': 'reglement' }) }}'>{% trans %}Rules{% endtrans %}</a>
+                    </li>
               </ul>
-{#               {% endif %}#}
-{#               {% endif %}#}
               <p class="navbar-text navbar-right">
                 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {% if app.user.profilePicture %}
@@ -63,9 +58,7 @@
                     <img src="{{ gravatar('%this%'|replace({'%this%': app.user.email}),'30') }}" class="avatar" />
                     </a>
                 {% endif %}
-{#                     {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}#}
                         <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a>
-{#                     <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>#}
                     <a href="{{ path('fos_user_security_logout') }}"  class="glyphicon glyphicon-remove"></a>
                 {% else %}
                     <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
@@ -95,7 +88,7 @@
             </div>
           </div>
         </div>
-              {% endif %}
+        {% endif %}
 
         <div class="container" >
             {% if app.request.hasPreviousSession %}
@@ -108,11 +101,16 @@
                     {% endfor %}
                 {% endfor %}
             {% endif %}
+
             {% block body %}{% endblock %}
 
             <div class="col-xs-12 footer">
-                <p>&copy; <a href="http://www.youbetsport.com" target="_blank">{{ app_name }}</a></p>
+                <p>&copy; <a href="https://www.youbetsport.com" target="_blank">{{ app_name }}</a></p>
             </div>
+
+            {% block navbar_bottom %}
+            {% endblock %}
+
         </div>
 
         <script src="{{ asset('js/jquery.js') }}"></script>

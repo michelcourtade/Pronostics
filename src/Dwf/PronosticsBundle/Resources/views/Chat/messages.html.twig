@@ -1,13 +1,15 @@
 {% set lastUser = '' %}
-{% for message in chatMessages %}
-    {% include "DwfPronosticsBundle:Chat:message.html.twig" with {'index': loop.index, 'last': loop.last} %}
-    {% set lastUser = message.user.username %}
-{% else %}
-    <li class="left clearfix">
-        <div class="chat-body clearfix">
-            <p>
-                {{ 'No messages found. Why don\'t you post the first message of this contest ? '|trans }}
-            </p>
-        </div>
-    </li>
-{% endfor %}
+{% if chatMessages is defined %}
+    {% for message in chatMessages %}
+        {% include "DwfPronosticsBundle:Chat:message.html.twig" with {'index': loop.index, 'last': loop.last} %}
+        {% set lastUser = message.user.username %}
+    {% else %}
+        <li class="left clearfix">
+            <div class="chat-body clearfix">
+                <p>
+                    {{ 'No messages found. Why don\'t you post the first message of this contest ? '|trans }}
+                </p>
+            </div>
+        </li>
+    {% endfor %}
+{% endif %}
