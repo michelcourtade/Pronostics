@@ -60,4 +60,4 @@ require 'recipe/common.php';
 
 \Deployer\inventory('hosts.yml');
 
-\Deployer\set('repository', 'git@github.com:michelcourtade/Pronostics.git');
+\Deployer\set('repository', 'https://github.com/michelcourtade/Pronostics.git');
