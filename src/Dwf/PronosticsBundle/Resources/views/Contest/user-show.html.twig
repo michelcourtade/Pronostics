@@ -1,55 +1,53 @@
 {% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
 {% block body -%}
+
     {% block breadcrumb %}
-    <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}Bets of user %user% on %contest%{% endtrans %}</li>
-    </ul>
+        <ul class="breadcrumb">
+            <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+            <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+            <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+            <li>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}Bets of user %user% on %contest%{% endtrans %}</li>
+        </ul>
     {% endblock %}
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}
     
     {% block content %}
-    <div class="page-header">
-        <h2>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}Bets of user %user% on %contest%{% endtrans %}</h2>
-    </div>
-    {% if scores.totalScores > 0 %}
-        {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}
-        {% include "DwfPronosticsBundle:Contest:_charts.html.twig" %}
-    {% endif %}
-
-    <div class="list-match col-sm-12">
-    {% set lastDate = '' %}
-    {% for entity in entities %}
-        {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
-        {% set lastDate = entity.game.date|date('Ymd') %}
-    {% else %}
-        <p>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}No bet yet for user %user% on %contest%{% endtrans %}</p>
-    {% endfor %}
-    </div>
-    {% if event.bestScorer %}
         <div class="page-header">
-            <h2>{% trans %}Best scorer{% endtrans %}</h2>
+            <h2>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}Bets of user %user% on %contest%{% endtrans %}</h2>
         </div>
-        {% if bestscorer_pronostic %}
-            <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - {% trans %}Nb goals{% endtrans %} : {{ bestscorer_pronostic.goals }}</h2>
-            <div class="center"><a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-lg btn-primary">{% trans %}Modify{% endtrans %}</a></div>
-        {% else %}
-            <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">{% trans %}Bet{% endtrans %}</a></div>
+        {% if scores.totalScores > 0 %}
+            {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}
+            {% include "DwfPronosticsBundle:Contest:_charts.html.twig" %}
         {% endif %}
-    {% endif %}
-        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
+
+        <div class="list-match col-sm-12">
+        {% set lastDate = '' %}
+        {% for entity in entities %}
+
+            {% include "DwfPronosticsBundle:Pronostic:game.html.twig" with {'entity': entity, 'lastDate': lastDate } %}
+
+            {% set lastDate = entity.game.date|date('Ymd') %}
+        {% else %}
+            <p>{% trans with { '%user%': userDisplayed.username,'%contest%': contest.contestName } %}No bet yet for user %user% on %contest%{% endtrans %}</p>
+        {% endfor %}
+        </div>
+        {% if event.bestScorer %}
+            <div class="page-header">
+                <h2>{% trans %}Best scorer{% endtrans %}</h2>
+            </div>
+            {% if bestscorer_pronostic %}
+                <h2>{% if bestscorer_pronostic.player.getWebPath %}<img src='/{{ bestscorer_pronostic.player.getWebPath }}' />{% endif %}{{ bestscorer_pronostic.player }} - {% trans %}Nb goals{% endtrans %} : {{ bestscorer_pronostic.goals }}</h2>
+                <div class="center"><a href='{{ path('bestscorer_pronostics_edit', {'id': bestscorer_pronostic.id}) }}' class="btn btn-lg btn-primary">{% trans %}Modify{% endtrans %}</a></div>
+            {% else %}
+                <div class="center"><a href='{{ path('bestscorer_pronostics_new', {'event': event.id}) }}' class="btn btn-lg btn-primary">{% trans %}Bet{% endtrans %}</a></div>
+            {% endif %}
+        {% endif %}
     {% endblock %}
 
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
-    {% include "DwfPronosticsBundle:Contest:_js-charts.html.twig" %}
 {% endblock %}

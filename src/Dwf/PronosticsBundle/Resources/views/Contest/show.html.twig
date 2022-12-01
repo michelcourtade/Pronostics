@@ -51,11 +51,10 @@
 
             {% include "DwfPronosticsBundle:Contest:_charts.html.twig" %}
 
-            {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
-
         {% endblock %}
     </div>
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
