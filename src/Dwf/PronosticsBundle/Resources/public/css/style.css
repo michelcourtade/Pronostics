@@ -7,3 +7,15 @@ tr.standing-2 > td {
 tr.standing-3 > td {
     background-color: #CD7F32!important;
 }
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    background-color: #ffffff;
+}
+
+.navbar-default .navbar-nav > a.dropdown-toggle {
+    color: #777777!important;
+}
+
+.dropdown-menu {
+    padding: 0px;
+}

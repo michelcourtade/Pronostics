@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         <title>{% block title %}{{ app_name }}{% endblock %}</title>
 
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}" rel="stylesheet" >
-        <link href="{{ asset('bundles/dwfpronostics/css/chat.css') }}" rel="stylesheet" >
-        <link href="{{ asset('bundles/dwfpronostics/css/style.css') }}" rel="stylesheet" >
+        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap.css') }}?{{ 'now'|date('YmdH') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('bundles/dwfpronostics/css/bootstrap-theme.css') }}?{{ 'now'|date('YmdH') }}" rel="stylesheet" >
+        <link href="{{ asset('bundles/dwfpronostics/css/chat.css') }}?{{ 'now'|date('YmdH') }}" rel="stylesheet" >
+        <link href="{{ asset('bundles/dwfpronostics/css/style.css') }}?{{ 'now'|date('YmdH') }}" rel="stylesheet" >
         <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
         {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
 
@@ -114,7 +114,6 @@
         </div>
 
         <script src="{{ asset('js/jquery.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.js') }}"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/highcharts.js') }}"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/modules/exporting.js') }}"></script>
         <script src="{{ asset('bundles/dwfpronostics/js/bootstrap.min.js') }}"></script>

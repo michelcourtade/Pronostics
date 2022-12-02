@@ -19,7 +19,7 @@
 
     {% block content %}
         <div class="page-header">
-            <h1>{% trans %}Standings{% endtrans %}</h1>
+        <h1>{% trans %}Standings{% endtrans %}</h1>
         </div>
         <div class="col-sm-12">
             {% if pager is defined and pager.haveToPaginate %}
@@ -71,9 +71,6 @@
                 </div>
             {% endif %}
 
-            {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
-
         </div>
     {% endblock %}
-
 {% endblock %}
