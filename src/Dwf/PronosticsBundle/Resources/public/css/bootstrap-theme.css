@@ -499,7 +499,7 @@ div.show-match .team .scorers span { display:block; }
 div.show-match .team img { max-width:50px; vertical-align:middle; }
 div.show-match .team img { float:left; margin-right:10px; }
 div.show-match .team.ext img { float:right; margin-right:0; margin-left:10px; }
-div.show-match .score { text-align:center; color:#666; }
+div.show-match .score { text-align:center; color:#666; padding: 0 5px;}
 div.show-match .score strong { color:#0087E6; font-size:22px; font-weight:400; display:block; }
 div.show-match .score strong select.form-control, div.show-match .score span select.form-control, div.show-match .score p select.form-control { display: inline-block; width: auto; }
 div.show-match .score span { display:block; }
@@ -738,6 +738,15 @@ div.container div.col-sm-12 ul.nav {
 .page-header-title h1 {
     height: 200px;
     width: 100%;
+    font-size: 24px;
     background: rgb(255, 255, 255);
     background: linear-gradient(90deg, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0) 100%);
+}
+
+.page-header h1 {
+    font-size: 24px;
+}
+
+.page-header h2 {
+    font-size: 20px;
 }
