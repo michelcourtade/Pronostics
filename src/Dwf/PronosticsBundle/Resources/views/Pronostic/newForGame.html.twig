@@ -42,6 +42,7 @@
                     {{ form_widget(form.overtime) }}
                 </p>
                 <div class="overtime_content" style="display: none;">
+                    <p class="final_winner">{{ 'Final score'|trans }} :</p>
                     <span>{{ form_widget(form.scoreTeam1Overtime) }} - {{ form_widget(form.scoreTeam2Overtime) }}</span>
                     <p class="final_winner">
                         {{ form_label(form.overtime, 'Winner if draw'|trans) }}
@@ -82,6 +83,8 @@
         } else {
             $('.overtime_content').hide();
         }
+        $("#dwf_pronosticsbundle_pronostic_scoreTeam1Overtime").val($("#dwf_pronosticsbundle_pronostic_scoreTeam1").val());
+        $("#dwf_pronosticsbundle_pronostic_scoreTeam2Overtime").val($("#dwf_pronosticsbundle_pronostic_scoreTeam2").val());
     }
 
     function toggleFinalWinner() {
