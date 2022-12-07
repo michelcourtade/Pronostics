@@ -13,7 +13,7 @@
 </div>
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     <div class="page-header">
-    <h1>{% trans %}Current events{% endtrans %}</h1>
+        <h1>{% trans %}Current events{% endtrans %}</h1>
     </div>
     
     <table class="records_list table events">
@@ -42,4 +42,43 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if oldEvents %}
+        <div class="page-header">
+            <h1>{{ 'Old events'|trans }}</h1>
+        </div>
+
+        <table class="records_list table events">
+            <thead>
+            <tr>
+                <th>{% trans %}Event{% endtrans %}</th>
+                <th>{% trans %}Infos{% endtrans %}</th>
+                <th>{% trans %}Actions{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in oldEvents %}
+                <tr>
+                    <td>
+                        {% if event.getWebPath %}
+                            <a href="{{ path('event_show', { 'id': event.id }) }}" >
+                                <img src='/{{ event.getWebPath }}' class="contest_logo"/>
+                            </a>
+                        {% endif %} <p>{{ event.name }}</p>
+                    </td>x
+                    <td>
+                        <p class="small">{% if event.startDate %}{{ event.startDate|date('d/m/Y') }}{% endif %}
+                            {% if event.finishDate %} - {{ event.finishDate|date('d/m/Y') }}{% endif %}
+                        </p>
+                    </td>
+                    <td>
+                        <a href="{{ path('event_show', { 'id': event.id }) }}" class="btn btn-sm btn-primary">
+                            {% trans %}See event page{% endtrans %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
