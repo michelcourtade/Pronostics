@@ -976,13 +976,15 @@ class ContestController extends Controller
      */
     public function showGameAction($id, $contestId)
     {
-        $em      = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
-        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
-        $entity                = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
-        $event                 = $contest->getEvent();
+        $gameRepository = $em->getRepository('DwfPronosticsBundle:Game');
+
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $entity = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
+        $event = $contest->getEvent();
 
         $scorersTeam1 = "";
         $scorersTeam2 = "";
@@ -994,9 +996,12 @@ class ContestController extends Controller
             $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')
                 ->findScorersByGameAndTeam($entity, $entity->getTeam2(), $event->getNationalTeams());
         }
-        $nextGame          = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
+
+        $nextGame = $gameRepository->findNextGameAfter($entity);
+        $allTeamGamesOnEvent = $gameRepository->findAllTeamGamesOnEvent([$entity->getTeam1(), $entity->getTeam2()], $event);
         $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame, 'contest' => $contest));
-        $pronostic         = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+        $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+
         if ($entity->getEvent()->getSimpleBet()) {
             if (!$pronostic) {
                 $pronostic = new Pronostic();
@@ -1061,27 +1066,28 @@ class ContestController extends Controller
         ));
 
         $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
-        $offset        = max($countMessages - 20, 0);
-        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+        $offset = max($countMessages - 20, 0);
+        $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
         return array(
-                'contest'               => $contest,
-                'event'                 => $event,
-                'user'                  => $this->getUser(),
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'entity'                => $entity,
-                'pronostic'             => $pronostic,
-                'nextGame'              => $nextGame,
-                'pronosticNextGame'     => $pronosticNextGame,
-                'pronostics'            => $pronostics,
-                'scorersTeam1'          => $scorersTeam1,
-                'scorersTeam2'          => $scorersTeam2,
-                'form'                  => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
-                'messageForContest'     => $messageForContest,
-                'adminMessage'          => $adminMessage,
-                'formMessage'           => $formMessage->createView(),
-                'chatMessages'          => $chatMessages,
-                'pusher_auth_key'       => $this->container->getParameter('pusher_auth_key'),
+            'contest' => $contest,
+            'event' => $event,
+            'user' => $this->getUser(),
+            'currentChampionshipDay' => $currentChampionshipDay,
+            'entity' => $entity,
+            'pronostic' => $pronostic,
+            'nextGame' => $nextGame,
+            'pronosticNextGame' => $pronosticNextGame,
+            'pronostics' => $pronostics,
+            'scorersTeam1' => $scorersTeam1,
+            'scorersTeam2' => $scorersTeam2,
+            'form' => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
+            'messageForContest' => $messageForContest,
+            'adminMessage' => $adminMessage,
+            'formMessage' => $formMessage->createView(),
+            'chatMessages' => $chatMessages,
+            'pusher_auth_key' => $this->container->getParameter('pusher_auth_key'),
+            'allTeamGamesOnEvent' => $allTeamGamesOnEvent,
         );
     }
 
