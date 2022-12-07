@@ -755,3 +755,9 @@ div.container div.col-sm-12 ul.nav {
 .page-header h2 {
     font-size: 20px;
 }
+
+td > img.img-rounded {
+    max-width:40px;
+    vertical-align:middle;
+    border: 1px solid #999;
+}
