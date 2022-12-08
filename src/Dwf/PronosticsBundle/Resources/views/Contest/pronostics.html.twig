@@ -1,7 +1,7 @@
 {% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
 {% block breadcrumb %}
-    <ul class="breadcrumb">
+    <ul class="breadcrumb hidden-xs">
         <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
         <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
         <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
@@ -19,7 +19,10 @@
     
     {% block content %}
     <div class="page-header">
-        <h2>{% trans %}My bets{% endtrans %}</h2>
+        <h1>
+            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+            {{ 'My bets'|trans }}
+        </h1>
     </div>
     {% if scores.totalScores > 0 %}
         {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}

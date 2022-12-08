@@ -1,1 +1,51 @@
-{% extends "DwfPronosticsBundle:Game:_points.html.twig" %}
+<div class="page-header">
+    {% if position %}
+        <h3>{{ 'My position'|trans }} <span class="label label-success">{{ position }}</span></h3>
+    {% endif %}
+    {% if scores.nbScores is defined and scores.nbScores > 0 %}
+        <table class="records_list table table-striped">
+            <thead>
+            <tr>
+                <th>{{ 'Stats'|trans }}</th>
+                <th>{{ 'N.'|trans }}</th>
+                <th>{{ 'Total'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if scores.nbPerfectScores and not event.simpleBet %}
+                <tr>
+                    <td>{{ 'Good bets with perfect scores'|trans }} - {{ event.nbPointsForRightBetWithScore }} {{ 'points'|trans }}</td>
+                    <td>{{ scores.nbPerfectScores }}</td>
+                    <td>{{ scores.nbPerfectScores * event.nbPointsForRightBetWithScore }}</td>
+                </tr>
+            {% endif %}
+            {% if scores.nbGoodScores %}
+                <tr>
+                    <td>{{ 'Good bets'|trans }} - {{ event.nbPointsForRightBet }} {{ 'points'|trans }}</td>
+                    <td>{{ scores.nbGoodScores }}</td>
+                    <td>{{ scores.nbGoodScores * event.nbPointsForRightBet }}</td>
+                </tr>
+            {% endif %}
+            {% if scores.nbBadScores %}
+                <tr>
+                    <td>{{ 'Bad bets'|trans }} - {{ event.nbPointsForWrongBet }} {{ 'points'|trans }}</td>
+                    <td>{{ scores.nbBadScores }}</td>
+                    <td>{{ scores.nbBadScores * event.nbPointsForWrongBet }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td><strong>{{ 'Totals'|trans }}</strong></td>
+                <td><strong>{{ scores.nbScores }}</strong></td>
+                <td><strong class="label label-success">{{ scores.totalScores ?: 0}}</strong></td>
+            </tr>
+            <tr>
+                <td>{{ 'Av Pts / Bet'|trans }}</td>
+                <td></td>
+                <td>{{ (scores.totalScores / scores.nbScores)|round(1, 'floor') }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <p>{% trans %}No bet yet. Go see {% endtrans %} <a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}game listing{% endtrans %}</a> {% trans %} to bet.{% endtrans %}</p>
+    {% endif %}
+</div>

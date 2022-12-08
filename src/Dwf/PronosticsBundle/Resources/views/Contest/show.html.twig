@@ -11,7 +11,7 @@
     {% block contest_header %}
 
         {% block breadcrumb %}
-            <ul class="breadcrumb">
+            <ul class="breadcrumb hidden-xs">
                 <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
                 <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
                 <li>{{ contest.contestName }}</li>
@@ -34,16 +34,18 @@
 
     {% endblock %}
 
-    <div class="page-header">
-        <h1>{% trans %}Summary{% endtrans %}</h1>
-    </div>
     <div class="row col-sm-12">
 
         {% block content %}
-            <div class="col-sm-3">
+            <div>
                 {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
             </div>
             <div class="col-sm-9">
+            <div class="page-header">
+                <h1><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+                    {{ 'Summary'|trans }}
+                </h1>
+            </div>
             {% if scores.totalScores %}
                 {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}
             {% endif %}

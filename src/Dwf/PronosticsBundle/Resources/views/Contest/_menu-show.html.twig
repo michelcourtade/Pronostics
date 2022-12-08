@@ -1,5 +1,5 @@
-<ul class="list-group">
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'contest_show') %} active{% endif %}"><a href="{{ path('contest_show', { 'contestId': contest.id }) }}">{% trans %}Summary{% endtrans %}</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'contest_gameday') %} active{% endif %}"><a href="{{ path('contest_gameday', { 'contestId': contest.id }) }}">{% trans %}Games of the day{% endtrans %}</a></li>
-    <li class="list-group-item{% if(app.request.attributes.get("_route") == 'contest_nextgames') %} active{% endif %}"><a href="{{ path('contest_nextgames', {'contestId': contest.id }) }}">{% trans %}Next games{% endtrans %}</a></li>
+<ul class="nav nav-pills nav-justified">
+    <li class="{% if(app.request.attributes.get("_route") == 'contest_show') %} active{% endif %}"><a href="{{ path('contest_show', { 'contestId': contest.id }) }}">{% trans %}Summary{% endtrans %}</a></li>
+    <li class="{% if(app.request.attributes.get("_route") == 'contest_gameday') %} active{% endif %}"><a href="{{ path('contest_gameday', { 'contestId': contest.id }) }}">{% trans %}Games of the day{% endtrans %}</a></li>
+    <li class="{% if(app.request.attributes.get("_route") == 'contest_nextgames') %} active{% endif %}"><a href="{{ path('contest_nextgames', {'contestId': contest.id }) }}">{% trans %}Next games{% endtrans %}</a></li>
 </ul>
