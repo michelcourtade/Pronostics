@@ -7,7 +7,7 @@
 {% block body -%}
 
     {% block breadcrumb %}
-        <ul class="breadcrumb">
+        <ul class="breadcrumb hidden-xs">
         <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
         <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
         {% if contest %}
@@ -41,11 +41,8 @@
         {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
     {% endif %}
     </div>
-    <div class="page-header">
-        <h1>{% trans %}Games of the day{% endtrans %}</h1>
-    </div>
     {% block menu %}
-        <div class="col-sm-3">
+        <div>
             {% if contest %}
                 {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
             {% else %}
@@ -53,6 +50,12 @@
             {% endif %}
         </div>
     {% endblock menu %}
+    <div class="page-header">
+        <h1>
+            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+            {{ 'Games of the day'|trans }}
+        </h1>
+    </div>
     <div class="row">
         <div class="list-match col-sm-8">
         {% set lastDate = '' %}

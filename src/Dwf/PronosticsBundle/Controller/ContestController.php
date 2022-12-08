@@ -265,11 +265,25 @@ class ContestController extends Controller
 
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $standings = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
 
         $event = $contest->getEvent();
         $user = $this->getUser();
         if (!$user->hasGroup($contest->getName())) {
             return $this->redirect($this->generateUrl('events'));
+        }
+
+        if ($standings) {
+            $position = 1;
+            foreach ($standings as $standing) {
+                if ($standing[0]->getUser()->getId() == $user->getId()) {
+                    $points = $standings[0]['total'];
+                    break;
+                }
+                $position++;
+            }
+        } else {
+            $position = 0;
         }
 
         $currentChampionshipDay = '';
@@ -342,6 +356,8 @@ class ContestController extends Controller
             'pusher_auth_key'=> $this->container->getParameter('pusher_auth_key'),
             'betsChart' => $scores['totalScores'] > 0 ? $betsChart : null,
             'betPointsChart' => $scores['totalScores'] ? $betPointsChart : null,
+            'position' => $position,
+            'points' => $points,
         );
     }
 
@@ -1103,6 +1119,7 @@ class ContestController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $translator = $this->get('translator');
+        $user = $this->getUser();
 
         $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
@@ -1135,6 +1152,20 @@ class ContestController extends Controller
             /** @var ScoreManager $scoreManager */
             $scoreManager = $this->get('dwf_pronosticbundle.score_manager');
             $scores = $scoreManager->buildScoresForContestAndUser($contest, $this->getUser());
+
+            $standings = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
+            if ($standings) {
+                $position = 1;
+                foreach ($standings as $standing) {
+                    if ($standing[0]->getUser()->getId() == $user->getId()) {
+                        $points = $standings[0]['total'];
+                        break;
+                    }
+                    $position++;
+                }
+            } else {
+                $position = 0;
+            }
 
             /** @var HighchartManager $chartManager */
             $chartManager = $this->get('dwf_pronosticbundle.highchartmanager');
@@ -1205,6 +1236,7 @@ class ContestController extends Controller
                     'pusher_auth_key' => $this->container->getParameter('pusher_auth_key'),
                     'betsChart' => $scores['totalScores'] > 0 ? $betsChart : null,
                     'betPointsChart' => $scores['totalScores'] ? $betPointsChart : null,
+                    'position' => $position,
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');

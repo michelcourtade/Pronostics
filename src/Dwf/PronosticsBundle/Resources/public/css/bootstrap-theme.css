@@ -433,7 +433,7 @@ table.records_list.events tr td:first-child img { display:block; margin:0 auto 5
 
 div.list-match { margin-bottom:40px; }
 div.list-match div.head-date { border-bottom:1px solid #474747; padding-bottom:5px; margin-bottom:20px; }
-div.list-match div.head-date h2 { margin:0; }
+div.list-match div.head-date h2, div.list-match div.head-date h3 { margin:0; }
 div.list-match p.date { text-align:center; }
 div.list-match div.match + div.head-date { margin-top:30px; }
 div.list-match div.match {
