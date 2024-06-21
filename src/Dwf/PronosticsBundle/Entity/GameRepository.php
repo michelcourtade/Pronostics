@@ -159,4 +159,24 @@ class GameRepository extends EntityRepository
     	$query = $qb->getQuery();
     	return $query->getResult();
     }
+
+    /**
+     * @param array $teamsArray
+     * @param Event $event
+     *
+     * @return array
+     */
+    public function findAllTeamGamesOnEvent(array $teamsArray, Dwf\PronosticsBundle\Entity\Event $event)
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->where('g.event = :event')
+            ->andWhere('g.team1 IN (:teams) OR g.team2 IN (:teams)' )
+            ->setParameter('event', $event)
+            ->setParameter('teams', $teamsArray)
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }

@@ -1,6 +1,6 @@
 {% if (entity.date|date('Ymd') != lastDate) %}
     <div class="head-date row">
-        <h2 class="col-sm-12">{{ entity.date|date('d/m/Y') }}</h2>
+        <h3 class="col-sm-12">{{ entity.date|date('d/m/Y') }}</h3>
     </div>
 {% endif %}
 <div class="match row{% if pronostic is defined and pronostic is not null %} already-bet{% endif %}">

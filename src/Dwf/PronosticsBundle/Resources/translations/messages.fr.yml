@@ -178,7 +178,7 @@ at: à
 Your bet has been modified.: Votre pronostic a été modifié.
 Modify my bet: Modifier mon pronostic
 Next game: Prochain match
-Old events: Historique
+Old events: Evènements passés
 There are no standings: Il n'y a pas de classement pour le moment.
 There are no games: Pas de match pour le moment
 No standings yet: Pas encore de classement
@@ -278,3 +278,21 @@ Game has already started, you can't bet anymore.: Le match a déjà commencé, v
 With extra time, final score: Avec prolongations, score final
 Change your password: Modifier votre mot de passe
 Problem during submission. Retry: Problème lors de l'envoi. Réésayez un peu plus tard.
+Bets of user %user% on %contest%: Pronostics de %user% sur la compétition %contest%
+No bet yet for user %user% on %contest%: Pas encore de pronostics validé pour %user% sur la compétition %contest%
+See %user% bets: Voir les pronostics de %user%
+User doesn't belong to this contest: L'utilisateur ne fait pas partie de la compétition
+Event not found: Evènement non trouvé
+User not found: Utilisateur non trouvé
+Bets are identical on every event: Mes pronostics sont identiques dans chaque évènement, peu importe la compétition
+Nb bets: Nombre pronostics
+Total bet points due to perfect scores: Tot. points pronostics scores exacts
+Total bet points due to good bets: Tot. points bons pronostics
+Total bet points due to bad bets: Tot. points mauvais pronostics
+Bets distribution: Répartition des pronostics
+Bet points distribution: Répartition des points par pronostics
+Discuss: Discuter
+Final score: Score final
+See results for these teams: Voir les résultats de ces équipes
+User Bet: Pronostic
+My position: Mon classement

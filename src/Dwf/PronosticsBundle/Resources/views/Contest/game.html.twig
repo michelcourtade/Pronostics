@@ -98,6 +98,56 @@
     </div>
 </div>
 
+{% if allTeamGamesOnEvent %}
+    <div class="row">
+        <a class="btn btn-primary center-block col-xl-6 col-xl-offset-6" href="" onclick="$('#allgames').toggle(); return false;">
+            {{ 'See results for these teams'|trans }}
+        </a>
+        <div class="list-match col-sm-9 block-center" id="allgames" style="display: none;">
+            <table class="records_list table table-striped">
+                <thead>
+                <tr>
+                    <th class="hidden-xs">{% trans %}Infos{% endtrans %}</th>
+                    <th>{% trans %}Team 1{% endtrans %}</th>
+                    <th>{% trans %}Score{% endtrans %}</th>
+                    <th>{% trans %}Team 2{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for game in allTeamGamesOnEvent %}
+                    {% if game.id != entity.id %}
+                        <tr>
+                            <td class="hidden-xs">
+                                {{ game.type }}
+                            </td>
+                            <td>
+                                <img src='/{{ game.team1.getWebPath }}' class="img-rounded"/>
+                                <span class="hidden-xs">{{ game.team1.name }}</span>
+                                <span class="hidden-sm hidden-md hidden-lg">{{ game.team1.iso }}</span>
+                            </td>
+                            <td>
+                                {{ game.score }}
+                                {% if game.overtime %}
+                                    <span>{{ game.scoreAfterOvertime }}</span>
+                                    {% if game.winner %}
+                                        <span>{{ entity.winner }}</span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="hidden-xs">{{ game.team2.name }}</span>
+                                <span class="hidden-sm hidden-md hidden-lg">{{ game.team2.iso }}</span>
+                                <img src='/{{ game.team2.getWebPath }}' class="img-rounded"/>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    </div>
+{% endif %}
+
 {% if entity.played or entity.hasBegan() %}
     {% if pronostics %}
     <div class="page-header">
@@ -108,7 +158,7 @@
         <thead>
             <tr>
                 <th>{% trans %}User{% endtrans %}</th>
-                <th>{% trans %}Bet{% endtrans %}</th>
+                <th>{% trans %}User Bet{% endtrans %}</th>
                 <th>{% trans %}Pts won{% endtrans %}</th>
             </tr>
         </thead>

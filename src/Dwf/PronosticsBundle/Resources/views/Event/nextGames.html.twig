@@ -1,7 +1,11 @@
-{% extends '::base.html.twig' %}
+{% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
+
+{% block navbar_bottom %}
+
+{% endblock %}
 
 {% block body -%}
-    <ul class="breadcrumb">
+    <ul class="breadcrumb hidden-xs">
     <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
     <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
     {% if contest %}
@@ -10,15 +14,17 @@
     
     <li>{% trans %}Next games{% endtrans %}</li>
     </ul>
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
-    <div class="page-header center">
+
+    <div class="page-header-title">
     <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}
-    {% if contest %}
-        {{ contest.contestName }} - <small>{{ event.name }}</small>
+        {% if contest %}
+            {{ contest.contestName }}
+            <small>{{ event.name }}</small>
         {% else %}
-        {{ event.name }} 
+            {{ event.name }}
         {% endif %}
-     - {% trans %}Next games{% endtrans %}
      </h1>
     </div>
     {% if messageForContest and messageForContest.message %}
@@ -29,21 +35,22 @@
         </div>
     {% endif %}
     <div class="col-sm-12">
-    {% if contest %}
-        {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
-    {% else %}
+    {% if contest is not defined %}
         {% include "DwfPronosticsBundle:Event:_menu.html.twig" %}
     {% endif %}
     </div>
-    <div class="page-header">
-        <h1>{% trans %}Next games{% endtrans %}</h1>
-    </div>
-    <div class="col-sm-3">
+    <div>
         {% if contest %}
             {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
         {% else %}
             {% include "DwfPronosticsBundle:Event:_menu-home.html.twig" %}
         {% endif %}
+    </div>
+    <div class="page-header">
+        <h1>
+            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+            {{ 'Next games'|trans }}
+        </h1>
     </div>
     <div class="row">
         <div class="list-match col-sm-8">
@@ -60,9 +67,5 @@
         {% endfor %}
         </div>
     </div>
-    {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
+
 {% endblock %}

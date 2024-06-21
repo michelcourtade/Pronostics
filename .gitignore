@@ -13,3 +13,5 @@
 .settings/
 *~
 /web/uploads/*
+.idea/
+.php-version

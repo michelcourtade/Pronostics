@@ -1,0 +1,21 @@
+tr.standing-1 > td {
+    background-color: #FFD700!important;
+}
+tr.standing-2 > td {
+    background-color: #C0C0C0!important;
+}
+tr.standing-3 > td {
+    background-color: #CD7F32!important;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    background-color: #ffffff;
+}
+
+.navbar-default .navbar-nav > a.dropdown-toggle {
+    color: #777777!important;
+}
+
+.dropdown-menu {
+    padding: 0px;
+}

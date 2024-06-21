@@ -2,35 +2,51 @@
 
 // doc in http://deployer.org/docs
 
-require 'recipe/symfony.php';
+require 'recipe/common.php';
+
+
+\Deployer\set('ssh_type', 'native');
+\Deployer\set('ssh_multiplexing', true);
+
+\Deployer\set('release_name', function () {
+    // Set the deployment timezone
+    if (!date_default_timezone_set(\Deployer\set('timezone', 'UTC'))) {
+        date_default_timezone_set('UTC');
+    }
+
+    return date('YmdHis');
+}); // name of folder in releases
 
 // Symfony shared dirs
-set('shared_dirs', ['app/logs', 'web/uploads/documents']);
+\Deployer\set('shared_dirs', ['app/logs', 'web/uploads/documents']);
 
 // Symfony shared files
-set('shared_files', ['app/config/parameters.yml']);
+\Deployer\set('shared_files', ['app/config/parameters.yml']);
 
 // Symfony writable dirs
-set('writable_dirs', ['app/cache', 'app/logs']);
+\Deployer\set('writable_dirs', ['app/cache', 'app/logs']);
 
 // Assets
-set('assets', ['web/css', 'web/images', 'web/js']);
+\Deployer\set('assets', ['web/css', 'web/images', 'web/js']);
 
-// Environment vars
-env('env_vars', 'SYMFONY_ENV=prod');
-env('env', 'prod');
-set('keep_releases', 10);
+\Deployer\set('keep_releases', 10);
 
-task('install', function () {
-    cd('{{deploy_path}}/current');
-    run('make configure');
-    run('make update');
+\Deployer\task('install', function () {
+    \Deployer\cd('{{deploy_path}}/current');
+    \Deployer\set('env', [
+        'PHP_VERSION' => '/usr/bin/php7.2',
+    ]);
+    \Deployer\run('make configure', ['timeout' => 600]);
 });
 
+\Deployer\after('deploy:symlink', 'cachetool:clear:opcache');
+\Deployer\task('cachetool:clear:opcache', function () {
+    \Deployer\run('sudo /usr/sbin/apachectl graceful');
+});
 /**
  * Main task
  */
-task('deploy', [
+\Deployer\task('deploy', [
     'deploy:prepare',
     'deploy:release',
     'deploy:update_code',
@@ -40,33 +56,8 @@ task('deploy', [
     'install',
 ])->desc('Deploy YouBetSport');
 
-after('deploy', 'success');
+\Deployer\after('deploy', 'success');
 
-server('prod', 'albator.dwf.fr', 22)
-    ->user('pronostics-rugby')
-    ->forwardAgent()
-    ->identityFile()
-    ->stage('production')
-    ->env('deploy_path', '/var/www/clients/client3/web94/web/prod')
-    ->env('branch', 'withoutsonatauser')
-;
+\Deployer\inventory('hosts.yml');
 
-server('preprod', 'albator.dwf.fr', 22)
-    ->user('pronostics-rugby')
-    ->forwardAgent()
-    ->identityFile()
-    ->stage('pre-production')
-    ->env('deploy_path', '/var/www/clients/client3/web94/web/preprod')
-    ->env('branch', 'cleanup')
-;
-
-server('youbetsport', 'albator.dwf.fr', 22)
-    ->user('youbetsport')
-    ->identityFile()
-    ->forwardAgent()
-    ->stage('production')
-    ->env('deploy_path', '/var/www/clients/client3/web97/web/prod')
-    ->env('branch', 'develop')
-;
-
-set('repository', 'git@github.com:michelcourtade/Pronostics.git');
+\Deployer\set('repository', 'https://github.com/michelcourtade/Pronostics.git');

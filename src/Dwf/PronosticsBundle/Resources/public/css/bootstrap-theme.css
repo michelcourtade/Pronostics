@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
 
 body {
     padding-top:70px;
@@ -173,14 +173,17 @@ body {
   background-repeat: repeat-x;
 }
 .navbar-default .navbar-nav > .active > a {
-  background-image: -webkit-linear-gradient(top, #ebebeb 0%, #f3f3f3 100%);
-  background-image:         linear-gradient(to bottom, #ebebeb 0%, #f3f3f3 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb', endColorstr='#fff3f3f3', GradientType=0);
+  background-image: -webkit-linear-gradient(top, #428bca 0%, #428bca 100%);
+  background-image:         linear-gradient(to bottom, #428bca 0%, #428bca 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#428bca', endColorstr='#428bca', GradientType=0);
   background-repeat: repeat-x;
   -webkit-box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
           box-shadow: inset 0 3px 9px rgba(0, 0, 0, .075);
 }
-.navbar-brand,
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus
+.navbar-brand {
+    color: #ffffff;
+}
 .navbar-nav > li > a {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
 }
@@ -208,6 +211,11 @@ body {
 .navbar-fixed-bottom {
   border-radius: 0;
 }
+
+li.col-xs-2 {
+    padding: 0 10px;
+}
+
 .alert {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .2);
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 1px 2px rgba(0, 0, 0, .05);
@@ -425,7 +433,7 @@ table.records_list.events tr td:first-child img { display:block; margin:0 auto 5
 
 div.list-match { margin-bottom:40px; }
 div.list-match div.head-date { border-bottom:1px solid #474747; padding-bottom:5px; margin-bottom:20px; }
-div.list-match div.head-date h2 { margin:0; }
+div.list-match div.head-date h2, div.list-match div.head-date h3 { margin:0; }
 div.list-match p.date { text-align:center; }
 div.list-match div.match + div.head-date { margin-top:30px; }
 div.list-match div.match {
@@ -496,7 +504,7 @@ div.show-match .team .scorers span { display:block; }
 div.show-match .team img { max-width:50px; vertical-align:middle; }
 div.show-match .team img { float:left; margin-right:10px; }
 div.show-match .team.ext img { float:right; margin-right:0; margin-left:10px; }
-div.show-match .score { text-align:center; color:#666; }
+div.show-match .score { text-align:center; color:#666; padding: 0 5px;}
 div.show-match .score strong { color:#0087E6; font-size:22px; font-weight:400; display:block; }
 div.show-match .score strong select.form-control, div.show-match .score span select.form-control, div.show-match .score p select.form-control { display: inline-block; width: auto; }
 div.show-match .score span { display:block; }
@@ -722,4 +730,34 @@ div.list-match .actions a .popover-button + .popover {
 }
 div.container div.col-sm-12 ul.nav {
     margin-bottom: 15px;
+}
+
+.page-header-title {
+    background-image: url('../../../bundles/dwfpronostics/images/banner.jpg');
+    height: 200px;
+    color: #000000;
+}
+.page-header-title small {
+    display: block;
+}
+.page-header-title h1 {
+    height: 200px;
+    width: 100%;
+    font-size: 24px;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0) 100%);
+}
+
+.page-header h1 {
+    font-size: 24px;
+}
+
+.page-header h2 {
+    font-size: 20px;
+}
+
+td > img.img-rounded {
+    max-width:40px;
+    vertical-align:middle;
+    border: 1px solid #999;
 }

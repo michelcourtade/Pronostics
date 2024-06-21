@@ -31,14 +31,16 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
+        $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
+        $oldEvents = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
         return array(
-            'event'         => "",
-            'user'          => $this->getUser(),
-            'events'        => $entities,
-            'adminMessage'  => $adminMessage,
+            'event' => "",
+            'user' => $this->getUser(),
+            'events' => $events,
+            'oldEvents' => $oldEvents,
+            'adminMessage' => $adminMessage,
         );
     }
 
@@ -47,7 +49,7 @@ class EventController extends Controller
      *
      * @Route("/old", name="events_old")
      * @Method("GET")
-     * @Template("")
+     * @Template()
      */
     public function oldAction()
     {

@@ -1,17 +1,19 @@
 {% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
-{% block body -%}
-    {% block breadcrumb %}
-    <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
-    <li><a href="{{ path('contest_games_by_type', { 'type': entity.game.type.id, 'contestId': contest.id }) }}">{{ entity.game.type }}</a></li>
-    <li><a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">{{ entity.game }}</a></li>
-    <li>{% trans %}Bet on{% endtrans %} {{ entity.game }}</li>
+{% block breadcrumb %}
+    <ul class="breadcrumb hidden-xs">
+        <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+        <li><a href="{{ path('contest_games', {'contestId': contest.id }) }}">{% trans %}All games{% endtrans %}</a></li>
+        <li><a href="{{ path('contest_games_by_type', { 'type': entity.game.type.id, 'contestId': contest.id }) }}">{{ entity.game.type }}</a></li>
+        <li><a href="{{ path('contest_game_show', { 'id': entity.game.id, 'contestId': contest.id }) }}">{{ entity.game }}</a></li>
+        <li>{% trans %}Bet on{% endtrans %} {{ entity.game }}</li>
     </ul>
-    {% endblock %}
+{% endblock %}
+
+{% block body -%}
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
     {% block contest_header %}
     {{ parent() }}
@@ -40,6 +42,7 @@
                     {{ form_widget(form.overtime) }}
                 </p>
                 <div class="overtime_content" style="display: none;">
+                    <p class="final_winner">{{ 'Final score'|trans }} :</p>
                     <span>{{ form_widget(form.scoreTeam1Overtime) }} - {{ form_widget(form.scoreTeam2Overtime) }}</span>
                     <p class="final_winner">
                         {{ form_label(form.overtime, 'Winner if draw'|trans) }}
@@ -75,7 +78,7 @@
     {{ parent() }}
     <script type="text/javascript">
     function toggleOvertime(obj) {
-        if(obj.is(':checked')){
+        if (obj.is(':checked') && ($("#dwf_pronosticsbundle_pronostic_scoreTeam1").val() === $("#dwf_pronosticsbundle_pronostic_scoreTeam2").val())) {
             $('.overtime_content').show();
         } else {
             $('.overtime_content').hide();

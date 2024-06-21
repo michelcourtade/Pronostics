@@ -56,18 +56,24 @@ class StandingRepository extends EntityRepository
         $query = $qb->getQuery();
         return $query->getResult();
     }
+
+    /**
+     * @param User    $user
+     * @param Contest $contest
+     * @param Game    $game
+     *
+     * @return array
+     */
     public function getMaxPointsByUserAndContestBeforeGame(Dwf\PronosticsBundle\Entity\User $user, Dwf\PronosticsBundle\Entity\Contest $contest, Dwf\PronosticsBundle\Entity\Game $game)
     {
         $qb = $this->createQueryBuilder('s')
-        ->where('s.user = :user')
-        ->leftJoin('s.game','g')
-        ->setParameter('user', $user)
-        ->andWhere('s.contest = :contest')
-        ->setParameter('contest', $contest)
-        ->andWhere('g.id < :game')
-        ->setParameter('game', $game->getId())
-        ->orderBy('s.points', 'DESC')
-        ->setMaxResults(1)
+            ->leftJoin('s.game','g')
+            ->where('s.user = :user')
+            ->andWhere('s.contest = :contest')
+            ->setParameter('user', $user)
+            ->setParameter('contest', $contest)
+            ->orderBy('s.points', 'DESC')
+            ->setMaxResults(1)
         ;
         $query = $qb->getQuery();
         return $query->getResult();
@@ -94,11 +100,14 @@ class StandingRepository extends EntityRepository
     public function getByContest(Dwf\PronosticsBundle\Entity\Contest $contest)
     {
         $qb = $this->createQueryBuilder('s')
-        ->select('s','MAX(s.points) AS total', 'MAX(s.pronostics) AS nb_pronostics')
-        ->where('s.contest = :contest')
-        ->setParameter('contest', $contest)
-        ->groupBy('s.user')
-        ->orderBy('total', 'DESC')
+            ->select('s','MAX(s.points) AS total', 'MAX(s.pronostics) AS nb_pronostics')
+            ->leftJoin('s.user','u')
+            ->where('s.contest = :contest')
+            ->setParameter('contest', $contest)
+            ->groupBy('s.user')
+            ->orderBy('total', 'DESC')
+            ->addOrderBy('nb_pronostics', 'ASC')
+            ->addOrderBy('u.username', 'ASC')
         ;
         $query = $qb->getQuery();
         return $query->getResult();

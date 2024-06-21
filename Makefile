@@ -2,17 +2,17 @@ ENV = "dev"
 
 configure:
 	@if test ! -f app/config/parameters.yml; then echo "app/config/parameters.yml is missing"; exit 1; fi
-	curl -s http://getcomposer.org/installer | php
-	php composer.phar install
-	php app/console doctrine:migrations:migrate -n --env=$(ENV)
-	php app/console assets:install --symlink
-	php app/console assetic:dump --env=$(ENV)
+	./getComposer.sh
+	$(PHP_VERSION) composer.phar install
+	$(PHP_VERSION) app/console doctrine:migrations:migrate -n --env=$(ENV)
+	$(PHP_VERSION) app/console assets:install --symlink
+	$(PHP_VERSION) app/console assetic:dump --env=$(ENV)
 
 install:
-	php app/console doctrine:database:create --env=$(ENV)
-	php app/console doctrine:schema:create --env=$(ENV)
-	php app/console doctrine:migrations:migrate -n --env=$(ENV)
-	php app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
+	$(PHP_VERSION) app/console doctrine:database:create --env=$(ENV)
+	$(PHP_VERSION) app/console doctrine:schema:create --env=$(ENV)
+	$(PHP_VERSION) app/console doctrine:migrations:migrate -n --env=$(ENV)
+	$(PHP_VERSION) app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
 
 update-dev:
 	make cc
@@ -23,10 +23,10 @@ update: ENV = "prod"
 update: cc
 
 drop-db:
-	php app/console doctrine:database:drop --env=$(ENV) --force
+	$(PHP_VERSION) app/console doctrine:database:drop --env=$(ENV) --force
 
 refresh:
-	php app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
+	$(PHP_VERSION) app/console doctrine:fixtures:load --env=$(ENV) --no-interaction
 	make cc
 
 cs:
@@ -34,3 +34,11 @@ cs:
 
 cc:
 	rm -Rf app/cache/*
+
+configure-dev:
+	@if test ! -f app/config/parameters.yml; then echo "app/config/parameters.yml is missing"; exit 1; fi
+	./getComposer.sh
+	symfony composer install
+	symfony console doctrine:migrations:migrate -n --env=$(ENV)
+	symfony console assets:install --symlink
+	symfony console assetic:dump --env=$(ENV)

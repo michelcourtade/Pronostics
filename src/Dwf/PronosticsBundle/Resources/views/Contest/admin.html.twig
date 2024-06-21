@@ -1,21 +1,28 @@
 {% extends 'DwfPronosticsBundle:Contest:show.html.twig' %}
 
-{% block body -%}
-    {% block breadcrumb %}
-    <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
-    <li>{% trans %}Admin{% endtrans %}</li>
+{% block breadcrumb %}
+    <ul class="breadcrumb hidden-xs">
+        <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+        <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+        <li><a href="{{ path('contest_show', {'contestId': contest.id }) }}">{{ contest.contestName }}</a></li>
+        <li>{% trans %}Admin{% endtrans %}</li>
     </ul>
-    {% endblock %}
+{% endblock %}
+
+{% block body -%}
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+
     {% block contest_header %}
     {{ parent() }}
     {% endblock %}
+
     {% block content %}
     <div class="page-header">
-        <h2>{% trans %}Admin{% endtrans %}</h2>
+        <h1>
+            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+            {{ 'Admin'|trans }}
+        </h1>
     </div>
     <div class="tabs-container">
         <ul class="nav nav-tabs">
@@ -81,18 +88,6 @@
             {% endif %}
             </div>
         </div>
-{#         <div class="panel panel-default">#}
-{#             <div class="panel-heading">{% trans %}Invite by username{% endtrans %}</div>#}
-{#             <div class="panel-body">#}
-{#             form username#}
-{#             </div>#}
-{#         </div>#}
-{#         <div class="panel panel-default">#}
-{#             <div class="panel-heading">{% trans %}Invite Facebook friends{% endtrans %}</div>#}
-{#             <div class="panel-body">#}
-{#             friends list#}
-{#             </div>#}
-{#         </div>#}
     </div>
         <div style="display:none;" class="tabs">
         {% if users %}
@@ -159,6 +154,7 @@
         </div>
     </div>
     {% endblock %}
+
     {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Game:js-tabs.html.twig" %}

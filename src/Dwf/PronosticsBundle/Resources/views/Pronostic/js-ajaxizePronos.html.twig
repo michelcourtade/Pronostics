@@ -25,6 +25,16 @@
   	  });
   	}
     $(document).ready(function() {
-    	ajaxizePronos();
+        ajaxizePronos();
+
+        // stop event closing menu
+        $('#dropup-discuss').on('hide.bs.dropdown', function () {
+            return false;
+        });
+
+        $('#close-chat').on('click', function () {
+            $('#dropup-discuss').toggleClass('open')
+        });
+
     });
-</script> 
+</script>

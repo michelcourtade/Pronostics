@@ -2,30 +2,31 @@
 
 namespace Dwf\PronosticsBundle\Controller;
 
+use Dwf\PronosticsBundle\Championship\HighchartManager;
+use Dwf\PronosticsBundle\Championship\ScoreManager;
 use Dwf\PronosticsBundle\Entity\ChatMessage;
+use Dwf\PronosticsBundle\Entity\Contest;
+use Dwf\PronosticsBundle\Entity\ContestMessage;
 use Dwf\PronosticsBundle\Entity\ContestRepository;
+use Dwf\PronosticsBundle\Entity\Invitation;
+use Dwf\PronosticsBundle\Entity\Pronostic;
 use Dwf\PronosticsBundle\Entity\Repository\ChatMessageRepository;
+use Dwf\PronosticsBundle\Form\SimplePronosticType;
 use Dwf\PronosticsBundle\Form\Type\ChatMessageFormType;
+use Dwf\PronosticsBundle\Form\Type\ContestFormType;
+use Dwf\PronosticsBundle\Form\Type\ContestMessageFormType;
+use Dwf\PronosticsBundle\Form\Type\ContestType;
+use Dwf\PronosticsBundle\Form\Type\CreateContestFormType;
+use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
+use Dwf\PronosticsBundle\Form\Type\InvitationContestOpenFormType;
 use Pusher\Pusher;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Dwf\PronosticsBundle\Entity\Game;
-use Dwf\PronosticsBundle\Entity\Pronostic;
-use Dwf\PronosticsBundle\Form\GameType;
-use Dwf\PronosticsBundle\Form\SimplePronosticType;
-use Dwf\PronosticsBundle\Form\Type\ContestFormType;
-use Dwf\PronosticsBundle\Entity\Contest;
-use Dwf\PronosticsBundle\Form\Type\InvitationContestFormType;
-use Dwf\PronosticsBundle\Form\Type\InvitationContestOpenFormType;
-use Dwf\PronosticsBundle\Entity\Invitation;
-use Dwf\PronosticsBundle\Form\Type\ContestType;
-use Dwf\PronosticsBundle\Form\Type\ContestMessageFormType;
-use Dwf\PronosticsBundle\Form\Type\CreateContestFormType;
-use Dwf\PronosticsBundle\Entity\ContestMessage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -35,7 +36,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ContestController extends Controller
 {
-
     /**
      * Lists all Contests entities for a user in an event
      *
@@ -47,6 +47,7 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $user = $this->getUser();
         $event = $em->getRepository('DwfPronosticsBundle:Event')->find($event);
         if($this->getUser()) {
             $myContests = $em->getRepository('DwfPronosticsBundle:Contest')->findAllByOwnerAndEvent($this->getUser(), $event);
@@ -64,11 +65,8 @@ class ContestController extends Controller
             } else {
                 $arrayContests = '';
             }
-
-
             $contestType = new ContestFormType("Dwf\PronosticsBundle\Entity\User");
             $contest = new Contest('');
-    //             $contest->setName('');
             $contest->setOwner($this->getUser());
             $contest->setEvent($event);
             $form = $this->createForm($contestType, $contest, array(
@@ -80,6 +78,8 @@ class ContestController extends Controller
             if ($form->isValid()) {
                 $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
                 $em->persist($contest);
+                $user->addGroup($contest);
+                $em->persist($user);
                 $em->flush();
                 $this->addFlash(
                         'success',
@@ -92,9 +92,9 @@ class ContestController extends Controller
             $myContests = $otherContests = $contestForm = "";
         }
 
-        return array("myContests"       => $myContests,
-                     "otherContests"    => $otherContests,
-                     "contestForm"      => $contestForm);
+        return array("myContests" => $myContests,
+                     "otherContests" => $otherContests,
+                     "contestForm"=> $contestForm);
     }
 
     /**
@@ -108,6 +108,7 @@ class ContestController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $user = $this->getUser();
 
         $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
         $contestType = new CreateContestFormType("Dwf\PronosticsBundle\Entity\User");
@@ -123,7 +124,11 @@ class ContestController extends Controller
         if ($form->isValid()) {
             $contest->setName($this->getUser()->__toString().'-'.$contest->getContestName().'-'.uniqid());
             $em->persist($contest);
+
+            $user->addGroup($contest);
+            $em->persist($user);
             $em->flush();
+
             $this->addFlash(
                     'success',
                     $this->get('translator')->trans('Your contest has been created.')
@@ -133,8 +138,8 @@ class ContestController extends Controller
         $contestForm = $form->createView();
 
         return array(
-                "events"            => $events,
-                "contestForm"       => $contestForm
+                "events" => $events,
+                "contestForm" => $contestForm
         );
 
     }
@@ -255,16 +260,30 @@ class ContestController extends Controller
      */
     public function showAction($contestId)
     {
-        $em      = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
 
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
-        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $standings = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
 
         $event = $contest->getEvent();
-        $user  = $this->getUser();
+        $user = $this->getUser();
         if (!$user->hasGroup($contest->getName())) {
             return $this->redirect($this->generateUrl('events'));
+        }
+
+        if ($standings) {
+            $position = 1;
+            foreach ($standings as $standing) {
+                if ($standing[0]->getUser()->getId() == $user->getId()) {
+                    $points = $standings[0]['total'];
+                    break;
+                }
+                $position++;
+            }
+        } else {
+            $position = 0;
         }
 
         $currentChampionshipDay = '';
@@ -274,7 +293,7 @@ class ContestController extends Controller
             $currentChampionshipDay = $championshipManager->getCurrentChampionshipDay();
         }
 
-        $players      = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
+        $players = $em->getRepository('DwfPronosticsBundle:Player')->findAll();
         $arrayPlayers = array();
         if ($players) {
             foreach ($players as $player) {
@@ -282,18 +301,20 @@ class ContestController extends Controller
             }
         }
 
-        $teams      = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
+        $teams = $em->getRepository('DwfPronosticsBundle:Team')->findAll();
         $arrayTeams = array();
         if ($teams) {
             foreach ($teams as $team) {
                 $arrayTeams[$team->getId()] = $team;
             }
         }
-        $nb             = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndEvent($this->getUser(), $event);
-        $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 5);
-        $nbGoodScore    = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 3);
-        $nbBadScore     = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 1);
-        $total          = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByContestAndUser($contest, $this->getUser());
+        $scoreManager = $this->get('dwf_pronosticbundle.score_manager');
+        $scores = $scoreManager->buildScoresForContestAndUser($contest, $this->getUser());
+
+        /** @var HighchartManager $chartManager */
+        $chartManager = $this->get('dwf_pronosticbundle.highchartmanager');
+        $betsChart = $chartManager->buildBetsChartWithScores('piechart', $translator->trans('Bets distribution'), $scores);
+        $betPointsChart = $chartManager->buildBetPointsChartWithScores('piechart2', $translator->trans('Bet points distribution'), $scores);
 
         $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
         $messageForContest = null;
@@ -312,31 +333,31 @@ class ContestController extends Controller
             'method' => 'PUT',
         ));
         $formMessage->add('submit', 'submit', array(
-            'label'        => $this->get('translator')->trans('Send'),
+            'label' => $translator->trans('Send'),
             'button_class' => 'btn btn-warning btn-sm',
         ));
 
         $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
-        $offset        = max($countMessages - 20, 0);
-        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+        $offset = max($countMessages - 20, 0);
+        $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
         return array(
-                'contest'                   => $contest,
-                'user'                      => $this->getUser(),
-                'event'                     => $event,
-                'currentChampionshipDay'    => $currentChampionshipDay,
-                'teams'                     => $arrayTeams,
-                'players'                   => $arrayPlayers,
-                'nbPronostics'              => $nb,
-                'nbPerfectScore'            => $nbPerfectScore,
-                'nbGoodScore'               => $nbGoodScore,
-                'nbBadScore'                => $nbBadScore,
-                'total'                     => $total,
-                'messageForContest'         => $messageForContest,
-                'adminMessage'              => $adminMessage,
-                'formMessage'               => $formMessage->createView(),
-                'chatMessages'              => $chatMessages,
-                'pusher_auth_key'           => $this->container->getParameter('pusher_auth_key'),
+            'contest'=> $contest,
+            'user' => $this->getUser(),
+            'event' => $event,
+            'currentChampionshipDay'=> $currentChampionshipDay,
+            'teams' => $arrayTeams,
+            'players' => $arrayPlayers,
+            'scores' => $scores,
+            'messageForContest' => $messageForContest,
+            'adminMessage' => $adminMessage,
+            'formMessage' => $formMessage->createView(),
+            'chatMessages'=> $chatMessages,
+            'pusher_auth_key'=> $this->container->getParameter('pusher_auth_key'),
+            'betsChart' => $scores['totalScores'] > 0 ? $betsChart : null,
+            'betPointsChart' => $scores['totalScores'] ? $betPointsChart : null,
+            'position' => $position,
+            'points' => $points,
         );
     }
 
@@ -629,6 +650,7 @@ class ContestController extends Controller
         $event                 = $contest->getEvent();
         $types                 = $em->getRepository('DwfPronosticsBundle:GameType')->findAllByEvent($event);
         $anchorDate            = '';
+        $user = $this->getUser();
         if (!$event) {
             return $this->redirect($this->generateUrl('events'));
         }
@@ -690,6 +712,32 @@ class ContestController extends Controller
                         $pronostic->setSliceScore(null);
                     }
                     $em->persist($pronostic);
+                    if ($user->isUniqueBet()) {
+                        foreach ($user->getGroups() as $group) {
+                            if ($group->getId() != $contest->getId()) {
+                                $otherContest = $em->getRepository('DwfPronosticsBundle:Contest')->find($group->getId());
+                                if ($otherContest && $otherContest->getEvent() == $event) {
+                                    $otherPronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $otherContest));
+                                    if (!$otherPronostic) {
+                                        $otherPronostic = new Pronostic();
+                                        $otherPronostic->setGame($entity);
+                                        $otherPronostic->setUser($this->getUser());
+                                        $otherPronostic->setEvent($event);
+                                        $otherPronostic->setContest($otherContest);
+                                    }
+                                    $otherPronostic->setSimpleBet($pronostic->getSimpleBet());
+                                    $otherPronostic->setSliceScore($pronostic->getSliceScore());
+                                    $otherPronostic->setScoreTeam1($pronostic->getScoreTeam1());
+                                    $otherPronostic->setScoreTeam2($pronostic->getScoreTeam2());
+                                    $otherPronostic->setOvertime($pronostic->getOvertime());
+                                    $otherPronostic->setScoreTeam1Overtime($pronostic->getScoreTeam1Overtime());
+                                    $otherPronostic->setScoreTeam2Overtime($pronostic->getScoreTeam2Overtime());
+                                    $otherPronostic->setWinner($pronostic->getWinner());
+                                    $em->persist($otherPronostic);
+                                }
+                            }
+                        }
+                    }
                     $em->flush();
                 }
 
@@ -944,13 +992,15 @@ class ContestController extends Controller
      */
     public function showGameAction($id, $contestId)
     {
-        $em      = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
 
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
-        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
-        $entity                = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
-        $event                 = $contest->getEvent();
+        $gameRepository = $em->getRepository('DwfPronosticsBundle:Game');
+
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $entity = $em->getRepository('DwfPronosticsBundle:Game')->find($id);
+        $event = $contest->getEvent();
 
         $scorersTeam1 = "";
         $scorersTeam2 = "";
@@ -962,9 +1012,12 @@ class ContestController extends Controller
             $scorersTeam2 = $em->getRepository('DwfPronosticsBundle:Scorer')
                 ->findScorersByGameAndTeam($entity, $entity->getTeam2(), $event->getNationalTeams());
         }
-        $nextGame          = $em->getRepository('DwfPronosticsBundle:Game')->findNextGameAfter($entity);
+
+        $nextGame = $gameRepository->findNextGameAfter($entity);
+        $allTeamGamesOnEvent = $gameRepository->findAllTeamGamesOnEvent([$entity->getTeam1(), $entity->getTeam2()], $event);
         $pronosticNextGame = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $nextGame, 'contest' => $contest));
-        $pronostic         = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+        $pronostic = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(array('user' => $this->getUser(), 'game' => $entity, 'contest' => $contest));
+
         if ($entity->getEvent()->getSimpleBet()) {
             if (!$pronostic) {
                 $pronostic = new Pronostic();
@@ -1029,27 +1082,28 @@ class ContestController extends Controller
         ));
 
         $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
-        $offset        = max($countMessages - 20, 0);
-        $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+        $offset = max($countMessages - 20, 0);
+        $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
         return array(
-                'contest'               => $contest,
-                'event'                 => $event,
-                'user'                  => $this->getUser(),
-                'currentChampionshipDay' => $currentChampionshipDay,
-                'entity'                => $entity,
-                'pronostic'             => $pronostic,
-                'nextGame'              => $nextGame,
-                'pronosticNextGame'     => $pronosticNextGame,
-                'pronostics'            => $pronostics,
-                'scorersTeam1'          => $scorersTeam1,
-                'scorersTeam2'          => $scorersTeam2,
-                'form'                  => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
-                'messageForContest'     => $messageForContest,
-                'adminMessage'          => $adminMessage,
-                'formMessage'           => $formMessage->createView(),
-                'chatMessages'          => $chatMessages,
-                'pusher_auth_key'       => $this->container->getParameter('pusher_auth_key'),
+            'contest' => $contest,
+            'event' => $event,
+            'user' => $this->getUser(),
+            'currentChampionshipDay' => $currentChampionshipDay,
+            'entity' => $entity,
+            'pronostic' => $pronostic,
+            'nextGame' => $nextGame,
+            'pronosticNextGame' => $pronosticNextGame,
+            'pronostics' => $pronostics,
+            'scorersTeam1' => $scorersTeam1,
+            'scorersTeam2' => $scorersTeam2,
+            'form' => $entity->getEvent()->getSimpleBet() ? $form->createView():'',
+            'messageForContest' => $messageForContest,
+            'adminMessage' => $adminMessage,
+            'formMessage' => $formMessage->createView(),
+            'chatMessages' => $chatMessages,
+            'pusher_auth_key' => $this->container->getParameter('pusher_auth_key'),
+            'allTeamGamesOnEvent' => $allTeamGamesOnEvent,
         );
     }
 
@@ -1062,10 +1116,12 @@ class ContestController extends Controller
      */
     public function pronosticsAction($contestId)
     {
-        $em      = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
+        $translator = $this->get('translator');
+        $user = $this->getUser();
 
-        $contest               = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
+        $contest = $em->getRepository('DwfPronosticsBundle:Contest')->find($contestId);
         $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
 
         $event = $contest->getEvent();
@@ -1093,13 +1149,30 @@ class ContestController extends Controller
                 $bestscorer_pronostic = $pronostic[0];
             }
 
-            $entities       = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndContest($this->getUser(), $contest, 0);
-            $nb             = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbByUserAndContest($this->getUser(), $contest);
-            $nbPerfectScore = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 5);
-            $nbGoodScore    = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 3);
-            $nbBadScore     = $em->getRepository('DwfPronosticsBundle:Pronostic')->getNbScoreByUserAndContestAndResult($this->getUser(), $contest, 1);
-            $total          = $em->getRepository('DwfPronosticsBundle:Pronostic')->getResultsByContestAndUser($contest, $this->getUser());
+            /** @var ScoreManager $scoreManager */
+            $scoreManager = $this->get('dwf_pronosticbundle.score_manager');
+            $scores = $scoreManager->buildScoresForContestAndUser($contest, $this->getUser());
 
+            $standings = $em->getRepository('DwfPronosticsBundle:Standing')->getByContest($contest);
+            if ($standings) {
+                $position = 1;
+                foreach ($standings as $standing) {
+                    if ($standing[0]->getUser()->getId() == $user->getId()) {
+                        $points = $standings[0]['total'];
+                        break;
+                    }
+                    $position++;
+                }
+            } else {
+                $position = 0;
+            }
+
+            /** @var HighchartManager $chartManager */
+            $chartManager = $this->get('dwf_pronosticbundle.highchartmanager');
+            $betsChart = $chartManager->buildBetsChartWithScores('piechart', $translator->trans('Bets distribution'), $scores);
+            $betPointsChart = $chartManager->buildBetPointsChartWithScores('piechart2', $translator->trans('Bet points distribution'), $scores);
+
+            $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndContest($this->getUser(), $contest, 0);
             $forms = "";
             if ($event->getSimpleBet()) {
                 $forms = array();
@@ -1148,23 +1221,22 @@ class ContestController extends Controller
             $chatMessages  = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
 
             return array(
-                    'contest'                       => $contest,
-                    'event'                         => $event,
-                    'currentChampionshipDay'        => $currentChampionshipDay,
-                    'user'                          => $this->getUser(),
-                    'entities'                      => $entities,
-                    'bestscorer_pronostic'          => $pronostic ? $bestscorer_pronostic : '',
-                    'nbPronostics'                  => $nb,
-                    'nbPerfectScore'                => $nbPerfectScore,
-                    'nbGoodScore'                   => $nbGoodScore,
-                    'nbBadScore'                    => $nbBadScore,
-                    'total'                         => $total,
-                    'forms'                         => $forms,
-                    'messageForContest'             => $messageForContest,
-                    'adminMessage'                  => $adminMessage,
-                    'formMessage'                   => $formMessage->createView(),
-                    'chatMessages'                  => $chatMessages,
-                    'pusher_auth_key'               => $this->container->getParameter('pusher_auth_key'),
+                    'contest' => $contest,
+                    'event' => $event,
+                    'currentChampionshipDay' => $currentChampionshipDay,
+                    'user' => $this->getUser(),
+                    'entities' => $entities,
+                    'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
+                    'scores' => $scores,
+                    'forms' => $forms,
+                    'messageForContest' => $messageForContest,
+                    'adminMessage' => $adminMessage,
+                    'formMessage' => $formMessage->createView(),
+                    'chatMessages' => $chatMessages,
+                    'pusher_auth_key' => $this->container->getParameter('pusher_auth_key'),
+                    'betsChart' => $scores['totalScores'] > 0 ? $betsChart : null,
+                    'betPointsChart' => $scores['totalScores'] ? $betPointsChart : null,
+                    'position' => $position,
             );
         }
         else throw $this->createNotFoundException('Unable to find Event entity.');
@@ -1518,5 +1590,129 @@ class ContestController extends Controller
                 ]
             );
         }
+    }
+
+    /**
+     * Show user's valid bets for a contest
+     *
+     * @Route("/contest/{contestId}/user/{userId}", name="contest_user_show")
+     * @Method({"GET","POST", "PUT"})
+     * @Template("DwfPronosticsBundle:Contest:user-show.html.twig")
+     */
+    public function showUserAction($contestId, $userId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
+
+        $userRepository = $em->getRepository('DwfPronosticsBundle:User');
+        $contestRepository = $em->getRepository('DwfPronosticsBundle:Contest');
+        $chatMessageRepository = $em->getRepository('DwfPronosticsBundle:ChatMessage');
+
+        $contest = $contestRepository->find($contestId);
+
+        if (!$contest) {
+            return new RedirectResponse($this->generateUrl('home'));
+        }
+
+        $event = $contest->getEvent();
+        if (!$event) {
+            $this->addFlash(
+                'danger',
+                $this->get('translator')->trans('Event not found')
+            );
+            return new RedirectResponse($this->generateUrl('home'));
+        }
+        $user = $userRepository->find($userId);
+        if (!$user) {
+            $this->addFlash(
+                'danger',
+                $this->get('translator')->trans('User not found')
+            );
+            return new RedirectResponse($this->generateUrl('home'));
+        }
+        if (!$user->hasGroup($contest->getName())) {
+            $this->addFlash(
+                'danger',
+                $this->get('translator')->trans('User doesn\'t belong to this contest')
+            );
+            return new RedirectResponse($this->generateUrl('home'));
+        }
+
+        $currentChampionshipDay = '';
+        if ($event->getChampionship()) {
+            $lastGamePlayed = $em->getRepository('DwfPronosticsBundle:Game')->findLastGamePlayedByEvent($event);
+            $currentChampionshipDay = '';
+            if (count($lastGamePlayed) > 0) {
+                $lastGamePlayed = $lastGamePlayed[0];
+                $gamesLeftInChampionshipDay = $em->getRepository('DwfPronosticsBundle:Game')->findGamesLeftByEventAndGameType($event, $lastGamePlayed->getType());
+                if ($gamesLeftInChampionshipDay) {
+                    $currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->find($lastGamePlayed->getType());
+                } else {
+                    $currentChampionshipDay = $em->getRepository('DwfPronosticsBundle:GameType')->getByEventAndPosition($event, $lastGamePlayed->getType()->getPosition() + 1);
+                    $currentChampionshipDay = '';
+                    if ($currentChampionshipDay) {
+                        $currentChampionshipDay = $currentChampionshipDay[0];
+                    }
+                }
+            }
+        }
+        $pronostic = $em->getRepository('DwfPronosticsBundle:BestScorerPronostic')->findOneByUserAndEvent($this->getUser(), $event);
+        if ($pronostic) {
+            $bestscorer_pronostic = $pronostic[0];
+        }
+
+        /** @var ScoreManager $scoreManager */
+        $scoreManager = $this->get('dwf_pronosticbundle.score_manager');
+        $scores = $scoreManager->buildScoresForContestAndUser($contest, $user);
+
+        /** @var HighchartManager $chartManager */
+        $chartManager = $this->get('dwf_pronosticbundle.highchartmanager');
+        $betsChart = $chartManager->buildBetsChartWithScores('piechart', $translator->trans('Bets distribution'), $scores);
+        $betPointsChart = $chartManager->buildBetPointsChartWithScores('piechart2', $translator->trans('Bet points distribution'), $scores);
+
+        $entities = $em->getRepository('DwfPronosticsBundle:Pronostic')->findByUserAndContest($user, $contest, 1);
+
+        $contestMessage = $em->getRepository('DwfPronosticsBundle:ContestMessage')->findByContest($contest);
+        $messageForContest = null;
+        if ($contestMessage) {
+            $messageForContest = $contestMessage[0];
+        }
+        $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
+
+        $messageChatContestType = new ChatMessageFormType("Dwf\PronosticsBundle\Entity\ChatMessage");
+        $chatMessage = new ChatMessage();
+        $chatMessage->setUser($this->getUser());
+        $chatMessage->setContest($contest);
+        $chatMessage->setEvent($contest->getEvent());
+        $formMessage = $this->createForm($messageChatContestType, $chatMessage, array(
+            'action' => $this->generateUrl('contest_send_message', array('contestId' => $contest->getId())),
+            'method' => 'PUT',
+        ));
+        $formMessage->add('submit', 'submit', array(
+            'label'        => $this->get('translator')->trans('Send'),
+            'button_class' => 'btn btn-warning btn-sm',
+        ));
+
+        $countMessages = $chatMessageRepository->getCountMessagesForContest($contest);
+        $offset = max($countMessages - 20, 0);
+        $chatMessages = $chatMessageRepository->getLastMessagesByContest($contest, $offset, $countMessages);
+
+        return array(
+            'contest' => $contest,
+            'event' => $event,
+            'currentChampionshipDay' => $currentChampionshipDay,
+            'user' => $this->getUser(),
+            'userDisplayed' => $user,
+            'entities' => $entities,
+            'bestscorer_pronostic' => $pronostic ? $bestscorer_pronostic : '',
+            'scores' => $scores,
+            'messageForContest' => $messageForContest,
+            'adminMessage' => $adminMessage,
+            'formMessage'=> $formMessage->createView(),
+            'chatMessages' => $chatMessages,
+            'pusher_auth_key' => $this->container->getParameter('pusher_auth_key'),
+            'betsChart' => $scores['totalScores'] > 0 ? $betsChart : null,
+            'betPointsChart' => $scores['totalScores'] ? $betPointsChart : null,
+        );
     }
 }

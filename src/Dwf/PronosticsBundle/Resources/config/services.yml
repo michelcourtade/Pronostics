@@ -1,4 +1,8 @@
 services:
+ app.form.profile:
+  class: Dwf\PronosticsBundle\Form\Type\UserType
+  tags:
+   - { name: form.type, alias: app_user_profile }
  dwf_pronosticsbundle.type.entity_hidden:
   class: Dwf\PronosticsBundle\Form\Type\EntityHiddenType
   arguments: ["@doctrine.orm.entity_manager"]
@@ -52,4 +56,7 @@ services:
         arguments: [ @doctrine.orm.entity_manager ]
  dwf_pronosticbundle.highchartmanager:
         class: Dwf\PronosticsBundle\Championship\HighchartManager
-        arguments: []
+        arguments: ['@translator']
+ dwf_pronosticbundle.score_manager:
+   class: Dwf\PronosticsBundle\Championship\ScoreManager
+   arguments: ['@doctrine.orm.entity_manager']

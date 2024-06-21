@@ -1,17 +1,28 @@
 {% extends '::base.html.twig' %}
 
+{% block navbar_bottom %}
+    {% include "DwfPronosticsBundle:Contest:_navbar-bottom.html.twig" %}
+{% endblock %}
+
 {% block body -%}
-    {% block breadcrumb %}
-    <ul class="breadcrumb">
-    <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
-    <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
-    <li>{{ contest.contestName }}</li>
-    </ul>
-    {% endblock %}
+
     {% include "DwfPronosticsBundle:Default:_adminMessage.html.twig" %}
+
     {% block contest_header %}
-        <div class="page-header center">
-            <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}{{ contest.contestName }} - <small>{{ event.name }}</small></h1>
+
+        {% block breadcrumb %}
+            <ul class="breadcrumb hidden-xs">
+                <li><a href="{{ path('events') }}">{% trans %}Home{% endtrans %}</a></li>
+                <li><a href="{{ path('event_home', {'event': event.id }) }}">{{ event.name }}</a></li>
+                <li>{{ contest.contestName }}</li>
+            </ul>
+        {% endblock %}
+
+        <div class="page-header-title" >
+            <h1>{% if event.getWebPath %}<img class="contest_logo" src='/{{ event.getWebPath }}' />{% endif %}
+                {{ contest.contestName }}
+                <small>{{ event.name }}</small>
+            </h1>
         </div>
         {% if messageForContest and messageForContest.message %}
             <div class="alert alert-info alert-dismissible" role="alert">
@@ -20,29 +31,35 @@
                     <p>{{ messageForContest.message }}</p>
             </div>
         {% endif %}
-        <div class="col-sm-12">
-            {% include "DwfPronosticsBundle:Contest:_menu.html.twig" %}
-        </div>
+
     {% endblock %}
-    <div class="page-header">
-        <h1>{% trans %}Summary{% endtrans %}</h1>
-    </div>
+
     <div class="row col-sm-12">
-    {% block content %}
-    <div class="col-sm-3">
-        {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
-    </div>
-    <div class="col-sm-9">
-    {% if total %}
-        {% include "DwfPronosticsBundle:Contest:_points.html.twig" with { 'totalPoints': total.total } %}
-    {% endif %}
-    </div>
-        {% include "DwfPronosticsBundle:Chat:chatbox.html.twig" %}
-    {% endblock %}
+
+        {% block content %}
+            <div>
+                {% include "DwfPronosticsBundle:Contest:_menu-show.html.twig" %}
+            </div>
+            <div class="col-sm-9">
+            <div class="page-header">
+                <h1><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+                    {{ 'Summary'|trans }}
+                </h1>
+            </div>
+            {% if scores.totalScores %}
+                {% include "DwfPronosticsBundle:Contest:_points.html.twig" %}
+            {% endif %}
+            </div>
+
+            {% include "DwfPronosticsBundle:Contest:_charts.html.twig" %}
+
+        {% endblock %}
     </div>
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% include "DwfPronosticsBundle:Pronostic:js-ajaxizePronos.html.twig" %}
     {% include "DwfPronosticsBundle:Chat:_js-pusher.html.twig" %}
+    {% include "DwfPronosticsBundle:Contest:_js-charts.html.twig" %}
 {% endblock %}
