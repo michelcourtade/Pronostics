@@ -30,14 +30,17 @@ class EventController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
+        $userHasAlreadyPlayed = $em->getRepository('DwfPronosticsBundle:Pronostic')->findOneBy(['user' => $user]);
         $events = $em->getRepository('DwfPronosticsBundle:Event')->findAllOrderedByDate();
         $oldEvents = $em->getRepository('DwfPronosticsBundle:Event')->getOldEventsOrderedByDate();
         $adminMessage = $em->getRepository('DwfPronosticsBundle:AdminMessage')->findLast();
 
         return array(
             'event' => "",
-            'user' => $this->getUser(),
+            'user' => $user,
+            'userHasAlreadyPlayed' => $userHasAlreadyPlayed,
             'events' => $events,
             'oldEvents' => $oldEvents,
             'adminMessage' => $adminMessage,

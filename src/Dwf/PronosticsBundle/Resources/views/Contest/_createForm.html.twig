@@ -2,7 +2,7 @@
 {{ form_start(contestForm) }}
     {{ form_errors(contestForm) }}
         <div class="input-group">
-        {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'Create a new contest'|trans}}) }}
+        {{ form_widget(contestForm.contestName, {'attr': {'class': 'form-control', 'placeholder': 'New contest name'|trans}}) }}
             <span class="input-group-btn">
             {{ form_widget(contestForm.submit, {'attr': { 'class': 'btn btn-default' }}) }}
             </span>

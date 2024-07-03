@@ -92,9 +92,12 @@ class ContestController extends Controller
             $myContests = $otherContests = $contestForm = "";
         }
 
-        return array("myContests" => $myContests,
-                     "otherContests" => $otherContests,
-                     "contestForm"=> $contestForm);
+        return array(
+            "myContests" => $myContests,
+            "otherContests" => $otherContests,
+            "contestForm"=> $contestForm,
+            'event' => $event,
+        );
     }
 
     /**
@@ -273,6 +276,7 @@ class ContestController extends Controller
             return $this->redirect($this->generateUrl('events'));
         }
 
+        $points = 0;
         if ($standings) {
             $position = 1;
             foreach ($standings as $standing) {

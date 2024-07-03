@@ -30,7 +30,7 @@ class EventRepository extends EntityRepository
     	->where('e.active = 1')
     	->andWhere('e.finishDate < :date')
     	->setParameter('date', date("YmdHis"))
-    	->orderBy('e.startDate', 'ASC');
+    	->orderBy('e.startDate', 'DESC');
     
     	$query = $qb->getQuery();
     	return $query->getResult();

@@ -66,7 +66,7 @@ symfony php app/console doctrine:fixtures:load
 
 Once you have some data with fixtures, create an admin user to administrate your data :
 ```bash
- symfony php app/console fos:user:create adminuser youremail@yourdomain.tld your_password
+symfony php app/console fos:user:create adminuser youremail@yourdomain.tld your_password
 ```
 and then promote your user to the ROLE_SUPER_ADMIN :
 ```bash

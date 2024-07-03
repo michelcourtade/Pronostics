@@ -2,6 +2,7 @@
 
 namespace Dwf\PronosticsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 // use Application\Sonata\UserBundle\Model\Group as BaseSonataGroup;
 use FOS\UserBundle\Model\Group as BaseGroup;
@@ -59,7 +60,19 @@ class Contest extends BaseGroup
      * @ORM\Column(name="contestName", type="string", length=255)
      */
     private $contestName;
-    
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dwf\PronosticsBundle\Entity\User", mappedBy="groups")
+     */
+    private $players;
+
+    public function __construct($name, $roles = array())
+    {
+        parent::__construct($name, $roles);
+        $this->players = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -211,8 +224,29 @@ class Contest extends BaseGroup
         return $this->contestName;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * @param ArrayCollection $players
+     */
+    public function setPlayers($players)
+    {
+        $this->players = $players;
+    }
+
     public function getSlugName()
     {
         return str_replace(' ', '-', $this->getName());
+    }
+
+    public function getNbPlayers()
+    {
+        return count($this->getPlayers());
     }
 }
